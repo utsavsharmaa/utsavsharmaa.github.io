@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Utsav Sharma — multidisciplinary designer. Branding, illustration, UI/UX, photography and film. NID Bengaluru.">
+<title>Utsav Sharma Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: mono meta row, fitted full-width name, centred mono tagline, rounded media cards in a 2-col grid with full-width breaks, grey about panel, solid accent contact card */
+:root{
+  --bg:#FFFFFF; --fg:#111216; --panel:#EEEFF1; --muted:#6A6F7A; --accent:#2B37D6; --on-accent:#FFFFFF;
+  --pill:#FFFFFF; --pill-soft:rgba(255,255,255,.45);
+  --t1:#D9DDE4; --t2:#C9CEF6; --t3:#E2DACB; --t4:#C7D6CF; --t5:#F0D2C4;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+  --gap:clamp(10px,1.4vw,16px);
+  --ov:12vw; /* room for the bend to push edges outward */
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D0E11; --fg:#ECEEF2; --panel:#18191E; --muted:#979CA8; --accent:#6E78FF; --on-accent:#0D0E11;
+  --pill:#ECEEF2; --pill-soft:rgba(20,21,26,.55);
+  --t1:#1E2129; --t2:#1E2253; --t3:#2A251E; --t4:#1A2823; --t5:#2E1F19; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D0E11; --fg:#ECEEF2; --panel:#18191E; --muted:#979CA8; --accent:#6E78FF; --on-accent:#0D0E11;
+  --pill:#ECEEF2; --pill-soft:rgba(20,21,26,.55);
+  --t1:#1E2129; --t2:#1E2253; --t3:#2A251E; --t4:#1A2823; --t5:#2E1F19; color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+html,body{overflow-x:clip}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;padding-inline:clamp(16px,2vw,24px)}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+
+/* meta row */
+.meta{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;padding-block:18px 8px;color:var(--accent)}
+.meta span:nth-child(2){text-align:center}
+.meta span:last-child{text-align:right}
+
+/* name */
+.name{margin:0;font-family:var(--display);font-weight:900;text-transform:uppercase;color:var(--accent);line-height:.84;white-space:nowrap;font-size:18vw;letter-spacing:-.005em;text-align:center}
+.name .l{display:inline-block;overflow:hidden;vertical-align:top}
+.name .l > span{display:inline-block;animation:rise .8s cubic-bezier(.2,.9,.25,1) both;animation-delay:calc(var(--i) * 55ms + 150ms)}
+.name .sp{display:inline-block;width:.22em}
+@keyframes rise{from{transform:translateY(105%)}to{transform:none}}
+.tagline{margin:clamp(40px,8vw,110px) auto clamp(20px,3vw,32px);text-align:center;color:var(--accent);line-height:1.5}
+
+/* bendable blocks: background is drawn wider than the box, and the visible shape is a clip-path set from script */
+.bend{position:relative;isolation:isolate;clip-path:inset(0 round 12px)}
+.bend > .bg{position:absolute;top:0;bottom:0;left:calc(-1 * var(--ov));right:calc(-1 * var(--ov));z-index:-1;background:var(--tc,var(--panel))}
+
+/* work grid */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap)}
+.card{display:block;aspect-ratio:1/1.08;max-width:100%}
+.card.wide{grid-column:1/-1;aspect-ratio:16/8.2}
+.card .glyph{position:absolute;left:-.03em;bottom:-.14em;font-family:var(--display);font-weight:900;line-height:.8;font-size:clamp(150px,30vw,520px);color:var(--fg);opacity:.09;transition:transform .8s cubic-bezier(.2,.9,.25,1);pointer-events:none}
+.card.wide .glyph{font-size:clamp(150px,34vw,620px)}
+.card .hint{position:absolute;right:20px;bottom:18px;color:var(--muted)}
+.card .bar{position:absolute;top:22px;left:22px;right:22px;display:flex;align-items:center;gap:6px;opacity:0;transform:translateY(-6px);transition:opacity .35s,transform .45s cubic-bezier(.2,.9,.25,1)}
+.pill{padding:8px 12px;border-radius:999px;background:var(--pill);color:#111216;white-space:nowrap}
+.pill.soft{background:var(--pill-soft);color:var(--fg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.arrow{margin-left:auto;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--pill-soft);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--fg);font-size:15px;flex:none}
+.card:hover .bar,.card:focus-visible .bar{opacity:1;transform:none}
+.card:hover .glyph,.card:focus-visible .glyph{transform:scale(1.06) translateY(-3%)}
+@media (hover:none){.card .bar{opacity:1;transform:none}}
+
+/* about */
+.about{margin-block:var(--gap);padding:clamp(24px,3.5vw,40px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(40px,6vw,96px);min-height:clamp(380px,48vw,560px)}
+.statement{margin:0;font-size:clamp(17px,1.6vw,21px);line-height:1.45;color:var(--accent);max-width:44ch;align-self:start}
+.statement .w{opacity:.22;transition:opacity .25s}
+.statement .w.on{opacity:1}
+.lists{align-self:end;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;color:var(--accent);text-align:right}
+.lists h2{margin:0 0 14px;font:inherit}
+.lists ul{list-style:none;margin:0;padding:0;display:grid;gap:3px;line-height:1.35}
+
+/* contact */
+.contact{--tc:var(--accent);margin-block:var(--gap) 0;color:var(--on-accent);padding:clamp(24px,3.5vw,40px);display:grid;grid-template-rows:auto 1fr auto;min-height:clamp(320px,34vw,440px);gap:40px}
+.contact h2{margin:0;font-weight:400;font-size:clamp(20px,2.2vw,28px);line-height:1.25;max-width:24ch}
+.contact .row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:28px}
+.socials{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.socials a:hover{text-decoration:underline}
+.direct{display:grid;justify-items:end;text-align:right;gap:2px}
+.direct .big{font-size:clamp(20px,2.6vw,32px);line-height:1.15;user-select:all;overflow-wrap:anywhere}
+.copy{margin-top:12px;border:1px solid currentColor;background:transparent;color:inherit;border-radius:999px;padding:8px 14px;cursor:pointer}
+.copy:hover{background:var(--on-accent);color:var(--accent)}
+footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding-block:20px 28px;color:var(--muted)}
+
+/* smooth scroll (Lenis) */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+
+
+/* soft blur along the bottom edge of the screen, getting stronger toward the edge */
+/* only a thin band on the far left and right, where the flare happens; no colour wash */
+.edge-blur{position:fixed;left:0;right:0;bottom:0;height:max(50px,7vh);pointer-events:none;z-index:40;
+  -webkit-mask-image:linear-gradient(to right,#000 0,#000 1.5%,transparent 6%,transparent 94%,#000 98.5%,#000 100%);
+  mask-image:linear-gradient(to right,#000 0,#000 1.5%,transparent 6%,transparent 94%,#000 98.5%,#000 100%)}
+.edge-blur > i{position:absolute;inset:0}
+.edge-blur > i:nth-child(1){backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 55%);mask-image:linear-gradient(to bottom,transparent 0%,#000 55%)}
+.edge-blur > i:nth-child(2){backdrop-filter:blur(3.5px);-webkit-backdrop-filter:blur(3.5px);-webkit-mask-image:linear-gradient(to bottom,transparent 45%,#000 100%);mask-image:linear-gradient(to bottom,transparent 45%,#000 100%)}
+
+/* cursor */
+.dot{position:fixed;left:0;top:0;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;z-index:50;transition:width .25s,height .25s,margin .25s,opacity .3s;opacity:0}
+.dot.big{width:26px;height:26px;margin:-13px 0 0 -13px}
+@media (hover:hover) and (pointer:fine){.dot.live{opacity:1}}
+
+@media (max-width:640px){
+  .meta span:nth-child(2){display:none}
+  .meta{grid-template-columns:1fr 1fr}
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .card,.card.wide{aspect-ratio:1/1.05}
+  .about{grid-template-columns:minmax(0,1fr)}
+  .lists{text-align:left}
+  .direct{justify-items:start;text-align:left}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .statement .w{opacity:1}
+  .dot{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="meta mono">
+  <span>Multidisciplinary designer</span>
+  <span>2026</span>
+  <span>NID Bengaluru</span>
+</header>
+
+<main>
+  <h1 class="name" id="name" aria-label="Utsav Sharma">Utsav Sharma</h1>
+  <p class="tagline mono">BHU-trained designer, now at NID Bengaluru<br>building 6 Raccoon Design</p>
+
+  <section class="grid" aria-label="Selected work">
+    <a class="card bend" href="#" style="--tc:var(--t3)"><span class="bg"></span>
+      <span class="glyph">IB</span><span class="hint mono">Add image</span>
+      <span class="bar mono"><span class="pill">Indie Beer Community</span><span class="pill soft">Logo &amp; identity</span><span class="arrow" aria-hidden="true">↗</span></span>
+    </a>
+    <a class="card bend" href="#" style="--tc:var(--t2)"><span class="bg"></span>
+      <span class="glyph">6R</span><span class="hint mono">Add image</span>
+      <span class="bar mono"><span class="pill">6 Raccoon Design</span><span class="pill soft">The Design Doctor</span><span class="arrow" aria-hidden="true">↗</span></span>
+    </a>
+    <a class="card wide bend" href="#" style="--tc:var(--t1)"><span class="bg"></span>
+      <span class="glyph">MTB</span><span class="hint mono">Add video or image</span>
+      <span class="bar mono"><span class="pill">MTB Freestyle Federation</span><span class="pill soft">Film with VRZ Visuals</span><span class="arrow" aria-hidden="true">↗</span></span>
+    </a>
+    <a class="card bend" href="#" style="--tc:var(--t4)"><span class="bg"></span>
+      <span class="glyph">K</span><span class="hint mono">Add image</span>
+      <span class="bar mono"><span class="pill">Kashikriti</span><span class="pill soft">Add tagline</span><span class="arrow" aria-hidden="true">↗</span></span>
+    </a>
+    <a class="card bend" href="#" style="--tc:var(--t5)"><span class="bg"></span>
+      <span class="glyph">PF</span><span class="hint mono">Add image</span>
+      <span class="bar mono"><span class="pill">Perfume Finder</span><span class="pill soft">Arduino prototype</span><span class="arrow" aria-hidden="true">↗</span></span>
+    </a>
+  </section>
+
+  <section class="about bend" aria-label="About"><span class="bg"></span>
+    <p class="statement" id="statement">I’m Utsav Sharma, a multidisciplinary designer. I studied Applied Arts at Banaras Hindu University and now study Design for Retail Experience at NID Bengaluru. I sketch first, research hard, and move between brands, screens, spaces and film.</p>
+    <div class="lists mono">
+      <div><h2>Worked with ↴</h2><ul><li>VRZ Visuals</li><li>MTB Freestyle Fed.</li><li>TAD Marketing</li><li>Gaurav Visuals</li><li>Indie Beer Community</li></ul></div>
+      <div><h2>Services ↴</h2><ul><li>Branding</li><li>Illustration</li><li>Packaging</li><li>UI / UX</li><li>Retail experience</li><li>Photo &amp; film</li></ul></div>
+    </div>
+  </section>
+
+  <section class="grid" aria-label="More work">
+    <a class="card bend" href="#" style="--tc:var(--t2)"><span class="bg"></span>
+      <span class="glyph">SK</span><span class="hint mono">Add sketchbook scans</span>
+      <span class="bar mono"><span class="pill">Sketchbook</span><span class="pill soft">Drawing daily</span><span class="arrow" aria-hidden="true">↗</span></span>
+    </a>
+    <a class="card bend" href="#" style="--tc:var(--t4)"><span class="bg"></span>
+      <span class="glyph">PH</span><span class="hint mono">Add photo series</span>
+      <span class="bar mono"><span class="pill">Photography</span><span class="pill soft">Through the lens</span><span class="arrow" aria-hidden="true">↗</span></span>
+    </a>
+    <a class="card wide bend" href="#" style="--tc:var(--t3)"><span class="bg"></span>
+      <span class="glyph">RX</span><span class="hint mono">Add image</span>
+      <span class="bar mono"><span class="pill">Retail Experience</span><span class="pill soft">NID coursework</span><span class="arrow" aria-hidden="true">↗</span></span>
+    </a>
+  </section>
+
+  <section class="contact bend" id="contact" aria-label="Contact"><span class="bg"></span>
+    <h2>Open to new projects, collaborations and odd ideas.</h2>
+    <span></span>
+    <div class="row">
+      <ul class="socials mono">
+        <li><a href="#">↳ Behance</a></li>
+        <li><a href="#">↳ LinkedIn</a></li>
+        <li><a href="#">↳ Instagram</a></li>
+      </ul>
+      <div class="direct">
+        <span class="big" id="email">utsavsharma2710@gmail.com</span>
+        <span class="big">+91 82991 45430</span>
+        <button class="copy mono" id="copyBtn" type="button">Copy email</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="mono">
+  <span>© 2026 Utsav Sharma</span>
+  <span>Layout inspired by the Kirk Framer template</span>
+</footer>
+
+<div class="edge-blur" aria-hidden="true"><i></i><i></i></div>
+<div class="dot" id="dot" aria-hidden="true"></div>
+
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+
+  /* 1. Name: letters rise in one after another, then the name is fitted to the page width */
+  var name = document.getElementById('name');
+  var text = name.textContent, i = 0;
+  name.textContent = '';
+  var box = document.createElement('span'); box.style.display = 'inline-block'; name.appendChild(box);
+  text.split('').forEach(function(ch){
+    if (ch === ' ') { var s = document.createElement('span'); s.className = 'sp'; box.appendChild(s); return; }
+    var l = document.createElement('span'); l.className = 'l'; l.setAttribute('aria-hidden', 'true');
+    var inner = document.createElement('span'); inner.textContent = ch; inner.style.setProperty('--i', i++);
+    l.appendChild(inner); box.appendChild(l);
+  });
+  function fit(){
+    name.style.fontSize = '100px';
+    var w = box.getBoundingClientRect().width, avail = name.clientWidth;
+    if (w) name.style.fontSize = Math.floor(100 * avail / w * 0.995) + 'px';
+  }
+  fit();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  addEventListener('resize', fit);
+
+  /* 2. About paragraph: words fill in as you scroll */
+  var st = document.getElementById('statement');
+  var words = st.textContent.trim().split(/\s+/);
+  st.innerHTML = words.map(function(w){ return '<span class="w">' + w + '</span>'; }).join(' ');
+  var wordEls = st.querySelectorAll('.w');
+  function fillWords(){
+    var vh = innerHeight, sr = st.getBoundingClientRect();
+    var prog = reduce ? 1 : clamp((vh * 0.85 - sr.top) / (sr.height + vh * 0.35), 0, 1);
+    var n = Math.round(prog * wordEls.length);
+    wordEls.forEach(function(w, k){ w.classList.toggle('on', k < n); });
+  }
+
+  /* 3. Bend, using the same maths as the original's shader:
+        near the bottom of the screen, everything is stretched sideways away from the
+        screen's centre line. strength = (y / screenHeight)^40, stretch = 1 + 0.2 * strength,
+        so it only shows in a thin band at the very bottom, up to 20% wider at the edge. */
+  /* measured from the original: flare begins ~79% down the screen, and edges have moved ~5% outward by 88% */
+  /* traced from the original: barely moves until ~89% down the screen, ~16-20% wider at the very bottom,
+     and drifts up to 1% of the screen width toward the side the mouse is on */
+  var AMOUNT = 0.2, SPREAD = 60, MOUSE_FACTOR = 0.01;
+  var mouseX = 0.5, mouseXs = 0.5;
+  var blocks = Array.prototype.slice.call(document.querySelectorAll('.bend'));
+  var hovers = new Map();
+  blocks.forEach(function(b){
+    hovers.set(b, {t: 0, v: 0});
+    if (b.classList.contains('card')){
+      b.addEventListener('mouseenter', function(){ hovers.get(b).t = 1; });
+      b.addEventListener('mouseleave', function(){ hovers.get(b).t = 0; });
+      b.addEventListener('focus', function(){ hovers.get(b).t = 1; });
+      b.addEventListener('blur', function(){ hovers.get(b).t = 0; });
+    }
+  });
+
+  function strength(vy, vh){ var s = clamp(vy / vh, 0, 1); return Math.pow(s, SPREAD); }
+
+  function shape(el, r, vw, vh, hv){
+    var w = r.width, h = r.height;
+    var ins = 10 * hv;              /* hover: block shrinks 10px on every side */
+    var R = 12 + 12 * hv;           /* and its corners soften from 12px to 24px */
+    var cx = vw / 2;
+    var bottomF = strength(r.bottom, vh);
+    if (bottomF < 0.002 && hv < 0.002){ if (el._clip !== ''){ el._clip = ''; el.style.clipPath = ''; } return; }
+    /* Draw the normal rounded rectangle, then push EVERY point of it (sides and corners alike)
+       through the same bend, exactly like the original's shader does to the image.
+       That keeps the corners attached to the curved sides with no notch or step. */
+    var mx = MOUSE_FACTOR * (mouseXs * 2 - 1) * vw;
+    var pts = [], k, a, y;
+    function add(x, yy){
+      var f = reduce ? 0 : strength(r.top + yy, vh);
+      var vx = r.left + x;
+      var nx = cx + (vx - cx) * (1 + AMOUNT * f) + mx * f;
+      pts.push([nx - r.left, yy]);
+    }
+    var x0 = ins, x1 = w - ins, top = ins, bot = h - ins;
+    var y0 = top + R, y1 = bot - R, ys = [], ARC = 10;
+    /* sample the sides: a few points along the card, plus many inside the bend zone at the bottom of the screen */
+    for (k = 0; k <= 12; k++) ys.push(y0 + (y1 - y0) * k / 12);
+    for (k = 0; k <= 48; k++){ y = vh * (0.86 + 0.14 * k / 48) - r.top; if (y > y0 && y < y1) ys.push(y); }
+    ys.sort(function(p, q){ return p - q; });
+    for (k = 0; k < ys.length; k++) add(x0, ys[k]);                                                        /* left side, down */
+    for (k = 1; k <= ARC; k++){ a = Math.PI - (Math.PI / 2) * k / ARC; add(x0 + R + R * Math.cos(a), y1 + R * Math.sin(a)); }   /* bottom-left corner */
+    for (k = 0; k <= ARC; k++){ a = Math.PI / 2 - (Math.PI / 2) * k / ARC; add(x1 - R + R * Math.cos(a), y1 + R * Math.sin(a)); } /* bottom-right corner */
+    for (k = ys.length - 1; k >= 0; k--) add(x1, ys[k]);                                                   /* right side, up */
+    for (k = 1; k <= ARC; k++){ a = -(Math.PI / 2) * k / ARC; add(x1 - R + R * Math.cos(a), y0 + R * Math.sin(a)); }            /* top-right corner */
+    for (k = 0; k <= ARC; k++){ a = -Math.PI / 2 - (Math.PI / 2) * k / ARC; add(x0 + R + R * Math.cos(a), y0 + R * Math.sin(a)); } /* top-left corner */
+    var clip = 'polygon(' + pts.map(function(p){ return p[0].toFixed(1) + 'px ' + p[1].toFixed(1) + 'px'; }).join(',') + ')';
+    if (clip !== el._clip){ el._clip = clip; el.style.clipPath = clip; }
+  }
+
+  /* Smooth scroll, same library and feel as the original */
+  var lenis = null;
+  if (!reduce && window.Lenis){
+    try { lenis = new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 1 }); } catch(e){ lenis = null; }
+  }
+
+  /* Fallback if the library didn't load: ease mouse-wheel scrolling ourselves */
+  var smooth = null;
+  if (!lenis && !reduce && matchMedia('(pointer: fine)').matches){
+    smooth = { target: scrollY, cur: scrollY, active: false };
+    addEventListener('wheel', function(e){
+      if (e.ctrlKey) return;
+      e.preventDefault();
+      if (!smooth.active){ smooth.target = smooth.cur = scrollY; smooth.active = true; }
+      var max = document.documentElement.scrollHeight - innerHeight;
+      smooth.target = clamp(smooth.target + e.deltaY * (e.deltaMode === 1 ? 32 : 1), 0, max);
+    }, { passive: false });
+    addEventListener('scroll', function(){ if (!smooth.active){ smooth.target = smooth.cur = scrollY; } }, { passive: true });
+  }
+
+  function frame(t){
+    if (lenis) lenis.raf(t);
+    else if (smooth && smooth.active){
+      smooth.cur += (smooth.target - smooth.cur) * 0.09;
+      if (Math.abs(smooth.target - smooth.cur) < 0.5){ smooth.cur = smooth.target; smooth.active = false; }
+      scrollTo(0, smooth.cur);
+    }
+    var vw = document.documentElement.clientWidth, vh = innerHeight;
+    mouseXs += (mouseX - mouseXs) * 0.1;
+    blocks.forEach(function(b){
+      var hs = hovers.get(b);
+      hs.v += (hs.t - hs.v) * (reduce ? 1 : 0.16);
+      if (Math.abs(hs.t - hs.v) < 0.001) hs.v = hs.t;
+      var r = b.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > vh) return;
+      shape(b, r, vw, vh, hs.v);
+    });
+    fillWords();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  /* 4. Cursor dot with a little lag, inverts colours underneath */
+  var dot = document.getElementById('dot');
+  addEventListener('mousemove', function(e){ mouseX = e.clientX / innerWidth; });
+  if (!reduce && matchMedia('(hover: hover) and (pointer: fine)').matches){
+    var x = -100, y = -100, tx = x, ty = y;
+    addEventListener('mousemove', function(e){ tx = e.clientX; ty = e.clientY; dot.classList.add('live'); });
+    document.addEventListener('mouseleave', function(){ dot.classList.remove('live'); });
+    document.querySelectorAll('a,button').forEach(function(el){
+      el.addEventListener('mouseenter', function(){ dot.classList.add('big'); });
+      el.addEventListener('mouseleave', function(){ dot.classList.remove('big'); });
+    });
+    (function loop(){ x += (tx - x) * 0.22; y += (ty - y) * 0.22; dot.style.transform = 'translate(' + x + 'px,' + y + 'px)'; requestAnimationFrame(loop); })();
+  }
+
+  /* 5. Copy email */
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    var b = this, t = document.getElementById('email').textContent;
+    function done(){ b.textContent = 'Copied'; setTimeout(function(){ b.textContent = 'Copy email'; }, 1600); }
+    function fallback(){ var r = document.createRange(); r.selectNodeContents(document.getElementById('email')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selected, press Ctrl+C'; }
+    try { navigator.clipboard.writeText(t).then(done, fallback); } catch(e){ fallback(); }
+  });
+})();
+</script>
+</body>
+</html>
