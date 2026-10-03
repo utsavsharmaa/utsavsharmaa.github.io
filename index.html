@@ -19,15 +19,8 @@
   --mono:"DM Mono",ui-monospace,Menlo,monospace;
   --gap:clamp(10px,1.4vw,16px);
   --ov:12vw; /* room for the bend to push edges outward */
+  color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0D0E11; --fg:#ECEEF2; --panel:#18191E; --muted:#979CA8; --accent:#6E78FF; --on-accent:#0D0E11;
-  --pill:#ECEEF2; --pill-soft:rgba(20,21,26,.55);
-  --t1:#1E2129; --t2:#1E2253; --t3:#2A251E; --t4:#1A2823; --t5:#2E1F19; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0D0E11; --fg:#ECEEF2; --panel:#18191E; --muted:#979CA8; --accent:#6E78FF; --on-accent:#0D0E11;
-  --pill:#ECEEF2; --pill-soft:rgba(20,21,26,.55);
-  --t1:#1E2129; --t2:#1E2253; --t3:#2A251E; --t4:#1A2823; --t5:#2E1F19; color-scheme:dark}
 
 *{box-sizing:border-box}
 html,body{margin:0}
