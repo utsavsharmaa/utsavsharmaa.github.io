@@ -386,42 +386,36 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       function ease(t){ return t < .5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2; }   /* slow-fast-slow */
       function easeSine(t){ return -(Math.cos(Math.PI * t) - 1) / 2; }
       function seg(t, a, b){ return clamp((t - a) / (b - a), 0, 1); }
-      /* Pointer stretch, measured from the original: while the loader runs, moving the mouse stretches the name
-         sideways (up to ~2x for a very fast move, slightly taller too), then it springs back,
-         losing ~40% of the stretch every 0.2s. It leans toward the side the pointer came from. */
-      var stretch = 0, dir = 0, dxAcc = 0, lastX = null, lastT = performance.now(), vx = 0;
-      var bw = box.offsetWidth, bh = box.offsetHeight;
-      function onMove(e){ if (lastX !== null) dxAcc += e.clientX - lastX; lastX = e.clientX; }
+      /* Pointer follow, measured from the original in Chrome: while the loader runs, the small name
+         glides after the mouse (both directions) with a soft lag, settling in about a third of a second.
+         Until the mouse moves it sits in its normal spot. When the zoom starts it travels from wherever
+         it is up to the top. */
+      var followX = 0, followY = 0, targetX = 0, targetY = 0, lastT = performance.now();
+      var homeX = vw / 2, homeY = vh * 0.4;          /* where the small name is centred */
+      function onMove(e){ targetX = e.clientX - homeX; targetY = e.clientY - homeY; }
       addEventListener('mousemove', onMove);
-      function updateStretch(now){
+      function updateFollow(now){
         var dt = Math.min(64, now - lastT); lastT = now;
-        stretch *= Math.pow(0.59, dt / 200);
-        /* pointer speed in px per ms, lightly smoothed: a normal swipe (~1 px/ms) gives a clear stretch, a fast flick (~3 px/ms) nearly doubles the width */
-        if (dt > 0) vx = vx * 0.5 + (dxAcc / dt) * 0.5;
-        var impulse = Math.min(1.1, Math.abs(vx) * 0.35);
-        if (impulse > stretch){ stretch = impulse; dir = vx < 0 ? -1 : 1; }
-        dxAcc = 0;
-        if (stretch < 0.002) stretch = 0;
+        var a = 1 - Math.pow(1 - 0.06, dt / 16.7);
+        followX += (targetX - followX) * a;
+        followY += (targetY - followY) * a;
       }
       function place(k){
         var sc = s0 + (1 - s0) * k;
-        var sx = 1 + stretch, sy = 1 + stretch * 0.12;
-        var lean = -dir * stretch * bw * 0.15;
-        box.style.transform = 'translate(' + (tx0 * (1 - k)).toFixed(2) + 'px,' + (ty0 * (1 - k)).toFixed(2) + 'px) scale(' + sc.toFixed(4) + ')' +
-          (stretch ? ' translate(' + (lean + bw / 2).toFixed(2) + 'px,' + (bh / 2).toFixed(2) + 'px) scale(' + sx.toFixed(4) + ',' + sy.toFixed(4) + ') translate(' + (-bw / 2).toFixed(2) + 'px,' + (-bh / 2).toFixed(2) + 'px)' : '');
+        var x = (tx0 + followX) * (1 - k), y = (ty0 + followY / NAME_STRETCH) * (1 - k);
+        box.style.transform = 'translate(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px) scale(' + sc.toFixed(4) + ')';
       }
       place(0);
       box.style.setProperty('--p', '0%');
       var t0 = performance.now(), revealed = false;
       (function step(now){
         var t = now - t0;
-        if (t > 3050) dxAcc = 0;   /* stop reacting once the zoom starts, like the original */
-        updateStretch(now);
+        updateFollow(now);
         box.style.opacity = seg(t, 300, 750).toFixed(3);                              /* faint name fades in */
         box.style.setProperty('--p', (easeSine(seg(t, 850, 2750)) * 100).toFixed(2) + '%'); /* colour fills left to right */
         place(ease(seg(t, 3050, 3650)));                                              /* zoom up to full size */
         if (!revealed && t >= 3500){ revealed = true; root.classList.remove('intro'); }  /* page fades in */
-        if (t < 3700 || stretch > 0){ requestAnimationFrame(step); return; }
+        if (t < 3700){ requestAnimationFrame(step); return; }
         removeEventListener('mousemove', onMove);
         box.style.transform = ''; box.style.opacity = ''; box.style.removeProperty('--p');
         root.style.overflow = '';
