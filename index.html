@@ -37,10 +37,13 @@ a{color:inherit;text-decoration:none}
 
 /* name */
 .name{margin:0;font-family:var(--display);font-weight:900;text-transform:uppercase;color:var(--accent);line-height:.84;white-space:nowrap;font-size:18vw;letter-spacing:-.005em;text-align:center}
-.name .l{display:inline-block;overflow:hidden;vertical-align:top}
-.name .l > span{display:inline-block;animation:rise .8s cubic-bezier(.2,.9,.25,1) both;animation-delay:calc(var(--i) * 55ms + 150ms)}
-.name .sp{display:inline-block;width:.22em}
-@keyframes rise{from{transform:translateY(105%)}to{transform:none}}
+/* the name is painted with a left-to-right fill: solid accent up to --p, faint accent after it */
+.name .box{display:inline-block;transform-origin:0 0;color:transparent;
+  background-image:linear-gradient(90deg,var(--accent) 0,var(--accent) var(--p,100%),color-mix(in srgb,var(--accent) 16%,var(--bg)) var(--p,100%));
+  -webkit-background-clip:text;background-clip:text}
+/* load intro: everything but the name starts hidden, then fades in */
+.intro .meta,.intro .tagline,.intro main > section,.intro footer,.intro .name .box{opacity:0}
+.meta,.tagline,main > section,footer{transition:opacity .9s ease}
 .tagline{margin:clamp(40px,8vw,110px) auto clamp(20px,3vw,32px);text-align:center;color:var(--accent);line-height:1.5}
 
 /* bendable blocks: background is drawn wider than the box, and the visible shape is a clip-path set from script */
@@ -118,6 +121,13 @@ html.lenis,html.lenis body{height:auto}
   .dot{display:none}
 }
 </style>
+<script>
+/* hide the page straight away so nothing flashes before the intro starts; failsafe shows it after 6s */
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  document.documentElement.classList.add('intro');
+  setTimeout(function(){ document.documentElement.classList.remove('intro'); }, 6000);
+}
+</script>
 </head>
 <body>
 
@@ -209,24 +219,18 @@ html.lenis,html.lenis body{height:auto}
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
 
-  /* 1. Name: letters rise in one after another, then the name is fitted to the page width */
+  /* 1. Name: fitted to the page width */
   var name = document.getElementById('name');
-  var text = name.textContent, i = 0;
+  var text = name.textContent;
   name.textContent = '';
-  var box = document.createElement('span'); box.style.display = 'inline-block'; name.appendChild(box);
-  text.split('').forEach(function(ch){
-    if (ch === ' ') { var s = document.createElement('span'); s.className = 'sp'; box.appendChild(s); return; }
-    var l = document.createElement('span'); l.className = 'l'; l.setAttribute('aria-hidden', 'true');
-    var inner = document.createElement('span'); inner.textContent = ch; inner.style.setProperty('--i', i++);
-    l.appendChild(inner); box.appendChild(l);
-  });
+  var box = document.createElement('span'); box.className = 'box'; box.setAttribute('aria-hidden', 'true'); box.textContent = text;
+  name.appendChild(box);
   function fit(){
     name.style.fontSize = '100px';
-    var w = box.getBoundingClientRect().width, avail = name.clientWidth;
+    var w = box.offsetWidth, avail = name.clientWidth;
     if (w) name.style.fontSize = Math.floor(100 * avail / w * 0.995) + 'px';
   }
   fit();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
   addEventListener('resize', fit);
 
   /* 2. About paragraph: words fill in as you scroll */
@@ -352,6 +356,55 @@ html.lenis,html.lenis body{height:auto}
       el.addEventListener('mouseleave', function(){ dot.classList.remove('big'); });
     });
     (function loop(){ x += (tx - x) * 0.22; y += (ty - y) * 0.22; dot.style.transform = 'translate(' + x + 'px,' + y + 'px)'; requestAnimationFrame(loop); })();
+  }
+
+  /* 6. Load intro, timed from the original:
+        blank -> name appears small and faint near the centre -> colour fills it left to right
+        -> short hold -> name zooms up to full size -> rest of the page fades in */
+  var root = document.documentElement;
+  if (root.classList.contains('intro')){
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    scrollTo(0, 0);
+    root.style.overflow = 'hidden';
+    if (lenis){ try { lenis.scrollTo(0, { immediate: true, force: true }); } catch(e){} lenis.stop(); }
+
+    var started = false;
+    function begin(){
+      if (started) return; started = true;
+      fit();
+      box.style.transform = 'none';
+      var r = box.getBoundingClientRect();
+      var vw = innerWidth, vh = innerHeight;
+      var s0 = Math.min(1, Math.max(vw * 0.19, 170) / r.width);
+      var tx0 = vw / 2 - (r.left + r.width * s0 / 2);
+      var ty0 = vh * 0.4 - (r.top + r.height * s0 / 2);
+      function ease(t){ return t < .5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2; }   /* slow-fast-slow */
+      function easeSine(t){ return -(Math.cos(Math.PI * t) - 1) / 2; }
+      function seg(t, a, b){ return clamp((t - a) / (b - a), 0, 1); }
+      function place(k){
+        var sc = s0 + (1 - s0) * k;
+        box.style.transform = 'translate(' + (tx0 * (1 - k)).toFixed(2) + 'px,' + (ty0 * (1 - k)).toFixed(2) + 'px) scale(' + sc.toFixed(4) + ')';
+      }
+      place(0);
+      box.style.setProperty('--p', '0%');
+      var t0 = performance.now(), revealed = false;
+      (function step(now){
+        var t = now - t0;
+        box.style.opacity = seg(t, 300, 750).toFixed(3);                              /* faint name fades in */
+        box.style.setProperty('--p', (easeSine(seg(t, 850, 2750)) * 100).toFixed(2) + '%'); /* colour fills left to right */
+        place(ease(seg(t, 3050, 3650)));                                              /* zoom up to full size */
+        if (!revealed && t >= 3500){ revealed = true; root.classList.remove('intro'); }  /* page fades in */
+        if (t < 3700){ requestAnimationFrame(step); return; }
+        box.style.transform = ''; box.style.opacity = ''; box.style.removeProperty('--p');
+        root.style.overflow = '';
+        scrollTo(0, 0);
+        if (lenis){ lenis.start(); try { lenis.scrollTo(0, { immediate: true, force: true }); } catch(e){} }
+      })(t0);
+    }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(begin);
+    setTimeout(begin, 1500);   /* don't wait forever on slow fonts */
+  } else if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(fit);
   }
 
   /* 5. Copy email */
