@@ -389,15 +389,17 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       /* Pointer stretch, measured from the original: while the loader runs, moving the mouse stretches the name
          sideways (up to ~2x for a very fast move, slightly taller too), then it springs back,
          losing ~40% of the stretch every 0.2s. It leans toward the side the pointer came from. */
-      var stretch = 0, dir = 0, dxAcc = 0, lastX = null, lastT = performance.now();
+      var stretch = 0, dir = 0, dxAcc = 0, lastX = null, lastT = performance.now(), vx = 0;
       var bw = box.offsetWidth, bh = box.offsetHeight;
       function onMove(e){ if (lastX !== null) dxAcc += e.clientX - lastX; lastX = e.clientX; }
       addEventListener('mousemove', onMove);
       function updateStretch(now){
         var dt = Math.min(64, now - lastT); lastT = now;
         stretch *= Math.pow(0.59, dt / 200);
-        var impulse = Math.min(1.1, Math.abs(dxAcc) / 150);
-        if (impulse > stretch){ stretch = impulse; dir = dxAcc < 0 ? -1 : 1; }
+        /* pointer speed in px per ms, lightly smoothed: a normal swipe (~1 px/ms) gives a clear stretch, a fast flick (~3 px/ms) nearly doubles the width */
+        if (dt > 0) vx = vx * 0.5 + (dxAcc / dt) * 0.5;
+        var impulse = Math.min(1.1, Math.abs(vx) * 0.35);
+        if (impulse > stretch){ stretch = impulse; dir = vx < 0 ? -1 : 1; }
         dxAcc = 0;
         if (stretch < 0.002) stretch = 0;
       }
