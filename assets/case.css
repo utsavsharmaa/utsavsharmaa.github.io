@@ -2,7 +2,7 @@
    Layout: mono meta row, fitted project title, mono tagline, bending hero image,
    a facts row, then numbered chapters (label column + text column) with image stages between them. */
 :root{
-  --bg:#FFFFFF; --rule:rgba(0,0,0,.3); --fg:#111111; --ink:#111111; --text2:#2C2924; --text3:#57514A; --line:rgba(17,17,17,.13); --muted:#6B6457;
+  --bg:#FFFFFF; --rule:rgba(0,0,0,.2); --fg:#111111; --ink:#111111; --text2:#2C2924; --text3:#57514A; --line:rgba(17,17,17,.13); --muted:#6B6457;
   --panel:#F4F2EE; --accent:#E9B300; --on-accent:#140F00;
   --pill:#FFFFFF; --pill-fg:#111111; --pill-soft:rgba(255,255,255,.5);
   --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
@@ -27,8 +27,9 @@
 *{box-sizing:border-box}
 html,body{margin:0;overflow-x:clip}
 body{background:transparent;color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;padding-inline:clamp(16px,3.33vw,48px)}
-/* ruled lines, same as the homepage */
-html{background:var(--bg) repeating-linear-gradient(to bottom,transparent 0 45px,var(--rule) 45px 46px) 0 -16px}
+/* ruled lines from the Figma frames (drawn by assets/rules.js): 24 lines top to bottom of the screen, 20% black / 10% gold */
+html{background:var(--bg)}
+.rules{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;color:var(--rule)}
 .theming body,.theming body *{transition:background-color .6s ease,color .6s ease,border-color .6s ease!important}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%;height:auto}

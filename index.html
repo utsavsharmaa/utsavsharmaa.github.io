@@ -11,10 +11,10 @@
 <style>
 /* Layout: landing from Utsav's Figma (Desktop 1 light / Desktop 2 dark): nav pill, meta row, two-line gold name with
    stamps and a smiley stuck on it, mono tagline. Then rounded media cards in a 2-col grid, about panel, gold contact card. */
-/* Light = white ruled paper (black lines at 30%, 46px apart) with black type and gold name.
+/* Light = white ruled paper (black lines at 20%, 24 lines per screen) with black type and gold name.
    Dark = deep brown-black with gold lines at 10% and everything in gold. */
 :root{
-  --bg:#FFFFFF; --rule:rgba(0,0,0,.3); --fg:#111111; --ink:#111111; --muted:#6B6457;
+  --bg:#FFFFFF; --rule:rgba(0,0,0,.2); --fg:#111111; --ink:#111111; --muted:#6B6457;
   --panel:#F4F2EE; --accent:#E9B300; --on-accent:#140F00;
   --pill:#FFFFFF; --pill-fg:#111111; --pill-soft:rgba(255,255,255,.5);
   --nav-bg:rgba(255,255,255,.2); --nav-line:#4A3800; --hover:rgba(17,17,17,.07);
@@ -46,8 +46,9 @@
 html,body{margin:0}
 html,body{overflow-x:clip}
 body{background:transparent;color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;padding-inline:clamp(16px,3.33vw,48px)}  /* original: 48px side margins at desktop */
-/* ruled lines from the Figma file: first line 29px from the top, then every 46px; they scroll with the page */
-html{background:var(--bg) repeating-linear-gradient(to bottom,transparent 0 45px,var(--rule) 45px 46px) 0 -16px}
+/* ruled lines from the Figma frames (drawn by assets/rules.js): 24 lines top to bottom of the screen, 20% black / 10% gold */
+html{background:var(--bg)}
+.rules{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;color:var(--rule)}
 .theming body,.theming body *{transition:background-color .6s ease,color .6s ease,border-color .6s ease,opacity .6s ease!important}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
@@ -56,7 +57,7 @@ a{color:inherit;text-decoration:none}
 /* landing */
 .hero{position:relative;padding-top:clamp(92px,12.5vw,180px)}
 /* nav pill: 41px from the top, 20px DM Mono, 34px apart, at 1440 wide */
-.nav{position:absolute;top:clamp(14px,2.85vw,41px);left:50%;transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:clamp(2px,2.36vw,34px);
+.nav{position:absolute;top:clamp(14px,2.85vw,41px);left:50%;transform:translateX(-50%);z-index:5;display:flex;align-items:center;height:clamp(40px,4.58vw,66px);gap:clamp(2px,2.36vw,34px);
   padding:clamp(6px,.83vw,12px) clamp(8px,1.39vw,20px);border:1px solid var(--nav-line);border-radius:40px;background:var(--nav-bg);
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--ink);font-size:clamp(11px,1.39vw,20px);letter-spacing:-.01em;white-space:nowrap}
 .nav a{position:relative;padding:clamp(5px,.56vw,8px) clamp(7px,.83vw,12px);border-radius:20px;transition:background-color .25s}
@@ -64,9 +65,13 @@ a{color:inherit;text-decoration:none}
 /* pages that aren't built yet say so instead of going nowhere */
 .nav a[data-soon]::after{content:"Coming soon";position:absolute;left:50%;top:calc(100% + 12px);transform:translate(-50%,-4px);padding:6px 10px;border-radius:999px;background:var(--pill);color:var(--pill-fg);font-size:11px;letter-spacing:.04em;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
 .nav a[data-soon]:hover::after,.nav a[data-soon]:focus-visible::after,.nav a.soon::after{opacity:1;transform:translate(-50%,0)}
-.theme-btn{display:grid;place-items:center;width:clamp(28px,2.6vw,38px);height:clamp(28px,2.6vw,38px);margin-left:clamp(0px,.3vw,4px);border:0;border-radius:50%;background:transparent;color:inherit;cursor:pointer;padding:0;transition:background-color .25s}
+/* light / dark switch: its own round button in the top-right corner, same height and outline as the nav pill; stays put while you scroll */
+.theme-btn{position:fixed;z-index:47;top:clamp(14px,2.85vw,41px);right:clamp(16px,3.33vw,48px);display:grid;place-items:center;
+  width:clamp(40px,4.58vw,66px);height:clamp(40px,4.58vw,66px);padding:0;border:1px solid var(--nav-line);border-radius:50%;
+  background:var(--nav-bg);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--ink);cursor:pointer;transition:background-color .25s,opacity .9s ease}
 .theme-btn:hover{background:var(--hover)}
-.theme-btn span{width:44%;height:44%;border-radius:50%;border:1.5px solid currentColor;background:linear-gradient(90deg,currentColor 50%,transparent 50%);transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
+.intro .theme-btn{opacity:0}
+.theme-btn span{width:36%;height:36%;border-radius:50%;border:1.5px solid currentColor;background:linear-gradient(90deg,currentColor 50%,transparent 50%);transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
 .theme-btn[aria-pressed="true"] span{transform:rotate(180deg)}
 
 .hero-in{width:var(--W);margin-inline:auto}
@@ -100,19 +105,22 @@ a{color:inherit;text-decoration:none}
 /* after the intro the smiley comes loose and rolls around the whole screen; script moves it */
 .smile.roam{position:fixed;left:0;top:0;z-index:45;transition:opacity .4s ease;translate:none}
 .smile.roam .bob{top:0;bottom:0}
-.smile.roam:hover .bob{scale:1.15}
 .smile.roam.drag .bob{scale:1.2}
+/* little squash each time it hits an edge */
+.smile .bob.boing{animation:boing .38s cubic-bezier(.3,1.4,.5,1)}
+@keyframes boing{0%{scale:1}30%{scale:.86}65%{scale:1.07}100%{scale:1}}
 
 /* "Hello" speech bubble that sits on the pointer while it's over the name (Figma: Group 3) */
 .hello{position:fixed;left:0;top:0;z-index:55;pointer-events:none;opacity:0;transition:opacity .2s ease}
 .hello.on{opacity:1}
-.hello-in{position:absolute;left:-11px;bottom:10.5px;padding:8px 12px;border-radius:20px;background:#fff;color:#E9B300;
+.hello-in{position:absolute;left:-11px;bottom:10.5px;display:block;overflow:hidden;padding:8px 12px;border-radius:20px;background:#fff;color:#E9B300;
   font-family:var(--mono);font-size:20px;line-height:1.2;letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;
-  box-shadow:0 6px 18px -8px rgba(20,15,0,.35);transform-origin:11px calc(100% + 10.5px);scale:.4;transition:scale .35s cubic-bezier(.3,1.6,.5,1)}
+  box-shadow:0 6px 18px -8px rgba(20,15,0,.35);transform-origin:11px calc(100% + 10.5px);scale:.4;
+  transition:scale .35s cubic-bezier(.3,1.6,.5,1),width .6s cubic-bezier(.65,0,.35,1)}
 .hello.on .hello-in{scale:1}
 .hello svg{position:absolute;left:0;top:-15.5px;display:block}
-.hello-in.pop{animation:hello-pop .3s cubic-bezier(.3,1.6,.5,1)}
-@keyframes hello-pop{from{scale:.86}to{scale:1}}
+.hello-in .w{display:inline-block}
+.hello-measure{position:absolute;visibility:hidden;white-space:nowrap;font-family:var(--mono);font-size:20px;letter-spacing:-.01em;text-transform:uppercase}
 
 /* load intro: everything but the name starts hidden, then fades in; stickers slap on afterwards */
 .intro .nav,.intro .hero-meta,.intro .tagline,.intro .work-head,.intro main > section,.intro footer,.intro .name .box{opacity:0}
@@ -201,10 +209,10 @@ html.lenis,html.lenis body{height:auto}
 
 @media (max-width:640px){
   :root{--W:78vw}
-  .nav{gap:0;padding:4px 6px;font-size:10.5px;letter-spacing:-.02em}
+  .nav{gap:0;height:auto;padding:4px 6px;font-size:10.5px;letter-spacing:-.02em}
   .nav a{padding:6px 6px}
   .nav a[data-soon]::after{font-size:9px}
-  .theme-btn{width:26px;height:26px;margin-left:0}
+  .theme-btn{top:auto;bottom:16px;right:16px;width:44px;height:44px}
   .hero{padding-top:84px}
   .tagline{max-width:none}
   .me{height:240px}
@@ -222,6 +230,7 @@ html.lenis,html.lenis body{height:auto}
 }
 </style>
 <script src="assets/theme.js"></script>
+<script src="assets/rules.js" defer></script>
 <script>
 /* hide the page straight away so nothing flashes before the intro starts; failsafe shows it after 6s */
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
@@ -239,8 +248,8 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     <a href="#" data-soon>Playground</a>
     <a href="#" data-soon>Photography</a>
     <a href="#" data-soon>Resume</a>
-    <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch to dark mode"><span aria-hidden="true"></span></button>
   </nav>
+  <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch to dark mode"><span aria-hidden="true"></span></button>
 
   <div class="hero-in">
     <div class="hero-meta mono"><span>Multidisciplinary designer</span><span>2026</span></div>
@@ -248,7 +257,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       <h1 class="name" id="name" aria-label="Utsav Sharma"><span class="box" aria-hidden="true"><span class="ln">Utsav</span><span class="ln">Sharma</span></span></h1>
       <img class="stk" src="assets/home/varanasi.webp" width="483" height="618" alt="Varanasi postage stamp: मोक्ष की नगरी, death is not the end of life" draggable="false" style="--x:-1.24%;--y:48.03%;--w:13.4%;--r:-18.63deg;--d:.05s">
       <img class="stk" src="assets/home/lucknow.webp" width="543" height="694" alt="Lucknow postage stamp: नवाबों का शहर, muskuraiye aap Lucknow mein hai" draggable="false" style="--x:101.13%;--y:56.26%;--w:15.06%;--r:14.41deg;--d:.2s">
-      <button class="stk smile" type="button" data-theme-toggle aria-label="Switch to dark mode" style="--x:102.56%;--y:16.67%;--w:10.1%;--r:0deg;--d:.35s"><span class="bob"><img src="assets/home/smiley.webp" width="455" height="455" alt="" draggable="false"></span></button>
+      <span class="stk smile" aria-hidden="true" style="--x:102.56%;--y:16.67%;--w:10.1%;--r:0deg;--d:.35s"><span class="bob"><img src="assets/home/smiley.webp" width="455" height="455" alt="" draggable="false"></span></span>
     </div>
   </div>
   <p class="tagline mono">I notice weird things. Then I try to figure out why they happen. Sometimes that becomes a brand. Sometimes an interface. Sometimes a photograph.</p>
@@ -326,7 +335,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
 
 <div class="edge-blur" aria-hidden="true"><i></i><i></i></div>
 <div class="dot" id="dot" aria-hidden="true"></div>
-<div class="hello" id="hello" aria-hidden="true"><svg width="25.4" height="15.5" viewBox="0 0 25.4 15.5"><path d="M15.5 0C12.33 5.17 4.8 15.5 0 15.5c6.6-.09 20.91-3.24 25.4-15.13L15.5 0Z" fill="#fff"/></svg><span class="hello-in" id="helloText">Hello</span></div>
+<div class="hello" id="hello" aria-hidden="true"><svg width="25.4" height="15.5" viewBox="0 0 25.4 15.5"><path d="M15.5 0C12.33 5.17 4.8 15.5 0 15.5c6.6-.09 20.91-3.24 25.4-15.13L15.5 0Z" fill="#fff"/></svg><span class="hello-in" id="helloPill"><span class="w" id="helloText">Hello</span></span><span class="hello-measure" id="helloMeasure"></span></div>
 
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 <script>
@@ -584,49 +593,63 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   });
 
   /* 9. "Hello" bubble: while the pointer is over the name, a speech bubble sits right on it
-        and says hello in a different Indian language every second */
-  var hello = document.getElementById('hello'), helloText = document.getElementById('helloText');
+        and says hello in a different Indian language every 2 seconds. Each change: the old word
+        slides up and fades out, the bubble eases to the new width, the new word rises in. */
+  var hello = document.getElementById('hello'), pill = document.getElementById('helloPill');
+  var helloText = document.getElementById('helloText'), helloMeasure = document.getElementById('helloMeasure');
   var HELLOS = ['Hello', 'Namaste', 'Nomoshkaar', 'Vanakkam', 'Namaskaram', 'Namaskaar', 'Namaskara', 'Kem Chho', 'Namaskaram', 'Sat Sri Akaal', 'Nômôskar', 'Namaskar'];
-  var hi = 0, helloTimer = null;
-  function setHello(i){
+  var hi = 0, helloTimer = null, swapT = null;
+  function widthFor(word){ helloMeasure.textContent = word; return Math.ceil(helloMeasure.getBoundingClientRect().width) + 24; }
+  function showWord(i, instant){
     hi = i % HELLOS.length;
-    helloText.textContent = HELLOS[hi];
-    helloText.classList.remove('pop'); void helloText.offsetWidth; helloText.classList.add('pop');
+    var word = HELLOS[hi];
+    clearTimeout(swapT);
+    if (instant || !helloText.animate){
+      helloText.getAnimations && helloText.getAnimations().forEach(function(a){ a.cancel(); });
+      helloText.textContent = word; pill.style.width = widthFor(word) + 'px'; return;
+    }
+    pill.style.width = widthFor(word) + 'px';
+    helloText.animate([{ opacity: 1, transform: 'translateY(0)', filter: 'blur(0)' }, { opacity: 0, transform: 'translateY(-55%)', filter: 'blur(2px)' }],
+      { duration: 280, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' });
+    swapT = setTimeout(function(){
+      helloText.textContent = word;
+      helloText.animate([{ opacity: 0, transform: 'translateY(55%)', filter: 'blur(2px)' }, { opacity: 1, transform: 'translateY(0)', filter: 'blur(0)' }],
+        { duration: 420, easing: 'cubic-bezier(.25,1,.5,1)', fill: 'forwards' });
+    }, 280);
   }
   function moveHello(e){ hello.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px)'; }
   if (matchMedia('(hover: hover) and (pointer: fine)').matches){
     name.addEventListener('mouseenter', function(e){
       if (root.classList.contains('intro')) return;
-      moveHello(e); setHello(0); hello.classList.add('on');
+      moveHello(e); showWord(0, true); hello.classList.add('on');
       clearInterval(helloTimer);
-      helloTimer = setInterval(function(){ setHello(hi + 1); }, 1000);
+      helloTimer = setInterval(function(){ showWord(hi + 1); }, 2000);
     });
     name.addEventListener('mousemove', function(e){ if (hello.classList.contains('on')) moveHello(e); });
-    name.addEventListener('mouseleave', function(){ hello.classList.remove('on'); clearInterval(helloTimer); });
+    name.addEventListener('mouseleave', function(){ hello.classList.remove('on'); clearInterval(helloTimer); clearTimeout(swapT); });
   }
 
-  /* 10. The smiley comes loose after the intro and rolls around the whole screen on its own, forever.
-         It wanders toward random spots, rolls as it moves, stops when you hover so you can tap it
-         (tap = switch the theme), and you can grab it and throw it. */
+  /* 10. The smiley comes loose after the intro and travels like a bouncing ball: straight lines at a steady
+         speed, bouncing off the edges of the screen (with a little squash) and heading back across, forever.
+         It rolls as it goes. You can grab it and throw it; it then eases back to its cruising speed. */
   var smile = document.querySelector('.smile');
   if (smile && !reduce){
-    var S = { on: false, x: 0, y: 0, vx: 0, vy: 0, tx: 0, ty: 0, a: 0, w: 0, hover: false, drag: false, moved: false, pid: null, gx: 0, gy: 0, lx: 0, ly: 0, lt: 0, last: 0, startAt: 0 };
+    var bob = smile.querySelector('.bob');
+    var S = { on: false, x: 0, y: 0, vx: 0, vy: 0, a: 0, w: 0, drag: false, moved: false, pid: null, gx: 0, gy: 0, lx: 0, ly: 0, lt: 0, last: 0, startAt: 0 };
     function size(){ return Math.max(34, document.querySelector('.name-box').clientWidth * 0.101); }
-    function pick(){
-      var m = S.w * 0.7, vw = document.documentElement.clientWidth, vh = innerHeight;
-      S.tx = m + Math.random() * Math.max(1, vw - 2 * m);
-      S.ty = m + Math.random() * Math.max(1, vh - 2 * m);
-    }
+    function cruise(){ return Math.max(110, Math.min(230, document.documentElement.clientWidth * 0.13)); }
     function start(){
       var r = smile.getBoundingClientRect();
       S.w = size(); S.x = r.left + r.width / 2; S.y = r.top + r.height / 2;
+      /* set off down and to the left at a diagonal, like a ball pushed off the name */
+      var ang = (200 + Math.random() * 30) * Math.PI / 180, sp = cruise();
+      S.vx = Math.cos(ang) * sp; S.vy = -Math.sin(ang) * sp;
       smile.style.width = S.w + 'px';
       smile.style.transform = 'translate3d(' + (S.x - S.w / 2).toFixed(1) + 'px,' + (S.y - S.w / 2).toFixed(1) + 'px,0)';
       smile.classList.add('roam');
-      S.on = true; S.last = performance.now(); pick();
+      S.on = true; S.last = performance.now();
     }
-    smile.addEventListener('mouseenter', function(){ S.hover = true; });
-    smile.addEventListener('mouseleave', function(){ S.hover = false; });
+    function boing(){ bob.classList.remove('boing'); void bob.offsetWidth; bob.classList.add('boing'); }
     smile.addEventListener('pointerdown', function(e){
       if (!S.on || e.button !== 0) return;
       S.drag = true; S.moved = false; S.pid = e.pointerId;
@@ -636,8 +659,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     });
     smile.addEventListener('pointermove', function(e){
       if (!S.drag || e.pointerId !== S.pid) return;
-      var now = performance.now(), dt = Math.max(1, now - S.lt) / 1000;
-      if (!S.moved && Math.abs(e.clientX - S.lx) + Math.abs(e.clientY - S.ly) < 5 && now - S.lt < 400) return;
+      var now = performance.now(), dt = Math.max(8, now - S.lt) / 1000;
       S.moved = true;
       S.vx = (e.clientX - S.lx) / dt; S.vy = (e.clientY - S.ly) / dt;
       S.lx = e.clientX; S.ly = e.clientY; S.lt = now;
@@ -646,14 +668,13 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     function release(e){
       if (!S.drag || e.pointerId !== S.pid) return;
       S.drag = false; S.pid = null; smile.classList.remove('drag');
-      var sp = Math.hypot(S.vx, S.vy), max = 2200;
-      if (sp > max){ S.vx *= max / sp; S.vy *= max / sp; }   /* a throw carries on, then it settles back into wandering */
-      pick();
+      var sp = Math.hypot(S.vx, S.vy), max = 2400;
+      if (sp < 40){ var ang = Math.random() * Math.PI * 2; S.vx = Math.cos(ang) * cruise(); S.vy = Math.sin(ang) * cruise(); }   /* just dropped: pick a direction */
+      else if (sp > max){ S.vx *= max / sp; S.vy *= max / sp; }
     }
     smile.addEventListener('pointerup', release);
     smile.addEventListener('pointercancel', release);
-    smile.addEventListener('click', function(e){ if (S.moved){ e.preventDefault(); e.stopImmediatePropagation(); S.moved = false; } }, true);
-    addEventListener('resize', function(){ if (S.on){ S.w = size(); smile.style.width = S.w + 'px'; pick(); } });
+    addEventListener('resize', function(){ if (S.on){ S.w = size(); smile.style.width = S.w + 'px'; } });
 
     (function roam(now){
       if (!S.on){
@@ -666,21 +687,19 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       var dt = Math.min(0.05, (now - S.last) / 1000); S.last = now;
       var vw = document.documentElement.clientWidth, vh = innerHeight, half = S.w / 2;
       if (!S.drag){
-        var speed = Math.max(70, Math.min(170, vw * 0.09));
-        var dx = S.tx - S.x, dy = S.ty - S.y, d = Math.hypot(dx, dy);
-        if (d < S.w) pick();
-        var want = S.hover ? 0 : speed;
-        var dvx = d ? dx / d * want : 0, dvy = d ? dy / d * want : 0;
-        var k = Math.min(1, dt * (S.hover ? 6 : 0.9));
-        S.vx += (dvx - S.vx) * k; S.vy += (dvy - S.vy) * k;
+        /* keep a steady speed; after a throw, ease back to cruising without changing direction */
+        var sp = Math.hypot(S.vx, S.vy) || 1, target = cruise();
+        var nsp = sp + (target - sp) * Math.min(1, dt * 1.6);
+        S.vx *= nsp / sp; S.vy *= nsp / sp;
         S.x += S.vx * dt; S.y += S.vy * dt;
-        /* bounce off the edges of the screen */
-        if (S.x < half){ S.x = half; S.vx = Math.abs(S.vx) * 0.8; }
-        if (S.x > vw - half){ S.x = vw - half; S.vx = -Math.abs(S.vx) * 0.8; }
-        if (S.y < half){ S.y = half; S.vy = Math.abs(S.vy) * 0.8; }
-        if (S.y > vh - half){ S.y = vh - half; S.vy = -Math.abs(S.vy) * 0.8; }
+        var hit = false;
+        if (S.x < half){ S.x = half; S.vx = Math.abs(S.vx); hit = true; }
+        if (S.x > vw - half){ S.x = vw - half; S.vx = -Math.abs(S.vx); hit = true; }
+        if (S.y < half){ S.y = half; S.vy = Math.abs(S.vy); hit = true; }
+        if (S.y > vh - half){ S.y = vh - half; S.vy = -Math.abs(S.vy); hit = true; }
+        if (hit) boing();
       }
-      S.a += (S.vx * dt) / half;   /* roll like a ball: turn by distance travelled / radius */
+      S.a += (S.vx * dt) / half;   /* roll: turn by distance travelled / radius */
       smile.style.transform = 'translate3d(' + (S.x - half).toFixed(1) + 'px,' + (S.y - half).toFixed(1) + 'px,0) rotate(' + S.a.toFixed(3) + 'rad)';
       requestAnimationFrame(roam);
     })(performance.now());
