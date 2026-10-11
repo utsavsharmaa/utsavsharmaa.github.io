@@ -92,18 +92,27 @@ a{color:inherit;text-decoration:none}
 .stk.drag img,.stk.drag{filter:drop-shadow(0 18px 18px rgba(0,0,0,.22))}
 .smile{aspect-ratio:1}
 .smile img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;rotate:25.26deg}
-/* the smiley never sits still: it drifts in a slow loop, swaying side to side, forever */
-.smile .bob{position:absolute;inset:0;animation:smile-loop 5.2s ease-in-out infinite;will-change:transform}
-@keyframes smile-loop{
-  0%,100%{transform:translate(0,0) rotate(0deg)}
-  25%{transform:translate(9%,-10%) rotate(12deg)}
-  50%{transform:translate(0,-16%) rotate(0deg)}
-  75%{transform:translate(-9%,-10%) rotate(-12deg)}
-}
-/* in the dark frame the smiley sits 40px higher; it glides there when the theme switches */
-.smile .bob{top:var(--sy,0%);bottom:calc(-1 * var(--sy,0%));transition:top .7s cubic-bezier(.3,1.3,.5,1),bottom .7s cubic-bezier(.3,1.3,.5,1)}
+.smile .bob{position:absolute;inset:0;transition:scale .35s cubic-bezier(.3,1.5,.5,1)}
+/* in the dark frame the smiley sits 40px higher (only while it's parked on the name) */
+.smile .bob{top:var(--sy,0%);bottom:calc(-1 * var(--sy,0%))}
 :root[data-theme="dark"] .smile{--sy:-44%}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .smile{--sy:-44%}}
+/* after the intro the smiley comes loose and rolls around the whole screen; script moves it */
+.smile.roam{position:fixed;left:0;top:0;z-index:45;transition:opacity .4s ease;translate:none}
+.smile.roam .bob{top:0;bottom:0}
+.smile.roam:hover .bob{scale:1.15}
+.smile.roam.drag .bob{scale:1.2}
+
+/* "Hello" speech bubble that sits on the pointer while it's over the name (Figma: Group 3) */
+.hello{position:fixed;left:0;top:0;z-index:55;pointer-events:none;opacity:0;transition:opacity .2s ease}
+.hello.on{opacity:1}
+.hello-in{position:absolute;left:-11px;bottom:10.5px;padding:8px 12px;border-radius:20px;background:#fff;color:#E9B300;
+  font-family:var(--mono);font-size:20px;line-height:1.2;letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;
+  box-shadow:0 6px 18px -8px rgba(20,15,0,.35);transform-origin:11px calc(100% + 10.5px);scale:.4;transition:scale .35s cubic-bezier(.3,1.6,.5,1)}
+.hello.on .hello-in{scale:1}
+.hello svg{position:absolute;left:0;top:-15.5px;display:block}
+.hello-in.pop{animation:hello-pop .3s cubic-bezier(.3,1.6,.5,1)}
+@keyframes hello-pop{from{scale:.86}to{scale:1}}
 
 /* load intro: everything but the name starts hidden, then fades in; stickers slap on afterwards */
 .intro .nav,.intro .hero-meta,.intro .tagline,.intro .work-head,.intro main > section,.intro footer,.intro .name .box{opacity:0}
@@ -317,6 +326,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
 
 <div class="edge-blur" aria-hidden="true"><i></i><i></i></div>
 <div class="dot" id="dot" aria-hidden="true"></div>
+<div class="hello" id="hello" aria-hidden="true"><svg width="25.4" height="15.5" viewBox="0 0 25.4 15.5"><path d="M15.5 0C12.33 5.17 4.8 15.5 0 15.5c6.6-.09 20.91-3.24 25.4-15.13L15.5 0Z" fill="#fff"/></svg><span class="hello-in" id="helloText">Hello</span></div>
 
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 <script>
@@ -533,7 +543,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   }
 
   /* 7. Stickers: drag them anywhere; a tap (no drag) still works, so the smiley flips the theme */
-  document.querySelectorAll('.stk').forEach(function(el){
+  document.querySelectorAll('.stk:not(.smile)').forEach(function(el){
     var id = null, sx = 0, sy = 0, ox = 0, oy = 0, moved = false;
     el.addEventListener('pointerdown', function(e){
       if (e.button !== 0) return;
@@ -572,6 +582,109 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       if (lenis) lenis.scrollTo(t, { offset: -24 }); else t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
     });
   });
+
+  /* 9. "Hello" bubble: while the pointer is over the name, a speech bubble sits right on it
+        and says hello in a different Indian language every second */
+  var hello = document.getElementById('hello'), helloText = document.getElementById('helloText');
+  var HELLOS = ['Hello', 'Namaste', 'Nomoshkaar', 'Vanakkam', 'Namaskaram', 'Namaskaar', 'Namaskara', 'Kem Chho', 'Namaskaram', 'Sat Sri Akaal', 'Nômôskar', 'Namaskar'];
+  var hi = 0, helloTimer = null;
+  function setHello(i){
+    hi = i % HELLOS.length;
+    helloText.textContent = HELLOS[hi];
+    helloText.classList.remove('pop'); void helloText.offsetWidth; helloText.classList.add('pop');
+  }
+  function moveHello(e){ hello.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px)'; }
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches){
+    name.addEventListener('mouseenter', function(e){
+      if (root.classList.contains('intro')) return;
+      moveHello(e); setHello(0); hello.classList.add('on');
+      clearInterval(helloTimer);
+      helloTimer = setInterval(function(){ setHello(hi + 1); }, 1000);
+    });
+    name.addEventListener('mousemove', function(e){ if (hello.classList.contains('on')) moveHello(e); });
+    name.addEventListener('mouseleave', function(){ hello.classList.remove('on'); clearInterval(helloTimer); });
+  }
+
+  /* 10. The smiley comes loose after the intro and rolls around the whole screen on its own, forever.
+         It wanders toward random spots, rolls as it moves, stops when you hover so you can tap it
+         (tap = switch the theme), and you can grab it and throw it. */
+  var smile = document.querySelector('.smile');
+  if (smile && !reduce){
+    var S = { on: false, x: 0, y: 0, vx: 0, vy: 0, tx: 0, ty: 0, a: 0, w: 0, hover: false, drag: false, moved: false, pid: null, gx: 0, gy: 0, lx: 0, ly: 0, lt: 0, last: 0, startAt: 0 };
+    function size(){ return Math.max(34, document.querySelector('.name-box').clientWidth * 0.101); }
+    function pick(){
+      var m = S.w * 0.7, vw = document.documentElement.clientWidth, vh = innerHeight;
+      S.tx = m + Math.random() * Math.max(1, vw - 2 * m);
+      S.ty = m + Math.random() * Math.max(1, vh - 2 * m);
+    }
+    function start(){
+      var r = smile.getBoundingClientRect();
+      S.w = size(); S.x = r.left + r.width / 2; S.y = r.top + r.height / 2;
+      smile.style.width = S.w + 'px';
+      smile.style.transform = 'translate3d(' + (S.x - S.w / 2).toFixed(1) + 'px,' + (S.y - S.w / 2).toFixed(1) + 'px,0)';
+      smile.classList.add('roam');
+      S.on = true; S.last = performance.now(); pick();
+    }
+    smile.addEventListener('mouseenter', function(){ S.hover = true; });
+    smile.addEventListener('mouseleave', function(){ S.hover = false; });
+    smile.addEventListener('pointerdown', function(e){
+      if (!S.on || e.button !== 0) return;
+      S.drag = true; S.moved = false; S.pid = e.pointerId;
+      S.gx = e.clientX - S.x; S.gy = e.clientY - S.y; S.lx = e.clientX; S.ly = e.clientY; S.lt = performance.now();
+      try { smile.setPointerCapture(e.pointerId); } catch(err){}
+      smile.classList.add('drag');
+    });
+    smile.addEventListener('pointermove', function(e){
+      if (!S.drag || e.pointerId !== S.pid) return;
+      var now = performance.now(), dt = Math.max(1, now - S.lt) / 1000;
+      if (!S.moved && Math.abs(e.clientX - S.lx) + Math.abs(e.clientY - S.ly) < 5 && now - S.lt < 400) return;
+      S.moved = true;
+      S.vx = (e.clientX - S.lx) / dt; S.vy = (e.clientY - S.ly) / dt;
+      S.lx = e.clientX; S.ly = e.clientY; S.lt = now;
+      S.x = e.clientX - S.gx; S.y = e.clientY - S.gy;
+    });
+    function release(e){
+      if (!S.drag || e.pointerId !== S.pid) return;
+      S.drag = false; S.pid = null; smile.classList.remove('drag');
+      var sp = Math.hypot(S.vx, S.vy), max = 2200;
+      if (sp > max){ S.vx *= max / sp; S.vy *= max / sp; }   /* a throw carries on, then it settles back into wandering */
+      pick();
+    }
+    smile.addEventListener('pointerup', release);
+    smile.addEventListener('pointercancel', release);
+    smile.addEventListener('click', function(e){ if (S.moved){ e.preventDefault(); e.stopImmediatePropagation(); S.moved = false; } }, true);
+    addEventListener('resize', function(){ if (S.on){ S.w = size(); smile.style.width = S.w + 'px'; pick(); } });
+
+    (function roam(now){
+      if (!S.on){
+        if (!root.classList.contains('intro')){
+          if (!S.startAt) S.startAt = now + 1300;   /* let it land on the name first */
+          else if (now >= S.startAt) start();
+        }
+        requestAnimationFrame(roam); return;
+      }
+      var dt = Math.min(0.05, (now - S.last) / 1000); S.last = now;
+      var vw = document.documentElement.clientWidth, vh = innerHeight, half = S.w / 2;
+      if (!S.drag){
+        var speed = Math.max(70, Math.min(170, vw * 0.09));
+        var dx = S.tx - S.x, dy = S.ty - S.y, d = Math.hypot(dx, dy);
+        if (d < S.w) pick();
+        var want = S.hover ? 0 : speed;
+        var dvx = d ? dx / d * want : 0, dvy = d ? dy / d * want : 0;
+        var k = Math.min(1, dt * (S.hover ? 6 : 0.9));
+        S.vx += (dvx - S.vx) * k; S.vy += (dvy - S.vy) * k;
+        S.x += S.vx * dt; S.y += S.vy * dt;
+        /* bounce off the edges of the screen */
+        if (S.x < half){ S.x = half; S.vx = Math.abs(S.vx) * 0.8; }
+        if (S.x > vw - half){ S.x = vw - half; S.vx = -Math.abs(S.vx) * 0.8; }
+        if (S.y < half){ S.y = half; S.vy = Math.abs(S.vy) * 0.8; }
+        if (S.y > vh - half){ S.y = vh - half; S.vy = -Math.abs(S.vy) * 0.8; }
+      }
+      S.a += (S.vx * dt) / half;   /* roll like a ball: turn by distance travelled / radius */
+      smile.style.transform = 'translate3d(' + (S.x - half).toFixed(1) + 'px,' + (S.y - half).toFixed(1) + 'px,0) rotate(' + S.a.toFixed(3) + 'rad)';
+      requestAnimationFrame(roam);
+    })(performance.now());
+  }
 
   /* 5. Copy email */
   document.getElementById('copyBtn').addEventListener('click', function(){
