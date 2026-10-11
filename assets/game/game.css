@@ -1,5 +1,5 @@
 /* FEEL IT: a 10-face emotion game that opens from the smiley. Card follows the Figma frame (Frame 23, 618 x 944):
-   dark #140F00 card, 40px corners, white X top right, Big Shoulders title, DM Mono labels with #FFC300 values,
+   dark #140F00 card, 40px corners, white X top right, Big Shoulders title, DM Sans labels with #FFC300 values,
    458px square photo with 20px corners, five 80px emoji buttons. Everything is sized in --u so the whole card
    scales down to fit any screen. */
 .feelit{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:12px;
@@ -7,7 +7,7 @@
   opacity:0;visibility:hidden;transition:opacity .35s ease,visibility 0s linear .35s;
   --u:min(1px,calc((100vh - 24px) / 944),calc((100vw - 24px) / 618));
   --gold:#FFC300; --ink:#140F00; --good:#7DD957; --bad:#FE2429;
-  font-family:"DM Mono",ui-monospace,Menlo,monospace;color:#fff}
+  font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;color:#fff}
 @supports (height:100dvh){.feelit{--u:min(1px,calc((100dvh - 24px) / 944),calc((100vw - 24px) / 618))}}
 .feelit.open{opacity:1;visibility:visible;transition:opacity .35s ease}
 .fi-card{position:relative;width:calc(618 * var(--u));height:calc(944 * var(--u));background:var(--ink);border-radius:calc(40 * var(--u));
@@ -95,7 +95,7 @@
 .play-tip{position:fixed;left:0;top:0;z-index:56;pointer-events:none;opacity:0;transition:opacity .2s ease}
 .play-tip.on{opacity:1}
 .play-tip .in{position:absolute;left:-50%;bottom:0;transform:translateX(-50%);display:block;padding:8px 12px;border-radius:20px;background:#fff;color:#E9B300;
-  font-family:"DM Mono",ui-monospace,Menlo,monospace;font-size:clamp(13px,1.1vw,16px);line-height:1.25;letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;text-align:center;
+  font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:clamp(13px,1.1vw,16px);line-height:1.25;letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;text-align:center;
   box-shadow:0 6px 18px -8px rgba(20,15,0,.35);scale:.6;transform-origin:50% 120%;transition:scale .35s cubic-bezier(.3,1.6,.5,1)}
 .play-tip .in{left:0}
 .play-tip.on .in{scale:1}

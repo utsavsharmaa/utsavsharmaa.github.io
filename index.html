@@ -7,7 +7,7 @@
 <title>Utsav Sharma Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap">
 <style>
 /* Layout: landing from Utsav's Figma (Desktop 1 light / Desktop 2 dark): nav pill, meta row, two-line gold name with
    stamps and a smiley stuck on it, mono tagline. Then rounded media cards in a 2-col grid, about panel, gold contact card. */
@@ -22,7 +22,7 @@
   --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
   --namefont:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
   --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+  --mono:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --gap:clamp(12px,3.33vw,48px);   /* original: 48px between cards at desktop */
   --ov:12vw; /* room for the bend to push edges outward */
   color-scheme:light;
@@ -60,12 +60,12 @@ a{color:inherit;text-decoration:none}
    --k is one Figma pixel: every hero size below is written as Figma px x --k so the layout scales with the window. */
 :root{--k:calc(100vw / 1440)}
 .hero{position:relative;padding-top:calc(108 * var(--k))}
-/* nav pill: 556 x 40 at the top, 12px DM Mono with 6% tracking, 24px apart; glass fill with a 0.5px gradient edge.
+/* nav pill: 600 x 40 at the top, 14px DM Sans with -1% tracking, 24px apart; glass fill with a 0.5px gradient edge.
    It's fixed, so it travels down the page with you. */
 .nav{position:fixed;top:28px;left:50%;transform:translateX(-50%);z-index:47;display:flex;align-items:center;height:40px;gap:24px;
   padding:4px 16px;border-radius:40px;background:var(--nav-bg);box-shadow:var(--nav-shadow);
   backdrop-filter:blur(8px) saturate(1.2);-webkit-backdrop-filter:blur(8px) saturate(1.2);
-  color:var(--nav-fg);font-size:12px;line-height:1.2;letter-spacing:.06em;white-space:nowrap}
+  color:var(--nav-fg);font-size:14px;line-height:1.2;letter-spacing:-.01em;white-space:nowrap}
 .nav::before,.theme-btn::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:.5px;background:var(--nav-edge);pointer-events:none;
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
 .nav a{position:relative;padding:8px 12px;border-radius:20px;transition:background-color .25s}
@@ -83,8 +83,8 @@ a{color:inherit;text-decoration:none}
 .theme-btn svg{width:29px;height:29px;display:block;transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
 .theme-btn[aria-pressed="true"] svg{transform:rotate(180deg)}
 
-/* meta row: 886 wide, 20px DM Mono */
-.hero-meta{display:flex;justify-content:space-between;gap:16px;width:calc(886 * var(--k));margin-inline:auto;color:var(--ink);font-size:max(11px,calc(20 * var(--k)));letter-spacing:-.01em;line-height:1.2}
+/* meta row: 886 wide, 16px DM Sans */
+.hero-meta{display:flex;justify-content:space-between;gap:16px;width:calc(886 * var(--k));margin-inline:auto;color:var(--ink);font-size:max(11px,calc(16 * var(--k)));letter-spacing:-.01em;line-height:1.2}
 .name-box{position:relative;margin-top:calc(12 * var(--k))}
 /* name: UTSAV 400px / SHARMA 300px Big Shoulders Black, 84% line height, -0.5% tracking */
 .name{position:relative;z-index:1;margin:0;font-family:var(--namefont);font-weight:900;text-transform:uppercase;color:var(--accent);line-height:.84;white-space:nowrap;text-align:center}
@@ -102,12 +102,12 @@ a{color:inherit;text-decoration:none}
   transition:transform .7s cubic-bezier(.3,1.45,.5,1) var(--d,0s),opacity .4s ease var(--d,0s),left .6s ease,top .6s ease;
   cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none}
 /* light frame (Desktop 3) / dark frame (Desktop 4) put the stamps a few px apart, so each theme gets its own spot */
-.st-var{--x:-431;--y:298;--w:120.7;--r:-16.66deg;--d:.05s}
-.st-luck{--x:443.5;--y:303.5;--w:135.5;--r:18.13deg;--d:.2s}
-.smile{--x:682;--y:129;--w:68.5;--r:0deg;--d:.35s}
-:root[data-theme="dark"] .st-var{--x:-443;--y:286}
-:root[data-theme="dark"] .st-luck{--y:293.5}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .st-var{--x:-443;--y:286} :root:not([data-theme="light"]) .st-luck{--y:293.5}}
+.st-var{--x:-431;--y:303;--w:120.7;--r:-16.66deg;--d:.05s}
+.st-luck{--x:443.5;--y:308.5;--w:135.5;--r:18.13deg;--d:.2s}
+.smile{--x:682;--y:134;--w:68.5;--r:0deg;--d:.35s}
+:root[data-theme="dark"] .st-var{--x:-443;--y:291}
+:root[data-theme="dark"] .st-luck{--y:298.5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .st-var{--x:-443;--y:291} :root:not([data-theme="light"]) .st-luck{--y:298.5}}
 .stk:hover{--s:1.06;--rh:-5deg;transition-delay:0s}
 .stk.drag{cursor:grabbing;--s:1.1;--rh:4deg;transition-delay:0s;z-index:3}
 .stk.drag img,.stk.drag{filter:drop-shadow(0 18px 18px rgba(0,0,0,.22))}
@@ -137,8 +137,8 @@ a{color:inherit;text-decoration:none}
 .intro .nav,.intro .hero-meta,.intro .tagline,.intro .work-head,.intro main > section,.intro footer,.intro .name .box{opacity:0}
 .intro .stk{opacity:0;--s:1.6;--rh:14deg}
 .nav,.hero-meta,.tagline,.work-head,main > section,footer{transition:opacity .9s ease}
-/* tagline: 20px, 886 wide, starting at y 741 (12px under the 585px name frame; the 2 lines of name measure 588) */
-.tagline{margin:calc(9 * var(--k)) auto 0;max-width:calc(886 * var(--k));text-align:center;color:var(--ink);font-size:max(11px,calc(20 * var(--k)));letter-spacing:-.01em;line-height:1.2}
+/* tagline: 16px DM Sans, 886 wide, starting at y 741 (12px under the 585px name frame; the 2 lines of name measure 588) */
+.tagline{margin:calc(9 * var(--k)) auto 0;max-width:calc(886 * var(--k));text-align:center;color:var(--ink);font-size:max(11px,calc(16 * var(--k)));letter-spacing:-.01em;line-height:1.2}
 
 /* bendable blocks: background is drawn wider than the box, and the visible shape is a clip-path set from script */
 .bend{position:relative;isolation:isolate;clip-path:inset(0 round 8px)}

@@ -7,7 +7,7 @@
   --pill:#FFFFFF; --pill-fg:#111111; --pill-soft:rgba(255,255,255,.5);
   --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
   --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+  --mono:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --gap:clamp(12px,3.33vw,48px);
   --ov:12vw;
   color-scheme:light;
