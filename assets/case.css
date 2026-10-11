@@ -2,8 +2,8 @@
    Layout: mono meta row, fitted project title, mono tagline, bending hero image,
    a facts row, then numbered chapters (label column + text column) with image stages between them. */
 :root{
-  --bg:#E8E5E2; --paper-o:1; --fg:#111111; --ink:#111111; --text2:#2C2924; --text3:#57514A; --line:rgba(17,17,17,.13); --muted:#6B6457;
-  --panel:rgba(74,56,0,.07); --accent:#E9B300; --on-accent:#140F00;
+  --bg:#FFFFFF; --rule:rgba(0,0,0,.3); --fg:#111111; --ink:#111111; --text2:#2C2924; --text3:#57514A; --line:rgba(17,17,17,.13); --muted:#6B6457;
+  --panel:#F4F2EE; --accent:#E9B300; --on-accent:#140F00;
   --pill:#FFFFFF; --pill-fg:#111111; --pill-soft:rgba(255,255,255,.5);
   --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
   --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -14,20 +14,21 @@
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#140F00; --paper-o:0; --fg:#E9B300; --ink:#E9B300; --text2:#D8C690; --text3:#A8996E; --line:rgba(233,179,0,.16); --muted:#A08A50;
+    --bg:#140F00; --rule:rgba(233,179,0,.1); --fg:#E9B300; --ink:#E9B300; --text2:#D8C690; --text3:#A8996E; --line:rgba(233,179,0,.16); --muted:#A08A50;
     --panel:#1F1800; --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-    --bg:#140F00; --paper-o:0; --fg:#E9B300; --ink:#E9B300; --text2:#D8C690; --text3:#A8996E; --line:rgba(233,179,0,.16); --muted:#A08A50;
+    --bg:#140F00; --rule:rgba(233,179,0,.1); --fg:#E9B300; --ink:#E9B300; --text2:#D8C690; --text3:#A8996E; --line:rgba(233,179,0,.16); --muted:#A08A50;
     --panel:#1F1800; --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
     color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{margin:0;overflow-x:clip}
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;padding-inline:clamp(16px,3.33vw,48px)}
-body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("home/paper.jpg") center/cover no-repeat;opacity:var(--paper-o);transition:opacity .6s ease}
+body{background:transparent;color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;padding-inline:clamp(16px,3.33vw,48px)}
+/* ruled lines, same as the homepage */
+html{background:var(--bg) repeating-linear-gradient(to bottom,transparent 0 45px,var(--rule) 45px 46px) 0 -16px}
 .theming body,.theming body *{transition:background-color .6s ease,color .6s ease,border-color .6s ease!important}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%;height:auto}

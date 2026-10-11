@@ -11,10 +11,11 @@
 <style>
 /* Layout: landing from Utsav's Figma (Desktop 1 light / Desktop 2 dark): nav pill, meta row, two-line gold name with
    stamps and a smiley stuck on it, mono tagline. Then rounded media cards in a 2-col grid, about panel, gold contact card. */
-/* Light = paper texture with black type and gold name. Dark = deep brown-black with everything in gold. */
+/* Light = white ruled paper (black lines at 30%, 46px apart) with black type and gold name.
+   Dark = deep brown-black with gold lines at 10% and everything in gold. */
 :root{
-  --bg:#E8E5E2; --paper-o:1; --fg:#111111; --ink:#111111; --muted:#6B6457;
-  --panel:rgba(74,56,0,.07); --accent:#E9B300; --on-accent:#140F00;
+  --bg:#FFFFFF; --rule:rgba(0,0,0,.3); --fg:#111111; --ink:#111111; --muted:#6B6457;
+  --panel:#F4F2EE; --accent:#E9B300; --on-accent:#140F00;
   --pill:#FFFFFF; --pill-fg:#111111; --pill-soft:rgba(255,255,255,.5);
   --nav-bg:rgba(255,255,255,.2); --nav-line:#4A3800; --hover:rgba(17,17,17,.07);
   --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
@@ -28,14 +29,14 @@
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#140F00; --paper-o:0; --fg:#E9B300; --ink:#E9B300; --muted:#A08A50;
+    --bg:#140F00; --rule:rgba(233,179,0,.1); --fg:#E9B300; --ink:#E9B300; --muted:#A08A50;
     --panel:#1F1800; --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
     --nav-bg:rgba(32,24,0,.2); --hover:rgba(233,179,0,.1);
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#140F00; --paper-o:0; --fg:#E9B300; --ink:#E9B300; --muted:#A08A50;
+  --bg:#140F00; --rule:rgba(233,179,0,.1); --fg:#E9B300; --ink:#E9B300; --muted:#A08A50;
   --panel:#1F1800; --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
   --nav-bg:rgba(32,24,0,.2); --hover:rgba(233,179,0,.1);
   color-scheme:dark;
@@ -44,9 +45,9 @@
 *{box-sizing:border-box}
 html,body{margin:0}
 html,body{overflow-x:clip}
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;padding-inline:clamp(16px,3.33vw,48px)}  /* original: 48px side margins at desktop */
-/* paper texture from the Figma file, fixed behind everything (light mode only) */
-body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("assets/home/paper.jpg") center/cover no-repeat;opacity:var(--paper-o);transition:opacity .6s ease}
+body{background:transparent;color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;padding-inline:clamp(16px,3.33vw,48px)}  /* original: 48px side margins at desktop */
+/* ruled lines from the Figma file: first line 29px from the top, then every 46px; they scroll with the page */
+html{background:var(--bg) repeating-linear-gradient(to bottom,transparent 0 45px,var(--rule) 45px 46px) 0 -16px}
 .theming body,.theming body *{transition:background-color .6s ease,color .6s ease,border-color .6s ease,opacity .6s ease!important}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
@@ -90,7 +91,7 @@ a{color:inherit;text-decoration:none}
 .stk.drag{cursor:grabbing;--s:1.1;--rh:4deg;transition-delay:0s;z-index:3}
 .stk.drag img,.stk.drag{filter:drop-shadow(0 18px 18px rgba(0,0,0,.22))}
 .smile{aspect-ratio:1}
-.smile img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;transition:opacity .5s ease}
+.smile img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;rotate:25.26deg}
 /* the smiley never sits still: it drifts in a slow loop, swaying side to side, forever */
 .smile .bob{position:absolute;inset:0;animation:smile-loop 5.2s ease-in-out infinite;will-change:transform}
 @keyframes smile-loop{
@@ -99,14 +100,10 @@ a{color:inherit;text-decoration:none}
   50%{transform:translate(0,-16%) rotate(0deg)}
   75%{transform:translate(-9%,-10%) rotate(-12deg)}
 }
-.smile .l{rotate:25.26deg}
-.smile .d{rotate:10.13deg;translate:0 -29%;opacity:0}
-:root[data-theme="dark"] .smile .l{opacity:0}
-:root[data-theme="dark"] .smile .d{opacity:1}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]) .smile .l{opacity:0}
-  :root:not([data-theme="light"]) .smile .d{opacity:1}
-}
+/* in the dark frame the smiley sits 40px higher; it glides there when the theme switches */
+.smile .bob{top:var(--sy,0%);bottom:calc(-1 * var(--sy,0%));transition:top .7s cubic-bezier(.3,1.3,.5,1),bottom .7s cubic-bezier(.3,1.3,.5,1)}
+:root[data-theme="dark"] .smile{--sy:-44%}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .smile{--sy:-44%}}
 
 /* load intro: everything but the name starts hidden, then fades in; stickers slap on afterwards */
 .intro .nav,.intro .hero-meta,.intro .tagline,.intro .work-head,.intro main > section,.intro footer,.intro .name .box{opacity:0}
@@ -242,7 +239,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       <h1 class="name" id="name" aria-label="Utsav Sharma"><span class="box" aria-hidden="true"><span class="ln">Utsav</span><span class="ln">Sharma</span></span></h1>
       <img class="stk" src="assets/home/varanasi.webp" width="483" height="618" alt="Varanasi postage stamp: मोक्ष की नगरी, death is not the end of life" draggable="false" style="--x:-1.24%;--y:48.03%;--w:13.4%;--r:-18.63deg;--d:.05s">
       <img class="stk" src="assets/home/lucknow.webp" width="543" height="694" alt="Lucknow postage stamp: नवाबों का शहर, muskuraiye aap Lucknow mein hai" draggable="false" style="--x:101.13%;--y:56.26%;--w:15.06%;--r:14.41deg;--d:.2s">
-      <button class="stk smile" type="button" data-theme-toggle aria-label="Switch to dark mode" style="--x:103.18%;--y:14.56%;--w:13.13%;--r:0deg;--d:.35s"><span class="bob"><img class="l" src="assets/home/smiley-light.webp" alt="" draggable="false"><img class="d" src="assets/home/smiley-dark.webp" alt="" draggable="false"></span></button>
+      <button class="stk smile" type="button" data-theme-toggle aria-label="Switch to dark mode" style="--x:102.56%;--y:16.67%;--w:10.1%;--r:0deg;--d:.35s"><span class="bob"><img src="assets/home/smiley.webp" width="455" height="455" alt="" draggable="false"></span></button>
     </div>
   </div>
   <p class="tagline mono">I notice weird things. Then I try to figure out why they happen. Sometimes that becomes a brand. Sometimes an interface. Sometimes a photograph.</p>
