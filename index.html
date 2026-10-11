@@ -17,28 +17,30 @@
   --bg:#FFFFFF; --rule:rgba(0,0,0,.2); --fg:#111111; --ink:#111111; --muted:#6B6457;
   --panel:#F4F2EE; --accent:#E9B300; --on-accent:#140F00;
   --pill:#FFFFFF; --pill-fg:#111111; --pill-soft:rgba(255,255,255,.5);
-  --nav-bg:rgba(255,255,255,.2); --nav-line:#4A3800; --hover:rgba(17,17,17,.07);
+  --nav-bg:rgba(255,255,255,.85); --nav-edge:linear-gradient(180deg,#E3E3E3,rgba(238,238,238,.6)); --nav-shadow:0 2px 10px rgba(0,0,0,.07);
+  --nav-fg:#000; --icon:#000; --hover:rgba(17,17,17,.07);
   --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
   --namefont:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
   --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"DM Mono",ui-monospace,Menlo,monospace;
   --gap:clamp(12px,3.33vw,48px);   /* original: 48px between cards at desktop */
   --ov:12vw; /* room for the bend to push edges outward */
-  --W:min(62.5vw,1200px);          /* name width: 900px of the 1440px Figma frame */
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     --bg:#140F00; --rule:rgba(233,179,0,.1); --fg:#E9B300; --ink:#E9B300; --muted:#A08A50;
     --panel:#1F1800; --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
-    --nav-bg:rgba(32,24,0,.2); --hover:rgba(233,179,0,.1);
+    --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#140F00,#674F00); --nav-shadow:none;
+    --nav-fg:#E9B300; --icon:#fff; --hover:rgba(233,179,0,.12);
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#140F00; --rule:rgba(233,179,0,.1); --fg:#E9B300; --ink:#E9B300; --muted:#A08A50;
   --panel:#1F1800; --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
-  --nav-bg:rgba(32,24,0,.2); --hover:rgba(233,179,0,.1);
+  --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#140F00,#674F00); --nav-shadow:none;
+    --nav-fg:#E9B300; --icon:#fff; --hover:rgba(233,179,0,.12);
   color-scheme:dark;
 }
 
@@ -54,41 +56,47 @@ a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .mono{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
 
-/* landing */
-.hero{position:relative;padding-top:clamp(92px,12.5vw,180px)}
-/* nav pill: 41px from the top, 20px DM Mono, 34px apart, at 1440 wide */
-.nav{position:absolute;top:clamp(14px,2.85vw,41px);left:50%;transform:translateX(-50%);z-index:5;display:flex;align-items:center;height:clamp(40px,4.58vw,66px);gap:clamp(2px,2.36vw,34px);
-  padding:clamp(6px,.83vw,12px) clamp(8px,1.39vw,20px);border:1px solid var(--nav-line);border-radius:40px;background:var(--nav-bg);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--ink);font-size:clamp(11px,1.39vw,20px);letter-spacing:-.01em;white-space:nowrap}
-.nav a{position:relative;padding:clamp(5px,.56vw,8px) clamp(7px,.83vw,12px);border-radius:20px;transition:background-color .25s}
+/* landing, from the Figma frames "Desktop - 3" (light) and "Desktop - 4" (dark), 1440 wide.
+   --k is one Figma pixel: every hero size below is written as Figma px x --k so the layout scales with the window. */
+:root{--k:calc(100vw / 1440)}
+.hero{position:relative;padding-top:calc(119 * var(--k))}
+/* nav pill: 556 x 40 at the top, 12px DM Mono with 6% tracking, 24px apart; glass fill with a 0.5px gradient edge.
+   It's fixed, so it travels down the page with you. */
+.nav{position:fixed;top:28px;left:50%;transform:translateX(-50%);z-index:47;display:flex;align-items:center;height:40px;gap:24px;
+  padding:4px 16px;border-radius:40px;background:var(--nav-bg);box-shadow:var(--nav-shadow);
+  backdrop-filter:blur(8px) saturate(1.2);-webkit-backdrop-filter:blur(8px) saturate(1.2);
+  color:var(--nav-fg);font-size:12px;line-height:1.2;letter-spacing:.06em;white-space:nowrap}
+.nav::before,.theme-btn::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:.5px;background:var(--nav-edge);pointer-events:none;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.nav a{position:relative;padding:8px 12px;border-radius:20px;transition:background-color .25s}
 .nav a:hover,.nav a:focus-visible{background:var(--hover)}
 /* pages that aren't built yet say so instead of going nowhere */
 .nav a[data-soon]::after{content:"Coming soon";position:absolute;left:50%;top:calc(100% + 12px);transform:translate(-50%,-4px);padding:6px 10px;border-radius:999px;background:var(--pill);color:var(--pill-fg);font-size:11px;letter-spacing:.04em;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
 .nav a[data-soon]:hover::after,.nav a[data-soon]:focus-visible::after,.nav a.soon::after{opacity:1;transform:translate(-50%,0)}
-/* light / dark switch: its own round button in the top-right corner, same height and outline as the nav pill; stays put while you scroll */
-.theme-btn{position:fixed;z-index:47;top:clamp(14px,2.85vw,41px);right:clamp(16px,3.33vw,48px);display:grid;place-items:center;
-  width:clamp(40px,4.58vw,66px);height:clamp(40px,4.58vw,66px);padding:0;border:1px solid var(--nav-line);border-radius:50%;
-  background:var(--nav-bg);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--ink);cursor:pointer;transition:background-color .25s,opacity .9s ease}
+/* light / dark switch: 40px glass circle level with the nav, 119px in from the right edge at 1440 */
+.theme-btn{position:fixed;z-index:47;top:28px;right:calc(119 * var(--k));display:grid;place-items:center;width:40px;height:40px;padding:0;border:0;border-radius:50%;
+  background:var(--nav-bg);box-shadow:var(--nav-shadow);backdrop-filter:blur(8px) saturate(1.2);-webkit-backdrop-filter:blur(8px) saturate(1.2);
+  color:var(--icon);cursor:pointer;transition:background-color .25s,opacity .9s ease}
 .theme-btn:hover{background:var(--hover)}
 .intro .theme-btn{opacity:0}
-.theme-btn span{width:36%;height:36%;border-radius:50%;border:1.5px solid currentColor;background:linear-gradient(90deg,currentColor 50%,transparent 50%);transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
-.theme-btn[aria-pressed="true"] span{transform:rotate(180deg)}
+.theme-btn svg{width:29px;height:29px;display:block;transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
+.theme-btn[aria-pressed="true"] svg{transform:rotate(180deg)}
 
-.hero-in{width:var(--W);margin-inline:auto}
-.hero-meta{display:flex;justify-content:space-between;gap:16px;color:var(--ink);font-size:clamp(11px,1.39vw,20px);letter-spacing:-.01em;line-height:1.2}
-.name-box{position:relative;margin-top:clamp(10px,1.95vw,28px)}
-/* name: two lines, each fitted to the same width (UTSAV 400px / SHARMA 300px at 1440) */
+/* meta row: 886 wide, 20px DM Mono */
+.hero-meta{display:flex;justify-content:space-between;gap:16px;width:calc(886 * var(--k));margin-inline:auto;color:var(--ink);font-size:max(11px,calc(20 * var(--k)));letter-spacing:-.01em;line-height:1.2}
+.name-box{position:relative;margin-top:calc(9 * var(--k))}
+/* name: UTSAV 400px / SHARMA 300px Big Shoulders Black, 84% line height, -0.5% tracking */
 .name{position:relative;z-index:1;margin:0;font-family:var(--namefont);font-weight:900;text-transform:uppercase;color:var(--accent);line-height:.84;white-space:nowrap;text-align:center}
 .name .ln{display:block;width:max-content;margin-inline:auto;letter-spacing:-.005em}
-.name .ln:first-child{font-size:calc(var(--W) * .444)}
-.name .ln:last-child{font-size:calc(var(--W) * .333)}
+.name .ln:first-child{font-size:calc(400 * var(--k))}
+.name .ln:last-child{font-size:calc(300 * var(--k))}
 /* the name is painted with a left-to-right fill: solid accent up to --p, faint accent after it */
-.name .box{display:block;transform-origin:0 0;color:transparent;
+.name .box{display:inline-block;vertical-align:top;transform-origin:0 0;color:transparent;
   background-image:linear-gradient(90deg,var(--accent) 0,var(--accent) var(--p,100%),color-mix(in srgb,var(--accent) 16%,var(--bg)) var(--p,100%));
   -webkit-background-clip:text;background-clip:text}
 
-/* stickers: placed in % of the name, at the spots in the Figma frame; drag them around, the smiley switches the lights */
-.stk{position:absolute;z-index:2;left:var(--x);top:var(--y);width:var(--w);height:auto;margin:0;padding:0;border:0;background:none;
+/* stickers: placed from the centre of the page and the top of the name, in Figma px (centre x, centre y, width, angle) */
+.stk{position:absolute;z-index:2;left:calc(50% + var(--x) * var(--k));top:calc(var(--y) * var(--k));width:calc(var(--w) * var(--k));height:auto;margin:0;padding:0;border:0;background:none;
   transform:translate(-50%,-50%) rotate(calc(var(--r) + var(--rh,0deg))) scale(var(--s,1));
   transition:transform .7s cubic-bezier(.3,1.45,.5,1) var(--d,0s),opacity .4s ease var(--d,0s);
   cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none}
@@ -96,15 +104,10 @@ a{color:inherit;text-decoration:none}
 .stk.drag{cursor:grabbing;--s:1.1;--rh:4deg;transition-delay:0s;z-index:3}
 .stk.drag img,.stk.drag{filter:drop-shadow(0 18px 18px rgba(0,0,0,.22))}
 .smile{aspect-ratio:1}
-.smile img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;rotate:25.26deg}
+.smile img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;rotate:30deg}
 .smile .bob{position:absolute;inset:0;transition:scale .35s cubic-bezier(.3,1.5,.5,1)}
-/* in the dark frame the smiley sits 40px higher (only while it's parked on the name) */
-.smile .bob{top:var(--sy,0%);bottom:calc(-1 * var(--sy,0%))}
-:root[data-theme="dark"] .smile{--sy:-44%}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .smile{--sy:-44%}}
 /* after the intro the smiley comes loose and rolls around the whole screen; script moves it */
 .smile.roam{position:fixed;left:0;top:0;z-index:45;transition:opacity .4s ease;translate:none}
-.smile.roam .bob{top:0;bottom:0}
 .smile.roam.drag .bob{scale:1.2}
 /* little squash each time it hits an edge */
 .smile .bob.boing{animation:boing .38s cubic-bezier(.3,1.4,.5,1)}
@@ -113,7 +116,7 @@ a{color:inherit;text-decoration:none}
 /* "Hello" speech bubble that sits on the pointer while it's over the name (Figma: Group 3) */
 .hello{position:fixed;left:0;top:0;z-index:55;pointer-events:none;opacity:0;transition:opacity .2s ease}
 .hello.on{opacity:1}
-.hello-in{position:absolute;left:-11px;bottom:10.5px;display:block;overflow:hidden;padding:8px 12px;border-radius:20px;background:#fff;color:#E9B300;
+.hello-in{position:absolute;left:-11px;bottom:10.5px;display:block;overflow:hidden;padding:8px 12px;border-radius:20px;background:#fff;color:#140F00;
   font-family:var(--mono);font-size:20px;line-height:1.2;letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;
   box-shadow:0 6px 18px -8px rgba(20,15,0,.35);transform-origin:11px calc(100% + 10.5px);scale:.4;
   transition:scale .35s cubic-bezier(.3,1.6,.5,1),width .6s cubic-bezier(.65,0,.35,1)}
@@ -126,8 +129,8 @@ a{color:inherit;text-decoration:none}
 .intro .nav,.intro .hero-meta,.intro .tagline,.intro .work-head,.intro main > section,.intro footer,.intro .name .box{opacity:0}
 .intro .stk{opacity:0;--s:1.6;--rh:14deg}
 .nav,.hero-meta,.tagline,.work-head,main > section,footer{transition:opacity .9s ease}
-/* tagline: 20px at desktop, ~48px under the name, 644px wide */
-.tagline{margin:clamp(24px,3.33vw,48px) auto 0;max-width:max(44.7vw,280px);text-align:center;color:var(--ink);font-size:clamp(11px,1.39vw,20px);letter-spacing:-.01em;line-height:1.2;text-wrap:balance}
+/* tagline: 20px, 28px under the name, 644 wide */
+.tagline{margin:calc(28 * var(--k)) auto 0;max-width:calc(644 * var(--k));text-align:center;color:var(--ink);font-size:max(11px,calc(20 * var(--k)));letter-spacing:-.01em;line-height:1.2}
 
 /* bendable blocks: background is drawn wider than the box, and the visible shape is a clip-path set from script */
 .bend{position:relative;isolation:isolate;clip-path:inset(0 round 8px)}
@@ -158,11 +161,11 @@ a{color:inherit;text-decoration:none}
 .work .q p{margin:0;font-size:clamp(18px,1.7vw,24px);line-height:1.25;letter-spacing:-.01em;max-width:34ch;text-wrap:balance}
 .work .q span{color:var(--ink);white-space:nowrap}
 .work .q span b{font-weight:500}
-.work-head{display:flex;justify-content:space-between;gap:16px;color:var(--ink);margin:clamp(56px,7.5vw,108px) 0 14px;scroll-margin-top:24px}
+.work-head{display:flex;justify-content:space-between;gap:16px;color:var(--ink);margin:clamp(56px,7.5vw,108px) 0 14px;scroll-margin-top:88px}
 .work-head h2{margin:0;font:inherit}
 
 /* about */
-.about{scroll-margin-top:24px;margin-block:var(--gap);padding:clamp(24px,3.5vw,40px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(40px,6vw,96px);min-height:clamp(380px,48vw,560px)}
+.about{scroll-margin-top:88px;margin-block:var(--gap);padding:clamp(24px,3.5vw,40px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(40px,6vw,96px);min-height:clamp(380px,48vw,560px)}
 .about-l{display:flex;flex-direction:column;justify-content:space-between;gap:32px;min-width:0}
 .statement{margin:0;font-size:clamp(17px,1.6vw,21px);line-height:1.45;color:var(--ink);max-width:44ch}
 /* Utsav, drawn: plain on paper, cut out like a sticker on the dark panel */
@@ -208,12 +211,13 @@ html.lenis,html.lenis body{height:auto}
 @media (hover:hover) and (pointer:fine){.dot.live{opacity:1}}
 
 @media (max-width:640px){
-  :root{--W:78vw}
-  .nav{gap:0;height:auto;padding:4px 6px;font-size:10.5px;letter-spacing:-.02em}
-  .nav a{padding:6px 6px}
+  :root{--k:calc(100vw / 1128)}
+  .nav{top:14px;gap:0;padding:4px 6px;font-size:9.5px;letter-spacing:.02em}
+  .nav a{padding:6px 5px}
   .nav a[data-soon]::after{font-size:9px}
-  .theme-btn{top:auto;bottom:16px;right:16px;width:44px;height:44px}
+  .theme-btn{top:auto;bottom:16px;right:16px}
   .hero{padding-top:84px}
+  .hero-meta{width:auto}
   .tagline{max-width:none}
   .me{height:240px}
   .grid{grid-template-columns:minmax(0,1fr)}
@@ -250,15 +254,15 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     <a href="#" data-soon>Photography</a>
     <a href="#" data-soon>Resume</a>
   </nav>
-  <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch to dark mode"><span aria-hidden="true"></span></button>
+  <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch to dark mode"><svg aria-hidden="true" focusable="false" width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M26.0565 13.0485C26.0635 13.7941 26.1627 14.5754 26.0889 15.3175C25.7329 18.6943 24.2137 21.7202 21.4506 23.7597C19.878 24.9204 18.5744 25.5441 16.6057 25.916C8.42486 27.4617 1.17735 19.8874 3.24969 11.7442C4.5115 6.78593 8.27844 3.60389 13.4376 2.91602C14.1517 2.98101 14.9002 2.87883 15.621 3.02233C15.7318 3.04439 15.8288 3.10457 15.9298 3.09503L15.7933 3.13369C15.8434 3.21193 16.4367 3.28016 16.562 3.2878C16.7835 3.30134 17.036 3.26852 17.2566 3.30919C17.426 3.34697 17.5069 3.51575 17.715 3.58344L17.7303 3.58857C17.8779 3.636 18.0194 3.5771 18.1647 3.6029C18.293 3.62569 18.5139 3.77591 18.6283 3.84702C18.7466 3.92057 19.0831 3.89848 19.1303 3.95475C19.3262 4.18822 19.5483 4.18462 19.7861 4.31501C19.8928 4.37352 19.9524 4.49881 20.0532 4.56111C20.1404 4.61495 20.2595 4.61297 20.3504 4.66055C20.4004 4.68671 20.4324 4.73645 20.4793 4.76768C20.5648 4.82472 20.6694 4.85746 20.7575 4.91331C20.8878 4.99594 20.989 5.13143 21.1137 5.22571C21.3902 5.43465 21.6875 5.60342 21.9502 5.83159C22.1977 6.04671 22.4148 6.29318 22.6481 6.52312C22.793 6.66588 22.9605 6.79304 23.0927 6.94772C23.3328 7.2286 23.6238 7.88711 23.9063 8.07963C24.0597 8.18413 24.7984 9.58262 24.9086 9.84569C24.9268 9.88924 24.9487 9.9793 24.9952 9.97652C25.0036 9.94812 25.0089 9.93076 25.015 9.90156C25.0479 10.2314 25.0979 10.3816 25.2413 10.6776C25.3016 10.8021 25.357 11.3793 25.4375 11.4551C25.4313 11.2951 25.4241 11.1754 25.4712 11.022C25.6805 11.5053 25.5937 12.3953 25.8353 12.8639C25.8757 12.9424 25.9897 12.9876 26.0565 13.0485ZM10.2807 23.206C10.3643 23.3622 10.4372 23.3593 10.6004 23.4716L10.5454 23.467C10.7541 23.5765 10.9728 23.5959 11.1983 23.652C11.2014 23.6527 11.3285 23.8414 11.3609 23.8452C11.8708 23.9062 12.2725 23.9284 12.6031 24.1781C12.7418 24.2829 14.3289 24.2192 14.533 24.1815C14.6873 24.1626 14.9213 24.1737 15.0934 24.1557C15.4059 24.1229 15.8332 24.095 16.1363 24.0293C17.6684 23.6973 19.1187 23.1137 20.3723 22.166C20.6828 21.9313 21.4933 21.1335 21.7617 20.8463C22.8398 19.6924 23.6016 18.0689 23.942 16.5379C23.9777 16.3773 24.1107 15.9724 24.122 15.8535C24.1687 15.3625 24.1849 14.7542 24.1751 14.2636C24.153 13.1706 23.8948 11.9833 23.4725 10.9757C23.3897 10.778 23.3191 10.5272 23.2247 10.3349C23.0486 9.97647 22.8272 9.63824 22.6221 9.29491C22.3517 8.84215 22.0324 8.40645 21.6638 8.02775C21.5941 7.95612 21.4395 7.83401 21.334 7.84491C21.1708 7.86182 20.9751 8.03854 20.8587 8.15077C20.2505 8.73728 19.656 9.34079 19.0615 9.94076L17.0415 11.9631L12.5422 16.4645L9.43029 19.5654C8.94895 20.0477 8.44678 20.5436 7.98026 21.0406C7.88153 21.1457 7.80241 21.2966 7.81614 21.4469C8.01512 21.8871 9.80216 22.9209 10.2604 23.1897C10.2672 23.1951 10.2739 23.2006 10.2807 23.206Z"/></svg></button>
 
   <div class="hero-in">
     <div class="hero-meta mono"><span>Multidisciplinary designer</span><span>2026</span></div>
     <div class="name-box">
       <h1 class="name" id="name" aria-label="Utsav Sharma"><span class="box" aria-hidden="true"><span class="ln">Utsav</span><span class="ln">Sharma</span></span></h1>
-      <img class="stk" src="assets/home/varanasi.webp" width="483" height="618" alt="Varanasi postage stamp: मोक्ष की नगरी, death is not the end of life" draggable="false" style="--x:-1.24%;--y:48.03%;--w:13.4%;--r:-18.63deg;--d:.05s">
-      <img class="stk" src="assets/home/lucknow.webp" width="543" height="694" alt="Lucknow postage stamp: नवाबों का शहर, muskuraiye aap Lucknow mein hai" draggable="false" style="--x:101.13%;--y:56.26%;--w:15.06%;--r:14.41deg;--d:.2s">
-      <span class="stk smile" role="button" tabindex="0" aria-label="Want to play a game? Press and hold for 2 seconds, or press Enter" style="--x:102.56%;--y:16.67%;--w:10.1%;--r:0deg;--d:.35s"><span class="bob"><img src="assets/home/smiley.webp" width="455" height="455" alt="" draggable="false"></span><svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46"/></svg></span>
+      <img class="stk" src="assets/home/varanasi.webp" width="483" height="618" alt="Varanasi postage stamp: मोक्ष की नगरी, death is not the end of life" draggable="false" style="--x:-483;--y:286;--w:120.7;--r:-16.66deg;--d:.05s">
+      <img class="stk" src="assets/home/lucknow.webp" width="543" height="694" alt="Lucknow postage stamp: नवाबों का शहर, muskuraiye aap Lucknow mein hai" draggable="false" style="--x:458.5;--y:336.5;--w:135.5;--r:18.13deg;--d:.2s">
+      <span class="stk smile" role="button" tabindex="0" aria-label="Want to play a game? Press and hold for 2 seconds, or press Enter" style="--x:477;--y:132;--w:68.5;--r:0deg;--d:.35s"><span class="bob"><img src="assets/home/smiley.webp" width="455" height="455" alt="" draggable="false"></span><svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46"/></svg></span>
     </div>
   </div>
   <p class="tagline mono">I notice weird things. Then I try to figure out why they happen. Sometimes that becomes a brand. Sometimes an interface. Sometimes a photograph.</p>
@@ -352,14 +356,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   var box = name.querySelector('.box');
   var lines = name.querySelectorAll('.ln');
   var NAME_STRETCH = 1;
-  function fit(){
-    var avail = name.clientWidth;
-    for (var i = 0; i < lines.length; i++){
-      lines[i].style.fontSize = '100px';
-      var w = lines[i].offsetWidth;
-      if (w) lines[i].style.fontSize = (100 * avail / w * 0.995).toFixed(2) + 'px';
-    }
-  }
+  function fit(){}   /* sizes come straight from the Figma frame (CSS, in --k units); nothing to measure */
   fit();
   addEventListener('resize', fit);
 
@@ -591,7 +588,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       var t = document.querySelector(a.getAttribute('href'));
       if (!t) return;
       e.preventDefault();
-      if (lenis) lenis.scrollTo(t, { offset: -24 }); else t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+      if (lenis) lenis.scrollTo(t, { offset: -88 }); else t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
     });
   });
 
@@ -642,7 +639,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     var tipT = tip.querySelector('.t'), tipS = tip.querySelector('small');
     var S = { on: false, x: 0, y: 0, vx: 0, vy: 0, a: 0, w: 0, hover: false, down: false, drag: false, pid: null, dx0: 0, dy0: 0, gx: 0, gy: 0, lx: 0, ly: 0, lt: 0, last: 0, startAt: 0, hold: 0 };
     var HOLD = 2000;
-    function size(){ return Math.max(34, document.querySelector('.name-box').clientWidth * 0.101); }
+    function size(){ var w = document.documentElement.clientWidth; return 68.5 * (w <= 640 ? w / 1128 : w / 1440); }   /* 68.5 Figma px */
     function cruise(){ return Math.max(110, Math.min(230, document.documentElement.clientWidth * 0.13)); }
     function start(){
       var r = smile.getBoundingClientRect();
