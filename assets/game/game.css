@@ -1,0 +1,117 @@
+/* FEEL IT: a 10-face emotion game that opens from the smiley. Card follows the Figma frame (Frame 23, 618 x 944):
+   dark #140F00 card, 40px corners, white X top right, Big Shoulders title, DM Mono labels with #FFC300 values,
+   458px square photo with 20px corners, five 80px emoji buttons. Everything is sized in --u so the whole card
+   scales down to fit any screen. */
+.feelit{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:12px;
+  background:rgba(10,8,0,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  opacity:0;visibility:hidden;transition:opacity .35s ease,visibility 0s linear .35s;
+  --u:min(1px,calc((100vh - 24px) / 944),calc((100vw - 24px) / 618));
+  --gold:#FFC300; --ink:#140F00; --good:#7DD957; --bad:#FE2429;
+  font-family:"DM Mono",ui-monospace,Menlo,monospace;color:#fff}
+@supports (height:100dvh){.feelit{--u:min(1px,calc((100dvh - 24px) / 944),calc((100vw - 24px) / 618))}}
+.feelit.open{opacity:1;visibility:visible;transition:opacity .35s ease}
+.fi-card{position:relative;width:calc(618 * var(--u));height:calc(944 * var(--u));background:var(--ink);border-radius:calc(40 * var(--u));
+  padding:calc(20 * var(--u));display:flex;flex-direction:column;align-items:flex-end;overflow:hidden;
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.6);transform:translateY(24px) scale(.94);opacity:0;
+  transition:transform .55s cubic-bezier(.2,1.2,.3,1),opacity .35s ease}
+.feelit.open .fi-card{transform:none;opacity:1}
+.fi-x{width:calc(60 * var(--u));height:calc(60 * var(--u));flex:none;padding:0;border:0;background:none;cursor:pointer;border-radius:50%;transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+.fi-x img{display:block;width:100%;height:100%}
+.fi-x:hover{transform:rotate(90deg)}
+.fi-x:focus-visible,.fi-card button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.fi-body{position:relative;flex:1;align-self:stretch;margin-top:0}
+.fi-screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+  padding:calc(20 * var(--u)) calc(60 * var(--u)) calc(60 * var(--u));gap:calc(40 * var(--u));
+  opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .3s ease,transform .4s cubic-bezier(.2,.9,.25,1),visibility 0s linear .3s}
+.fi-screen.on{opacity:1;visibility:visible;transform:none;transition:opacity .35s ease .05s,transform .45s cubic-bezier(.2,.9,.25,1) .05s}
+.fi-head{display:flex;flex-direction:column;align-items:center;gap:calc(20 * var(--u));width:100%}
+.fi-title{margin:0;font-family:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;font-weight:900;text-transform:uppercase;
+  font-size:calc(48 * var(--u));line-height:1.2;text-align:center;max-width:calc(386 * var(--u));color:#fff}
+.fi-meta{display:flex;justify-content:space-between;width:100%;font-size:calc(20 * var(--u));line-height:1.2;letter-spacing:-.01em;text-transform:uppercase}
+.fi-meta b{display:block;font-weight:400;color:var(--gold)}
+.fi-meta .r{text-align:right}
+.fi-meta .r b{font-weight:500}
+.fi-time.low b{animation:fi-tick 1s steps(1) infinite}
+@keyframes fi-tick{50%{opacity:.35}}
+
+/* photo */
+.fi-photo{position:relative;width:calc(458 * var(--u));height:calc(458 * var(--u));flex:none;border-radius:calc(20 * var(--u));overflow:hidden;background:#2a2410;
+  box-shadow:0 0 0 0 transparent;transition:box-shadow .3s ease}
+.fi-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .25s ease,transform .45s cubic-bezier(.2,.9,.25,1)}
+.fi-photo img.out{opacity:0;transform:scale(1.04)}
+.fi-photo.good{box-shadow:0 0 0 calc(6 * var(--u)) var(--good)}
+.fi-photo.bad{box-shadow:0 0 0 calc(6 * var(--u)) var(--bad)}
+.fi-verdict{position:absolute;left:calc(16 * var(--u));right:calc(16 * var(--u));bottom:calc(16 * var(--u));padding:calc(10 * var(--u)) calc(14 * var(--u));
+  border-radius:calc(14 * var(--u));background:rgba(20,15,0,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  font-size:calc(18 * var(--u));line-height:1.25;text-transform:uppercase;letter-spacing:-.01em;
+  opacity:0;transform:translateY(12px);transition:opacity .25s ease,transform .35s cubic-bezier(.2,1.3,.4,1)}
+.fi-verdict.on{opacity:1;transform:none}
+.fi-verdict b{display:block;font-family:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;font-weight:900;font-size:calc(30 * var(--u));line-height:1}
+.fi-verdict.good b{color:var(--good)}
+.fi-verdict.bad b{color:var(--bad)}
+
+/* emoji answers */
+.fi-emojis{display:flex;justify-content:space-between;width:100%;height:calc(80 * var(--u));flex:none}
+.fi-emoji{position:relative;width:calc(80 * var(--u));height:calc(80 * var(--u));padding:0;border:0;border-radius:50%;background:none;cursor:pointer;
+  transition:transform .3s cubic-bezier(.3,1.6,.5,1),opacity .3s ease,filter .3s ease}
+.fi-emoji img{display:block;width:100%;height:100%;pointer-events:none}
+.fi-emoji:hover{transform:translateY(-6px) scale(1.08)}
+.fi-emoji:active{transform:scale(.92)}
+.fi-emoji[disabled]{cursor:default}
+.fi-locked .fi-emoji{opacity:.35;filter:saturate(.4)}
+.fi-locked .fi-emoji.picked,.fi-locked .fi-emoji.answer{opacity:1;filter:none}
+.fi-emoji.picked{transform:scale(1.12)}
+.fi-emoji.answer::after{content:"";position:absolute;inset:calc(-7 * var(--u));border-radius:50%;border:calc(3 * var(--u)) solid var(--good)}
+.fi-emoji.picked.wrong::after{content:"";position:absolute;inset:calc(-7 * var(--u));border-radius:50%;border:calc(3 * var(--u)) solid var(--bad)}
+
+/* intro + results */
+.fi-copy{margin:0;font-size:calc(20 * var(--u));line-height:1.45;text-transform:uppercase;letter-spacing:-.01em;text-align:center;color:rgba(255,255,255,.86)}
+.fi-copy b{font-weight:400;color:var(--gold)}
+.fi-rules{list-style:none;margin:0;padding:0;width:100%;display:grid;gap:calc(14 * var(--u));font-size:calc(20 * var(--u));text-transform:uppercase;letter-spacing:-.01em}
+.fi-rules li{display:flex;justify-content:space-between;gap:16px;padding-bottom:calc(14 * var(--u));border-bottom:1px solid rgba(255,195,0,.18)}
+.fi-rules li b{font-weight:400;color:var(--gold)}
+.fi-legend{display:flex;justify-content:space-between;width:100%;margin-top:auto}
+.fi-legend figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:calc(10 * var(--u));width:calc(80 * var(--u))}
+.fi-legend img{width:calc(64 * var(--u));height:calc(64 * var(--u))}
+.fi-legend figcaption{font-size:calc(13 * var(--u));text-transform:uppercase;letter-spacing:.02em;color:rgba(255,255,255,.75)}
+.fi-btns{display:grid;gap:calc(14 * var(--u));width:100%}
+.fi-btn{width:100%;padding:calc(20 * var(--u)) calc(20 * var(--u));border-radius:999px;border:1px solid var(--gold);background:var(--gold);color:var(--ink);
+  font:inherit;font-size:calc(20 * var(--u));letter-spacing:-.01em;text-transform:uppercase;cursor:pointer;transition:transform .25s cubic-bezier(.3,1.5,.5,1),background-color .2s,color .2s}
+.fi-btn:hover{transform:translateY(-2px)}
+.fi-btn.ghost{background:transparent;color:var(--gold)}
+.fi-btn.ghost:hover{background:rgba(255,195,0,.1)}
+.fi-score{margin:0;font-family:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;font-weight:900;line-height:.85;color:var(--gold);font-size:calc(170 * var(--u));text-align:center}
+.fi-score span{font-size:.36em;color:rgba(255,255,255,.55)}
+.fi-stats{display:grid;grid-template-columns:repeat(3,1fr);width:100%;font-size:calc(20 * var(--u));text-transform:uppercase;letter-spacing:-.01em;text-align:center}
+.fi-stats div + div{border-left:1px solid rgba(255,195,0,.18)}
+.fi-stats b{display:block;font-family:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;font-weight:900;font-size:calc(48 * var(--u));line-height:1.05;color:var(--gold)}
+.fi-bar{width:100%;height:calc(10 * var(--u));border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.fi-bar i{display:block;height:100%;width:0;background:var(--gold);border-radius:99px;transition:width 1.1s cubic-bezier(.2,.9,.25,1) .2s}
+.fi-acc{display:flex;justify-content:space-between;width:100%;font-size:calc(20 * var(--u));text-transform:uppercase;margin-bottom:calc(-26 * var(--u))}
+.fi-acc b{font-weight:500;color:var(--gold)}
+.fi-end .fi-btns{margin-top:auto}
+
+/* the smiley's prompt and 2-second hold ring */
+.play-tip{position:fixed;left:0;top:0;z-index:56;pointer-events:none;opacity:0;transition:opacity .2s ease}
+.play-tip.on{opacity:1}
+.play-tip .in{position:absolute;left:-50%;bottom:0;transform:translateX(-50%);display:block;padding:8px 12px;border-radius:20px;background:#fff;color:#E9B300;
+  font-family:"DM Mono",ui-monospace,Menlo,monospace;font-size:clamp(13px,1.1vw,16px);line-height:1.25;letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;text-align:center;
+  box-shadow:0 6px 18px -8px rgba(20,15,0,.35);scale:.6;transform-origin:50% 120%;transition:scale .35s cubic-bezier(.3,1.6,.5,1)}
+.play-tip .in{left:0}
+.play-tip.on .in{scale:1}
+.play-tip .in small{display:block;font-size:.78em;color:#8a7a3a}
+.play-tip .in::after{content:"";position:absolute;left:50%;top:100%;margin-left:-7px;border:7px solid transparent;border-top-color:#fff}
+.smile .ring{position:absolute;inset:-14%;width:128%;height:128%;pointer-events:none;opacity:0;transition:opacity .2s ease;rotate:-90deg}
+.smile .ring circle{fill:none;stroke:#FFC300;stroke-width:6;stroke-linecap:round;stroke-dasharray:289;stroke-dashoffset:289}
+.smile.holding .ring{opacity:1}
+.smile.holding .ring circle{stroke-dashoffset:0;transition:stroke-dashoffset 2s linear}
+@media (prefers-reduced-motion:reduce){.fi-card,.fi-screen,.fi-photo img,.fi-emoji{transition:none!important}}
+/* phones: the card scales down with the screen width, but small text keeps a readable minimum size */
+@media (max-width:640px){
+  .fi-meta,.fi-copy,.fi-rules,.fi-btn,.fi-acc,.fi-stats{font-size:max(13px,calc(20 * var(--u)))}
+  .fi-legend figcaption{font-size:max(9.5px,calc(13 * var(--u)))}
+  .fi-verdict{font-size:max(12px,calc(18 * var(--u)))}
+  .fi-verdict b{font-size:max(20px,calc(30 * var(--u)))}
+  .fi-btn{padding:max(13px,calc(20 * var(--u)))}
+  .fi-screen{gap:calc(32 * var(--u))}
+}

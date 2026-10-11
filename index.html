@@ -231,6 +231,7 @@ html.lenis,html.lenis body{height:auto}
 </style>
 <script src="assets/theme.js"></script>
 <script src="assets/rules.js" defer></script>
+<link rel="stylesheet" href="assets/game/game.css">
 <script>
 /* hide the page straight away so nothing flashes before the intro starts; failsafe shows it after 6s */
 if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
@@ -257,7 +258,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       <h1 class="name" id="name" aria-label="Utsav Sharma"><span class="box" aria-hidden="true"><span class="ln">Utsav</span><span class="ln">Sharma</span></span></h1>
       <img class="stk" src="assets/home/varanasi.webp" width="483" height="618" alt="Varanasi postage stamp: मोक्ष की नगरी, death is not the end of life" draggable="false" style="--x:-1.24%;--y:48.03%;--w:13.4%;--r:-18.63deg;--d:.05s">
       <img class="stk" src="assets/home/lucknow.webp" width="543" height="694" alt="Lucknow postage stamp: नवाबों का शहर, muskuraiye aap Lucknow mein hai" draggable="false" style="--x:101.13%;--y:56.26%;--w:15.06%;--r:14.41deg;--d:.2s">
-      <span class="stk smile" aria-hidden="true" style="--x:102.56%;--y:16.67%;--w:10.1%;--r:0deg;--d:.35s"><span class="bob"><img src="assets/home/smiley.webp" width="455" height="455" alt="" draggable="false"></span></span>
+      <span class="stk smile" role="button" tabindex="0" aria-label="Want to play a game? Press and hold for 2 seconds, or press Enter" style="--x:102.56%;--y:16.67%;--w:10.1%;--r:0deg;--d:.35s"><span class="bob"><img src="assets/home/smiley.webp" width="455" height="455" alt="" draggable="false"></span><svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46"/></svg></span>
     </div>
   </div>
   <p class="tagline mono">I notice weird things. Then I try to figure out why they happen. Sometimes that becomes a brand. Sometimes an interface. Sometimes a photograph.</p>
@@ -335,8 +336,10 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
 
 <div class="edge-blur" aria-hidden="true"><i></i><i></i></div>
 <div class="dot" id="dot" aria-hidden="true"></div>
+<div class="play-tip" id="playTip" aria-hidden="true"><span class="in"><span class="t">Want to play a game?</span><small>Hold me for 2 seconds</small></span></div>
 <div class="hello" id="hello" aria-hidden="true"><svg width="25.4" height="15.5" viewBox="0 0 25.4 15.5"><path d="M15.5 0C12.33 5.17 4.8 15.5 0 15.5c6.6-.09 20.91-3.24 25.4-15.13L15.5 0Z" fill="#fff"/></svg><span class="hello-in" id="helloPill"><span class="w" id="helloText">Hello</span></span><span class="hello-measure" id="helloMeasure"></span></div>
 
+<script src="assets/game/game.js" defer></script>
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 <script>
 (function(){
@@ -432,7 +435,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   /* Smooth scroll, same library and feel as the original */
   var lenis = null;
   if (!reduce && window.Lenis){
-    try { lenis = new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 1 }); } catch(e){ lenis = null; }
+    try { lenis = new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 1 }); window.__lenis = lenis; } catch(e){ lenis = null; }
   }
 
   /* Fallback if the library didn't load: ease mouse-wheel scrolling ourselves */
@@ -631,18 +634,20 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
 
   /* 10. The smiley comes loose after the intro and travels like a bouncing ball: straight lines at a steady
          speed, bouncing off the edges of the screen (with a little squash) and heading back across, forever.
-         It rolls as it goes. You can grab it and throw it; it then eases back to its cruising speed. */
+         It rolls as it goes, and stops while the pointer is on it. Hover: "Want to play a game?".
+         Press and hold for 2 seconds (a ring fills up) to open the FEEL IT game. Grab and fling it to throw it. */
   var smile = document.querySelector('.smile');
-  if (smile && !reduce){
-    var bob = smile.querySelector('.bob');
-    var S = { on: false, x: 0, y: 0, vx: 0, vy: 0, a: 0, w: 0, drag: false, moved: false, pid: null, gx: 0, gy: 0, lx: 0, ly: 0, lt: 0, last: 0, startAt: 0 };
+  if (smile){
+    var bob = smile.querySelector('.bob'), tip = document.getElementById('playTip');
+    var tipT = tip.querySelector('.t'), tipS = tip.querySelector('small');
+    var S = { on: false, x: 0, y: 0, vx: 0, vy: 0, a: 0, w: 0, hover: false, down: false, drag: false, pid: null, dx0: 0, dy0: 0, gx: 0, gy: 0, lx: 0, ly: 0, lt: 0, last: 0, startAt: 0, hold: 0 };
+    var HOLD = 2000;
     function size(){ return Math.max(34, document.querySelector('.name-box').clientWidth * 0.101); }
     function cruise(){ return Math.max(110, Math.min(230, document.documentElement.clientWidth * 0.13)); }
     function start(){
       var r = smile.getBoundingClientRect();
       S.w = size(); S.x = r.left + r.width / 2; S.y = r.top + r.height / 2;
-      /* set off down and to the left at a diagonal, like a ball pushed off the name */
-      var ang = (200 + Math.random() * 30) * Math.PI / 180, sp = cruise();
+      var ang = (200 + Math.random() * 30) * Math.PI / 180, sp = cruise();   /* set off down-left, like a ball pushed off the name */
       S.vx = Math.cos(ang) * sp; S.vy = -Math.sin(ang) * sp;
       smile.style.width = S.w + 'px';
       smile.style.transform = 'translate3d(' + (S.x - S.w / 2).toFixed(1) + 'px,' + (S.y - S.w / 2).toFixed(1) + 'px,0)';
@@ -650,33 +655,72 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       S.on = true; S.last = performance.now();
     }
     function boing(){ bob.classList.remove('boing'); void bob.offsetWidth; bob.classList.add('boing'); }
+
+    /* prompt bubble */
+    function tipText(holding){ tipT.textContent = holding ? 'Keep holding…' : 'Want to play a game?'; tipS.textContent = holding ? 'Opening FEEL IT' : (matchMedia('(hover: hover)').matches ? 'Hold me for 2 seconds' : 'Press and hold for 2 seconds'); }
+    function placeTip(){
+      var r = smile.getBoundingClientRect();
+      tip.style.transform = 'translate(' + (r.left + r.width / 2).toFixed(1) + 'px,' + (r.top - 12).toFixed(1) + 'px)';
+    }
+    function showTip(){ if (root.classList.contains('intro')) return; if (!S.down) tipText(false); placeTip(); tip.classList.add('on'); }
+    function hideTip(){ if (!S.down) tip.classList.remove('on'); }
+    smile.addEventListener('mouseenter', function(){ S.hover = true; showTip(); });
+    smile.addEventListener('mouseleave', function(){ S.hover = false; hideTip(); });
+    smile.addEventListener('focus', showTip);
+    smile.addEventListener('blur', function(){ tip.classList.remove('on'); });
+    smile.addEventListener('keydown', function(e){ if ((e.key === 'Enter' || e.key === ' ') && window.FeelIt){ e.preventDefault(); tip.classList.remove('on'); window.FeelIt.open(); } });
+
+    /* hold to play */
+    function cancelHold(){ clearTimeout(S.hold); S.hold = 0; smile.classList.remove('holding'); tipText(false); }
+    function startHold(){
+      cancelHold(); void smile.offsetWidth;
+      smile.classList.add('holding'); tipText(true); placeTip(); tip.classList.add('on');
+      S.hold = setTimeout(function(){
+        S.hold = 0; smile.classList.remove('holding');
+        S.down = false; S.drag = false; S.pid = null; smile.classList.remove('drag');
+        tip.classList.remove('on');
+        if (window.FeelIt) window.FeelIt.open();
+      }, HOLD);
+    }
+    smile.addEventListener('contextmenu', function(e){ e.preventDefault(); });   /* long-press on phones shouldn't open the menu */
     smile.addEventListener('pointerdown', function(e){
-      if (!S.on || e.button !== 0) return;
-      S.drag = true; S.moved = false; S.pid = e.pointerId;
+      if (e.button !== 0 || root.classList.contains('intro')) return;
+      S.down = true; S.drag = false; S.pid = e.pointerId;
+      S.dx0 = e.clientX; S.dy0 = e.clientY;
       S.gx = e.clientX - S.x; S.gy = e.clientY - S.y; S.lx = e.clientX; S.ly = e.clientY; S.lt = performance.now();
       try { smile.setPointerCapture(e.pointerId); } catch(err){}
-      smile.classList.add('drag');
+      startHold();
     });
     smile.addEventListener('pointermove', function(e){
-      if (!S.drag || e.pointerId !== S.pid) return;
+      if (!S.down || e.pointerId !== S.pid) return;
+      /* moving more than a few px turns the hold into a drag (only once it's roaming) */
+      if (!S.drag){
+        if (Math.abs(e.clientX - S.dx0) + Math.abs(e.clientY - S.dy0) < 8 || !S.on) return;
+        S.drag = true; cancelHold(); tip.classList.remove('on'); smile.classList.add('drag');
+      }
       var now = performance.now(), dt = Math.max(8, now - S.lt) / 1000;
-      S.moved = true;
       S.vx = (e.clientX - S.lx) / dt; S.vy = (e.clientY - S.ly) / dt;
       S.lx = e.clientX; S.ly = e.clientY; S.lt = now;
       S.x = e.clientX - S.gx; S.y = e.clientY - S.gy;
     });
     function release(e){
-      if (!S.drag || e.pointerId !== S.pid) return;
-      S.drag = false; S.pid = null; smile.classList.remove('drag');
-      var sp = Math.hypot(S.vx, S.vy), max = 2400;
-      if (sp < 40){ var ang = Math.random() * Math.PI * 2; S.vx = Math.cos(ang) * cruise(); S.vy = Math.sin(ang) * cruise(); }   /* just dropped: pick a direction */
-      else if (sp > max){ S.vx *= max / sp; S.vy *= max / sp; }
+      if (!S.down || e.pointerId !== S.pid) return;
+      S.down = false; S.pid = null; cancelHold();
+      if (S.drag){
+        S.drag = false; smile.classList.remove('drag');
+        var sp = Math.hypot(S.vx, S.vy), max = 2400;
+        if (sp < 40){ var ang = Math.random() * Math.PI * 2; S.vx = Math.cos(ang) * cruise(); S.vy = Math.sin(ang) * cruise(); }
+        else if (sp > max){ S.vx *= max / sp; S.vy *= max / sp; }
+      }
+      if (!S.hover) tip.classList.remove('on');
     }
     smile.addEventListener('pointerup', release);
     smile.addEventListener('pointercancel', release);
     addEventListener('resize', function(){ if (S.on){ S.w = size(); smile.style.width = S.w + 'px'; } });
 
     (function roam(now){
+      if (tip.classList.contains('on')) placeTip();
+      if (reduce){ requestAnimationFrame(roam); return; }   /* reduced motion: it stays parked on the name */
       if (!S.on){
         if (!root.classList.contains('intro')){
           if (!S.startAt) S.startAt = now + 1300;   /* let it land on the name first */
@@ -686,18 +730,21 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       }
       var dt = Math.min(0.05, (now - S.last) / 1000); S.last = now;
       var vw = document.documentElement.clientWidth, vh = innerHeight, half = S.w / 2;
+      var still = S.hover || S.down;
       if (!S.drag){
-        /* keep a steady speed; after a throw, ease back to cruising without changing direction */
-        var sp = Math.hypot(S.vx, S.vy) || 1, target = cruise();
-        var nsp = sp + (target - sp) * Math.min(1, dt * 1.6);
-        S.vx *= nsp / sp; S.vy *= nsp / sp;
+        /* keep a steady speed (ease to a stop while you're on it); direction never changes except at the edges */
+        var sp = Math.hypot(S.vx, S.vy) || 1, target = still ? 0 : cruise();
+        if (!still && sp < 1){ S.vx = S.vx || 1; S.vy = S.vy || 1; sp = Math.hypot(S.vx, S.vy); }
+        var nsp = sp + (target - sp) * Math.min(1, dt * (still ? 8 : 1.6));
+        S.dirx = S.vx / sp; S.diry = S.vy / sp;
+        S.vx = S.dirx * nsp; S.vy = S.diry * nsp;
         S.x += S.vx * dt; S.y += S.vy * dt;
         var hit = false;
         if (S.x < half){ S.x = half; S.vx = Math.abs(S.vx); hit = true; }
         if (S.x > vw - half){ S.x = vw - half; S.vx = -Math.abs(S.vx); hit = true; }
         if (S.y < half){ S.y = half; S.vy = Math.abs(S.vy); hit = true; }
         if (S.y > vh - half){ S.y = vh - half; S.vy = -Math.abs(S.vy); hit = true; }
-        if (hit) boing();
+        if (hit && !still) boing();
       }
       S.a += (S.vx * dt) / half;   /* roll: turn by distance travelled / radius */
       smile.style.transform = 'translate3d(' + (S.x - half).toFixed(1) + 'px,' + (S.y - half).toFixed(1) + 'px,0) rotate(' + S.a.toFixed(3) + 'rad)';
