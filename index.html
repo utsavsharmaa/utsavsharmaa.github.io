@@ -44,8 +44,8 @@ a{color:inherit;text-decoration:none}
   background-image:linear-gradient(90deg,var(--accent) 0,var(--accent) var(--p,100%),color-mix(in srgb,var(--accent) 16%,var(--bg)) var(--p,100%));
   -webkit-background-clip:text;background-clip:text}
 /* load intro: everything but the name starts hidden, then fades in */
-.intro .meta,.intro .tagline,.intro main > section,.intro footer,.intro .name .box{opacity:0}
-.meta,.tagline,main > section,footer{transition:opacity .9s ease}
+.intro .meta,.intro .tagline,.intro .work-head,.intro main > section,.intro footer,.intro .name .box{opacity:0}
+.meta,.tagline,.work-head,main > section,footer{transition:opacity .9s ease}
 /* tagline: 20px at desktop, 100px below the name, 53px above the cards */
 .tagline{margin:clamp(32px,6.7vw,97px) auto clamp(24px,3.6vw,52px);text-align:center;color:var(--accent);font-size:clamp(13px,1.4vw,20px);letter-spacing:-.01em;line-height:1.2}
 
@@ -59,7 +59,7 @@ a{color:inherit;text-decoration:none}
 /* work grid */
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap)}
 .card{display:block;aspect-ratio:1/1.13;max-width:100%}
-.card.wide{grid-column:1/-1;aspect-ratio:16/9}
+.card.wide{aspect-ratio:16/9}
 .card .glyph{position:absolute;left:-.03em;bottom:-.14em;font-family:var(--display);font-weight:900;line-height:.8;font-size:clamp(150px,30vw,520px);color:var(--fg);opacity:.09;transition:transform .8s cubic-bezier(.2,.9,.25,1);pointer-events:none}
 .card.wide .glyph{font-size:clamp(150px,34vw,620px)}
 .card .hint{position:absolute;right:20px;bottom:18px;color:var(--muted)}
@@ -70,6 +70,16 @@ a{color:inherit;text-decoration:none}
 .card:hover .bar,.card:focus-visible .bar{opacity:1;transform:none}
 .card:hover .glyph,.card:focus-visible .glyph{transform:scale(1.06) translateY(-3%)}
 @media (hover:none){.card .bar{opacity:1;transform:none}}
+
+/* work: each card sits in a wrapper with its question underneath */
+.work{display:flex;flex-direction:column;gap:14px;min-width:0}
+.work.wide{grid-column:1/-1}
+.work .q{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 24px;align-items:baseline}
+.work .q p{margin:0;font-size:clamp(18px,1.7vw,24px);line-height:1.25;letter-spacing:-.01em;max-width:34ch;text-wrap:balance}
+.work .q span{color:var(--accent);white-space:nowrap}
+.work .q span b{font-weight:500}
+.work-head{display:flex;justify-content:space-between;gap:16px;color:var(--accent);margin:0 0 14px}
+.work-head h2{margin:0;font:inherit}
 
 /* about */
 .about{margin-block:var(--gap);padding:clamp(24px,3.5vw,40px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(40px,6vw,96px);min-height:clamp(380px,48vw,560px)}
@@ -119,6 +129,7 @@ html.lenis,html.lenis body{height:auto}
   .card,.card.wide{aspect-ratio:1/1.05}
   .about{grid-template-columns:minmax(0,1fr)}
   .lists{text-align:left}
+  .work .q{grid-template-columns:minmax(0,1fr)}
   .direct{justify-items:start;text-align:left}
 }
 @media (prefers-reduced-motion:reduce){
@@ -147,23 +158,33 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   <h1 class="name" id="name" aria-label="Utsav Sharma">Utsav Sharma</h1>
   <p class="tagline mono">BHU-trained designer, now at NID Bengaluru<br>building 6 Raccoon Design</p>
 
+  <div class="work-head mono"><h2>Questions I couldn’t leave alone ↴</h2><span>4 projects</span></div>
   <section class="grid" aria-label="Selected work">
-    <a class="card wide bend" href="work/aadmiwala/" style="--tc:#2A1C12"><span class="bg"></span>
-      <img class="media" src="work/aadmiwala/cover.jpg" alt="" loading="lazy">
-      <span class="bar mono"><span class="pill">Aadmiwala</span><span class="pill soft">Hiring platform · Real Glide</span><span class="arrow" aria-hidden="true">↗</span></span>
-    </a>
-    <a class="card bend" href="work/sukoon/" style="--tc:#1834BE"><span class="bg"></span>
-      <img class="media" src="work/sukoon/cover.jpg" alt="" loading="lazy">
-      <span class="bar mono"><span class="pill">Sukoon</span><span class="pill soft">Men's mental wellbeing app</span><span class="arrow" aria-hidden="true">↗</span></span>
-    </a>
-    <a class="card bend" href="work/kashikriti/" style="--tc:#3E454B"><span class="bg"></span>
-      <img class="media" src="work/kashikriti/cover.jpg" alt="" loading="lazy">
-      <span class="bar mono"><span class="pill">KASHIKRITI</span><span class="pill soft">Branding & packaging</span><span class="arrow" aria-hidden="true">↗</span></span>
-    </a>
+    <article class="work wide">
+      <a class="card wide bend" href="work/aadmiwala/" style="--tc:#2A1C12"><span class="bg"></span>
+        <img class="media" src="work/aadmiwala/cover.jpg" alt="" loading="lazy">
+        <span class="bar mono"><span class="pill">Aadmiwala</span><span class="pill soft">Hiring platform · Real Glide</span><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <div class="q"><p>Why is hiring through recruiting firms so hard to track?</p><span class="mono"><b>01 / Aadmiwala</b> · Client work · Real Glide</span></div>
+    </article>
+    <article class="work">
+      <a class="card bend" href="work/sukoon/" style="--tc:#1834BE"><span class="bg"></span>
+        <img class="media" src="work/sukoon/cover.jpg" alt="" loading="lazy">
+        <span class="bar mono"><span class="pill">Sukoon</span><span class="pill soft">Men's mental wellbeing app</span><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <div class="q"><p>Why don’t men ask for help, even when they need it?</p><span class="mono"><b>02 / Sukoon</b> · Self-initiated research</span></div>
+    </article>
+    <article class="work">
+      <a class="card bend" href="work/kashikriti/" style="--tc:#3E454B"><span class="bg"></span>
+        <img class="media" src="work/kashikriti/cover.jpg" alt="" loading="lazy">
+        <span class="bar mono"><span class="pill">KASHIKRITI</span><span class="pill soft">Branding & packaging</span><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <div class="q"><p>Why do people walk past a craft this old?</p><span class="mono"><b>03 / KASHIKRITI</b> · Branding & packaging</span></div>
+    </article>
   </section>
 
   <section class="about bend" aria-label="About"><span class="bg"></span>
-    <p class="statement" id="statement">I’m Utsav Sharma, a multidisciplinary designer. I studied Applied Arts at Banaras Hindu University and now study Design for Retail Experience at NID Bengaluru. I sketch first, research hard, and move between brands, screens, spaces and film.</p>
+    <p class="statement" id="statement">I’m Utsav. I trained as an image-maker in Banaras, studying Applied Arts at BHU. Now, at NID Bengaluru, I’m learning to design for people: going from making things look good to making things make sense.</p>
     <div class="lists mono">
       <div><h2>Worked with ↴</h2><ul><li>Real Glide</li><li>VRZ Visuals</li><li>MTB Freestyle Fed.</li><li>TAD Marketing</li><li>Gaurav Visuals</li><li>Indie Beer Community</li></ul></div>
       <div><h2>Services ↴</h2><ul><li>Branding</li><li>Illustration</li><li>Packaging</li><li>UI / UX</li><li>Retail experience</li><li>Photo &amp; film</li></ul></div>
@@ -171,14 +192,17 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   </section>
 
   <section class="grid" aria-label="More work">
-    <a class="card wide bend" href="work/syntra/" style="--tc:#F1E6D8"><span class="bg"></span>
-      <img class="media" src="work/syntra/cover.jpg" alt="" loading="lazy">
-      <span class="bar mono"><span class="pill">Syntra</span><span class="pill soft">Interactive perfume finder · Retail Tech</span><span class="arrow" aria-hidden="true">↗</span></span>
-    </a>
+    <article class="work wide">
+      <a class="card wide bend" href="work/syntra/" style="--tc:#F1E6D8"><span class="bg"></span>
+        <img class="media" src="work/syntra/cover.jpg" alt="" loading="lazy">
+        <span class="bar mono"><span class="pill">Syntra</span><span class="pill soft">Interactive perfume finder · Retail Tech</span><span class="arrow" aria-hidden="true">↗</span></span>
+      </a>
+      <div class="q"><p>How do you find a scent you can’t put into words?</p><span class="mono"><b>04 / Syntra</b> · Retail tech · Group project</span></div>
+    </article>
   </section>
 
   <section class="contact bend" id="contact" aria-label="Contact"><span class="bg"></span>
-    <h2>Open to new projects, collaborations and odd ideas.</h2>
+    <h2>Got a question worth chasing? Write to me.</h2>
     <span></span>
     <div class="row">
       <ul class="socials mono">
