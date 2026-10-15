@@ -1,0 +1,3 @@
+Lato 2.0, copyright (c) 2010-2014 by tyPoland Lukasz Dziedzic (http://www.latofonts.com).
+Licensed under the SIL Open Font License, Version 1.1 (https://openfontlicense.org).
+Latin subsets of the Thin, Light, Light Italic, Regular, Medium, Medium Italic and SemiBold cuts, used on the Syntra case study.

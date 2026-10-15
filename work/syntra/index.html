@@ -3,134 +3,925 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Syntra: an interactive perfume finder for the Retail Tech module, by Utsav Sharma, Sijo Joseph and Rajat Chaple.">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Syntra: a kiosk you play like an instrument. Turn a knob and three sliders, and the screen finds your ZARA scent. A team project by Utsav Sharma, Sijo Joseph and Rajat Chaple, Retail Tech, NID.">
 <title>Syntra · Utsav Sharma</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap">
-<link rel="stylesheet" href="../../assets/case.css">
-<script src="../../assets/theme.js"></script>
-<script src="../../assets/rules.js" defer></script>
+<link rel="preload" href="../../assets/fonts/lato/lato-light.woff" as="font" type="font/woff" crossorigin>
+<style>
+/* Lato 2 (the cut used in the Figma file, with Thin, Medium and SemiBold), Latin subset, SIL Open Font License */
+@font-face{font-family:SLato;font-weight:200;font-style:normal;font-display:swap;src:url(../../assets/fonts/lato/lato-thin.woff) format("woff")}
+@font-face{font-family:SLato;font-weight:300;font-style:normal;font-display:swap;src:url(../../assets/fonts/lato/lato-light.woff) format("woff")}
+@font-face{font-family:SLato;font-weight:300;font-style:italic;font-display:swap;src:url(../../assets/fonts/lato/lato-light-italic.woff) format("woff")}
+@font-face{font-family:SLato;font-weight:400;font-style:normal;font-display:swap;src:url(../../assets/fonts/lato/lato-normal.woff) format("woff")}
+@font-face{font-family:SLato;font-weight:500;font-style:normal;font-display:swap;src:url(../../assets/fonts/lato/lato-medium.woff) format("woff")}
+@font-face{font-family:SLato;font-weight:500;font-style:italic;font-display:swap;src:url(../../assets/fonts/lato/lato-medium-italic.woff) format("woff")}
+@font-face{font-family:SLato;font-weight:600;font-style:normal;font-display:swap;src:url(../../assets/fonts/lato/lato-semibold.woff) format("woff")}
+
+/* Built from the Figma frame "Syntra" (1440 wide). On screens 1000px and up every element sits
+   where it sits in Figma, scaled by --k (1 Figma px). Below that the page reflows into one column. */
+:root{--k:calc(100vw / 1440);--or:#BD680F;--br:#593314;--gy:#948573;--g1:#F99C36;--g2:#975C1C;color-scheme:light}
+*{box-sizing:border-box}
+html{background:#fff;-webkit-text-size-adjust:100%}
+body{margin:0;background:#fff;color:var(--or);font-family:SLato,Lato,"Helvetica Neue",Arial,sans-serif;font-weight:300;overflow-x:clip;-webkit-font-smoothing:antialiased}
+img,svg{display:block}
+a{color:inherit}
+p,h1,h2,h3,figure,blockquote,ol,ul,dl,dd{margin:0}
+ol,ul{list-style:none;padding:0}
+:focus-visible{outline:2px solid var(--or);outline-offset:3px}
+
+.s{position:relative;overflow:hidden;height:calc(var(--sh)*var(--k));background:#fff}
+.a{position:absolute;left:calc(var(--x)*var(--k));top:calc(var(--y)*var(--k));width:calc(var(--w)*var(--k))}
+.p{position:absolute;left:calc(var(--x)*var(--k));top:calc(var(--y)*var(--k));width:calc(var(--w)*var(--k))}
+.box{position:absolute;left:calc(var(--x)*var(--k));top:calc(var(--y)*var(--k));width:calc(var(--bw)*var(--k));height:calc(var(--bh)*var(--k))}
+
+/* soft gold clouds: blurred ellipses in Figma (layer blur 250) */
+.cl{position:absolute;pointer-events:none;left:calc((var(--x) - 250)*var(--k));top:calc((var(--y) - 250)*var(--k));width:calc((var(--w) + 500)*var(--k));height:calc((var(--h) + 500)*var(--k));
+  background:radial-gradient(closest-side,rgb(var(--c) / var(--o)) 0%,rgb(var(--c) / var(--o)) 24%,rgb(var(--c) / calc(var(--o) * .62)) 52%,rgb(var(--c) / calc(var(--o) * .22)) 78%,rgb(var(--c) / 0) 100%)}
+.c1{--c:218 179 118}.c2{--c:249 156 54}
+
+/* photos: the figure is the photo's own box; the image may be bigger (blur bleed / shadow) */
+.ph{margin:0;aspect-ratio:var(--w) / var(--h)}
+.ph:not(.a):not(.p){position:relative}
+.ph img{width:100%;height:100%}
+.ph.bl img{position:absolute;max-width:none;left:calc(var(--l) / var(--w) * -100%);top:calc(var(--t) / var(--h) * -100%);width:calc((var(--w) + var(--l) + var(--r)) / var(--w) * 100%);height:calc((var(--h) + var(--t) + var(--b)) / var(--h) * 100%)}
+.mul img{mix-blend-mode:multiply}
+
+/* type */
+.f13{font-size:calc(13*var(--k))}.f14{font-size:calc(14*var(--k))}.f15{font-size:calc(15*var(--k))}.f16{font-size:calc(16*var(--k))}
+.f17{font-size:calc(17*var(--k))}.f18{font-size:calc(18*var(--k))}.f19{font-size:calc(19*var(--k))}.f20{font-size:calc(20*var(--k))}
+.f22{font-size:calc(22*var(--k))}.f24{font-size:calc(24*var(--k))}.f25{font-size:calc(25*var(--k))}.f26{font-size:calc(26*var(--k))}
+.f28{font-size:calc(28*var(--k))}.f30{font-size:calc(30*var(--k))}.f32{font-size:calc(32*var(--k))}.f40{font-size:calc(40*var(--k))}
+.f56{font-size:calc(56*var(--k))}.f72{font-size:calc(72*var(--k))}.f96{font-size:calc(96*var(--k))}.f140{font-size:calc(140*var(--k))}.f180{font-size:calc(180*var(--k))}
+.w2{font-weight:200}.w3{font-weight:300}.w4{font-weight:400}.w5{font-weight:500}.w6{font-weight:600}.it{font-style:italic}
+b{font-weight:500}
+.h12{line-height:1.2}.h13{line-height:1.3}.h14{line-height:1.4}.h10{line-height:1.01}.h131{line-height:1.31}
+.tc{text-align:center}.tr{text-align:right}
+.or{color:var(--or)}.br{color:var(--br)}.gy{color:var(--gy)}.o67{opacity:.67}.o49{opacity:.49}
+/* Figma's diamond gradient text: bright amber in the middle, brown at the edges */
+.go{background:radial-gradient(closest-side,var(--g1),var(--g2));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.go::selection,.go *::selection{color:var(--br);background:rgba(249,156,54,.25)}
+.hd{font-size:calc(40*var(--k));line-height:1.2;text-align:center;color:var(--or);font-weight:300}
+.lk{text-decoration:none;color:var(--or);font-weight:500}
+.lk:hover{text-decoration:underline;text-underline-offset:.2em}
+
+/* top bar */
+.back{position:fixed;z-index:30;top:20px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:6px;height:36px;padding:0 16px;border-radius:999px;
+  background:rgba(255,255,255,.72);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);box-shadow:0 2px 14px rgba(150,92,28,.12),inset 0 0 0 1px rgba(255,255,255,.9);
+  font-size:14px;font-weight:400;color:var(--or);text-decoration:none;white-space:nowrap}
+.back:hover{background:#fff}
+
+/* cover */
+.cover .bgimg{position:absolute;left:0;top:0;width:100%;height:calc(2024*var(--k))}
+.cover .bgimg img{width:100%;height:100%;object-fit:cover}
+.cover .fade{position:absolute;left:0;width:100%;top:calc(1367*var(--k));height:calc(271*var(--k));background:linear-gradient(to bottom,rgba(255,255,255,0),#fff)}
+.cover .bottles{position:absolute;left:0;top:calc(1598*var(--k));width:calc(894*var(--k))}
+.cover .bottles img{width:100%;height:auto}
+.title svg{width:100%;height:auto;overflow:visible}
+.fyp img{width:100%;height:auto}
+
+/* journey map, flow diagram, control box: fixed drawings */
+.dot{position:absolute;border-radius:50%;transform:translate(-50%,-50%);left:calc(var(--cx)*var(--k));top:calc(var(--cy)*var(--k))}
+.ring34{width:calc(34*var(--k));height:calc(34*var(--k));background:rgba(255,255,255,.4)}
+.dot14{width:calc(14*var(--k));height:calc(14*var(--k));background:#fff}
+.pain .ring{width:calc(34*var(--k));height:calc(34*var(--k));border-radius:50%;margin:0 auto;display:grid;place-items:center;background:rgba(211,122,25,.12)}
+.pain .ring i{width:calc(14*var(--k));height:calc(14*var(--k));border-radius:50%;background:#D37A19}
+.node{width:calc(26*var(--k));height:calc(26*var(--k));background:#fff;display:grid;place-items:center;box-shadow:0 1px 4px rgba(150,92,28,.18)}
+.node i{width:calc(10*var(--k));height:calc(10*var(--k));border-radius:50%;background:var(--or)}
+.box svg.p{height:auto;overflow:visible}
+.nw{white-space:nowrap}
+
+/* control box (playable) */
+.ctl{background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.9);border-radius:calc(16*var(--k));box-shadow:0 calc(20*var(--k)) calc(60*var(--k)) rgba(150,92,28,.12);
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.ctl .lb{position:absolute;left:calc(var(--x)*var(--k));top:calc(var(--y)*var(--k));font-size:calc(13*var(--k));line-height:1.2;color:var(--br);font-weight:300;white-space:nowrap;transition:color .25s}
+.ctl .lb.on{color:var(--or);font-weight:500}
+.ctl .md{position:absolute;width:calc(4*var(--k));height:calc(4*var(--k));border-radius:50%;background:rgba(89,51,20,.6);left:calc(var(--x)*var(--k));top:calc(var(--y)*var(--k));transition:background .25s,transform .25s}
+.ctl .md.on{background:var(--or);transform:scale(1.8)}
+.ctl .nm{position:absolute;top:calc(370*var(--k));font-size:calc(14*var(--k));font-weight:500;color:var(--or);text-align:center;line-height:1.2;left:calc(var(--x)*var(--k));width:calc(var(--w)*var(--k))}
+.knob{position:absolute;left:calc(125*var(--k));top:calc(145*var(--k));width:calc(130*var(--k));height:calc(130*var(--k));border-radius:50%;cursor:grab;
+  background:radial-gradient(circle at 50% 50%,#3B3532 0%,#121010 100%);box-shadow:0 calc(6*var(--k)) calc(12*var(--k)) rgba(0,0,0,.3)}
+.knob:active{cursor:grabbing}
+.knob .ind{position:absolute;left:50%;top:50%;width:0;height:0;transform:rotate(var(--a,-35deg));transition:transform .45s cubic-bezier(.3,1.4,.5,1)}
+.ctl.dragging .knob .ind{transition:none}
+.knob .ind::before{content:"";position:absolute;left:calc(-2*var(--k));top:calc(-48*var(--k));width:calc(4*var(--k));height:calc(30*var(--k));border-radius:calc(2*var(--k));background:#EADCCB}
+.trk{position:absolute;top:calc(95*var(--k));width:calc(6*var(--k));height:calc(230*var(--k));border-radius:calc(3*var(--k));background:rgba(43,43,43,.85);left:calc(var(--x)*var(--k))}
+.tick{position:absolute;width:calc(12*var(--k));height:calc(2*var(--k));background:rgba(89,51,20,.5);left:calc(var(--x)*var(--k));top:calc(var(--y)*var(--k))}
+.thumb{position:absolute;width:calc(30*var(--k));height:calc(40*var(--k));border-radius:calc(4*var(--k));background:linear-gradient(180deg,#3A3430,#141110);cursor:grab;
+  left:calc(var(--x)*var(--k));top:calc((var(--ty) - 20)*var(--k));box-shadow:0 calc(3*var(--k)) calc(8*var(--k)) rgba(0,0,0,.25);transition:top .4s cubic-bezier(.3,1.3,.5,1)}
+.thumb::after{content:"";position:absolute;left:18%;right:18%;top:50%;height:1px;background:rgba(234,220,203,.35)}
+.ctl.dragging .thumb.drag{transition:none}
+.btn{position:absolute;left:calc(940*var(--k));top:calc(170*var(--k));width:calc(80*var(--k));height:calc(80*var(--k));border-radius:50%;border:0;padding:0;cursor:pointer;
+  background:radial-gradient(circle at 50% 50%,#3B3532 0%,#121010 100%);box-shadow:0 calc(6*var(--k)) calc(10*var(--k)) rgba(0,0,0,.3);transition:transform .12s}
+.btn.down{transform:scale(.94)}
+.btn svg{position:absolute;inset:calc(-7*var(--k));width:calc(94*var(--k));height:calc(94*var(--k));pointer-events:none;transform:rotate(-90deg)}
+.btn svg circle{fill:none;stroke:var(--g1);stroke-width:3;stroke-dasharray:289;stroke-dashoffset:289;stroke-linecap:round}
+.btn.holding svg circle{transition:stroke-dashoffset 2s linear;stroke-dashoffset:0}
+.btxt{position:absolute;left:calc(915*var(--k));top:calc(270*var(--k));width:calc(140*var(--k));font-size:calc(13*var(--k));line-height:1.4;text-align:center}
+.btxt span{display:block;transition:color .2s,font-weight .2s}
+.btxt span.on{-webkit-text-fill-color:var(--or);font-weight:500}
+.readout{position:absolute;left:0;right:0;bottom:calc(-34*var(--k));text-align:center;font-size:calc(14*var(--k));font-weight:400;color:var(--br);letter-spacing:.01em}
+.readout em{font-style:normal;color:var(--or);font-weight:500}
+.play-hint{position:absolute;right:calc(18*var(--k));top:calc(14*var(--k));font-size:calc(12*var(--k));color:var(--gy);font-weight:400;letter-spacing:.04em;transition:opacity .4s}
+.ctl.touched .play-hint{opacity:0}
+
+/* weight bars */
+.bar{position:absolute;height:calc(14*var(--k));left:calc(var(--x)*var(--k));top:calc(2490*var(--k));width:calc(var(--w)*var(--k));transform-origin:left;transform:scaleX(0);transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.bars.in .bar{transform:none}
+.bars.in .bar:nth-child(2){transition-delay:.12s}.bars.in .bar:nth-child(3){transition-delay:.24s}.bars.in .bar:nth-child(4){transition-delay:.36s}
+
+.li{position:relative;padding-left:calc(26*var(--k))}
+.li::before{content:"";position:absolute;left:0;top:calc(4*var(--k));width:calc(12*var(--k));height:calc(12*var(--k));border-radius:50%;background:var(--bc)}
+
+/* 360 panorama */
+.pano{position:absolute;left:0;width:100%;top:calc(1480*var(--k));height:calc(281*var(--k));overflow:hidden;cursor:grab;touch-action:pan-y;background:#cfe0f0}
+.pano.grab{cursor:grabbing}
+.pano .track{position:absolute;left:0;top:0;height:100%;display:flex;will-change:transform}
+.pano .track img{height:100%;width:auto;max-width:none;flex:none;-webkit-user-drag:none;user-select:none;pointer-events:none}
+.pano .hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:rgba(20,15,0,.42);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font-size:13px;font-weight:400;letter-spacing:.02em;pointer-events:none;transition:opacity .5s}
+.pano.used .hint{opacity:0}
+.pano .deg{position:absolute;right:14px;top:12px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.7);color:var(--br);font-size:12px;font-weight:400;font-variant-numeric:tabular-nums;pointer-events:none}
+
+/* end */
+.end{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:28px calc(120*var(--k)) 36px;border-top:1px solid rgba(189,104,15,.18);font-size:14px;font-weight:400;color:var(--or)}
+.end a{text-decoration:none}.end a:hover{text-decoration:underline}
+
+.rv{opacity:0;transform:translateY(18px);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.9,.25,1)}
+.rv.in{opacity:1;transform:none}
+
+/* ---------- one column below 1000px ---------- */
+@media (max-width:999px){
+  :root{--k:.62px}
+  .s{height:auto;padding:72px 20px 64px}
+  .s.cover{padding-top:0;display:flex;flex-direction:column}
+  .cover .bottles{order:9}.cover .last{order:10}
+  .a{position:relative;left:auto;top:auto;width:auto;margin:0 0 18px}
+  .hd{font-size:28px;margin-bottom:12px}
+  .f13{font-size:13px}.f14{font-size:13px}.f15{font-size:14px}.f16{font-size:15px}.f17{font-size:15px}.f18{font-size:16px}.f19{font-size:16px}.f20{font-size:17px}
+  .f22{font-size:18px}.f24{font-size:20px}.f25{font-size:19px}.f26{font-size:20px}.f28{font-size:22px}.f30{font-size:22px}.f32{font-size:23px}.f40{font-size:28px}
+  .f56{font-size:40px}.f72{font-size:48px}.f96{font-size:56px}.f140{font-size:84px}.f180{font-size:104px}
+  .cl{left:calc((var(--x) - 250)*100vw/1440);top:calc((var(--y) - 250)*.5px);width:calc((var(--w) + 500)*100vw/1000);height:calc((var(--h) + 500)*.6px)}
+  .ph:not(.p){width:100%}
+  .scroller .ph.p img{max-width:none}
+  .grid{position:relative;display:grid;gap:18px 14px;grid-template-columns:1fr 1fr;margin:0 0 26px}
+  .grid > .a, .grid > div{margin:0}
+  .grid > *{min-width:0}
+  .grid.one{grid-template-columns:1fr}
+  .card > .ph{margin-bottom:10px}
+  .scroller{position:relative;overflow-x:auto;overflow-y:hidden;margin:0 -20px 22px;padding:0 20px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .scroller::-webkit-scrollbar{display:none}
+  .scroller > .box{position:relative;left:auto;top:auto;--k:.68px}
+  .scroller > .box.ctl{--k:.8px;margin-bottom:6px}
+  .scroller .swipe{position:sticky;left:0;display:block;font-size:12px;color:var(--gy);font-weight:400;margin:0 0 8px}
+  .cover .bgimg{height:620px}
+  .cover .fade{top:440px;height:180px}
+  .cover .bottles{position:relative;top:auto;width:calc(100% + 20px);margin:0 0 0 -20px}
+  .scroller.pad{padding-bottom:44px}
+  .row3,.pin,.sb,.rl{grid-template-columns:var(--gc,1fr)!important;margin-top:0!important;grid-auto-rows:auto!important}
+  .pin{--gc:90px 1fr}.sb{--gc:28px 110px 1fr}.rl{--gc:56px 1fr}
+  .lst{grid-auto-rows:auto!important;row-gap:16px!important}
+  .cover .meta{display:flex;justify-content:space-between;padding-top:72px}
+  .cover .title{width:240px!important;margin:120px 0 10px}
+  .fyp{max-width:520px}
+  .pano{position:relative;top:auto;height:240px;margin:0 -20px 18px;width:auto}
+  .bars-wrap{position:relative;height:110px;margin:0 0 18px}
+  .bar{top:0;left:calc(var(--x2)*1%);width:calc(var(--w2)*1%);height:12px}
+  .pct{position:absolute!important;top:22px!important;left:calc(var(--x2)*1%)!important;width:auto!important}
+  .pin{gap:8px 10px}
+  .row3{gap:4px;padding:12px 0;border-top:1px solid rgba(189,104,15,.15)}
+  .row3 .arr{display:none}
+  .sb{gap:4px 10px;align-items:baseline}
+  .readout{bottom:-28px}
+  .end{padding:24px 20px 32px}
+  .only-wide{display:none!important}
+}
+@media (min-width:1000px){ .only-narrow{display:none!important} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important} .rv{opacity:1;transform:none} }
+</style>
 </head>
 <body>
 
-<header class="meta mono">
-  <a href="../../">← Utsav Sharma</a>
-  <span>Case study 04 / 04</span>
-  <span class="end"><a href="#contact">Contact</a><button class="theme-btn" type="button" data-theme-toggle aria-label="Switch to dark mode"><span aria-hidden="true"></span></button></span>
-</header>
+<a class="back" href="../../#work" aria-label="Back to Utsav Sharma's work"><span aria-hidden="true">←</span> Utsav Sharma</a>
 
 <main>
-  <h1 class="title">Syntra</h1>
-  <p class="tagline mono">An interactive perfume finder for people<br>who know the feeling, not the name</p>
 
-  <figure class="hero bend" style="--tc:#F1E6D8"><span class="bg"></span><img class="media" src="hero.jpg" alt="Blurred perfume bottles scattered on a pale surface" width="1800" height="945"></figure>
+<!-- 01 Cover -->
+<section class="s cover" style="--sh:2725" aria-label="Syntra">
+  <div class="bgimg" aria-hidden="true"><figure class="ph" style="--w:1440;--h:2024"><img src="img/cover-bg.jpg" alt="" width="1440" height="2024" loading="lazy" decoding="async"></figure></div>
+  <div class="fade" aria-hidden="true"></div>
+  <div class="bottles" aria-hidden="true"><figure class="ph" style="--w:894;--h:1127"><img src="img/cover-bottles.webp" alt="" width="894" height="1127" loading="lazy" decoding="async"></figure></div>
+  <div class="meta">
+    <p class="a f15 w3 o67 h12" style="--x:80;--y:63;--w:277">Duration: 2 weeks</p>
+    <p class="a f15 w3 o67 h12 tr" style="--x:1083;--y:63;--w:277">Module: Retail Tech</p>
+  </div>
+  <h1 class="a title" style="--x:169;--y:290;--w:379" aria-label="Syntra">
+    <svg viewBox="0 0 379 107" aria-hidden="true"><defs><filter id="tblur" x="-5%" y="-10%" width="110%" height="120%"><feGaussianBlur stdDeviation="3.9"/></filter><radialGradient id="tgrad" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(191.568 51) scale(218.5 67)"><stop stop-color="#59330B"/><stop offset="1" stop-color="#DD8020"/></radialGradient></defs><g filter="url(#tblur)"><path fill="url(#tgrad)" d="M34.6 80.5C21.6 80.6 13.3 77.5 7.8 74.4L12.8 59.8L13.8 59.7C15.3 72.1 25.3 78.6 35.9 78.6C46.4 78.6 52.1 73.4 52.1 65.9C52.1 48.4 19.3 48.5 19.5 28.1C19.5 14 33.2 7.8 47.3 7.8C58 7.8 67.5 10.3 73.5 13.9L67.7 28.8H66.8C65.8 18.4 57.9 9.8 46.3 9.8C38.4 9.8 31.6 13.4 31.5 21.6C31.4 36.9 64.7 39 64.6 58.4C64.5 70.6 52.9 80.4 34.6 80.5ZM65.6211 99.2C61.2211 99.2 55.9211 98.2 53.2211 96.9L57.8211 84.5L59.0211 84.4C61.9211 91.3 67.1211 95.4 74.0211 95.4C85.2211 95.4 92.0211 85.5 92.0211 60.7C92.0211 45.3 89.3211 28.1 81.2211 28.1C77.6211 28.1 75.2211 31.6 72.7211 36.7L71.3211 35.9C76.0211 25.2 81.7211 20.7 88.4211 20.7C102.521 20.7 105.721 41.5 105.621 58.6C105.421 69.3 104.121 75.1 103.021 79.7C114.621 69.4 123.321 55.9 122.221 38C121.921 32.1 120.421 26.9 118.021 24.3L118.321 23.3C123.621 23.7 128.021 22.4 130.821 20.8L131.721 21.4C132.421 23.5 132.721 26.3 132.821 28.3C134.321 59.1 93.8211 99.2 65.6211 99.2ZM188.777 80.4C180.877 80.4 178.577 74.9 180.977 66.1L187.977 39.8C190.577 30.1 188.677 25.6 183.777 25.6C173.877 25.6 159.177 50.9 152.977 76.7L152.477 79H138.377L149.177 33.7C150.077 29.9 149.477 27.5 147.077 27.5C144.277 27.5 140.977 31.8 138.277 37L136.877 36.3C141.777 25.4 148.277 20.6 154.977 20.6C162.977 20.6 164.577 26.1 162.577 34.9L158.577 52.3H159.177C164.977 39.3 175.777 20.6 190.277 20.6C200.277 20.6 205.077 28.3 201.777 40.7L194.577 67.6C193.677 71 194.077 73.5 196.777 73.5C199.577 73.5 202.877 69.2 205.577 64L206.977 64.7C202.077 75.6 195.577 80.4 188.777 80.4ZM226.409 80.4C216.109 80.4 212.809 73.2 215.209 63.2L223.409 27.8H216.809L217.209 26.4C225.909 25.2 234.409 18.8 239.609 9.4H241.309L237.609 25.6H251.909L251.309 27.8H237.109L229.009 63.6C227.309 71.3 229.409 74.7 234.409 74.7C238.009 74.7 242.209 71.8 246.309 65.5L247.509 66.3C242.809 74.4 237.009 80.4 226.409 80.4ZM269.748 79H255.648L265.948 33.5C266.848 29.8 266.848 27.5 264.548 27.5C262.148 27.5 258.848 31.9 256.248 36.8L254.848 36C259.648 25.5 265.948 20.7 272.548 20.7C279.648 20.7 281.448 26.2 279.548 34.9L275.648 52.3H276.448C282.048 39.2 291.748 20.6 304.848 20.6C306.948 20.6 308.648 20.8 309.948 21.2L307.348 32.8L306.348 33.1C304.648 31.4 302.048 29.9 299.048 29.9C287.848 29.9 275.548 53.3 269.948 78.2L269.748 79ZM320.669 80.4C311.869 80.4 303.169 74.2 303.869 59.3C304.969 39.2 321.269 20.7 344.269 20.7C353.169 20.7 360.269 23.8 363.369 26.2L368.069 20.8H369.569L358.569 67.6C357.769 71 358.069 73.5 360.669 73.5C363.469 73.5 366.869 69.2 369.569 64L370.969 64.7C366.069 75.6 359.469 80.4 352.769 80.4C344.869 80.4 342.569 74.8 345.069 65.3L346.969 57.7H346.369C337.469 75 329.169 80.4 320.669 80.4ZM326.669 75.7C338.269 75.7 352.769 42 352.769 31.5C352.769 26.6 349.469 22.6 343.269 22.6C326.169 22.6 318.269 48.6 318.069 61.7C317.969 69.3 320.169 75.7 326.669 75.7Z"/></g></svg>
+  </h1>
+  <p class="a f32 w3 o67 h12" style="--x:165;--y:422;--w:1046">An interactive perfume finder.</p>
+  <p class="a f15 w3 o67 h12" style="--x:80;--y:914;--w:1046;letter-spacing:.03em">An interactive experiential system of turning and finding.<br>The memory of fragrance, and the joy of finding your own.<br>A phygital, guided, self-discovery perfume recommendation system.</p>
+  <p class="a f40 w3 h13 tc go" style="--x:189;--y:1258;--w:1063">Know the feeling, not the name?</p>
+  <p class="a fyp" style="--x:273;--y:1300;--w:894"><img src="img/find-your-perfume.webp" alt="Let's find your perfume." width="894" height="107"></p>
+  <p class="a f30 w3 h13 go last" style="--x:732;--y:2126;--w:628">We took the question:<br><b>how do you choose a scent you can't describe</b><br>and let your hands find the words.</p>
+</section>
 
-  <dl class="facts mono rv">
-    <div><dt>Module</dt><dd>Retail Tech</dd></div>
-    <div><dt>Duration</dt><dd>2 weeks</dd></div>
-    <div><dt>Team</dt><dd>Utsav Sharma, Sijo Joseph, Rajat Chaple</dd></div>
-    <div><dt>Built with</dt><dd>ESP32, p5.js, VR worlds, AR scent tickets</dd></div>
+<!-- 01b Meet Syntra -->
+<section class="s" style="--sh:2330" aria-labelledby="meet">
+  <i class="cl c1" style="--x:-260;--y:120;--w:900;--h:620;--o:.45"></i>
+  <i class="cl c2" style="--x:880;--y:900;--w:900;--h:700;--o:.25"></i>
+  <i class="cl c1" style="--x:-200;--y:1700;--w:800;--h:600;--o:.40"></i>
+  <h2 class="a hd" id="meet" style="--x:184;--y:140;--w:1072">Meet <b>Syntra</b></h2>
+  <p class="a f20 w3 h14 tc go" style="--x:170;--y:220;--w:1100">A kiosk you play like an instrument. Turn a knob and three sliders, and the screen finds your ZARA scent.<br>A double press takes you into its world. Hold the button, and a ticket prints that comes alive in AR.</p>
+  <figure class="ph a bl" style="--w:1200;--h:900;--x:120;--y:400"><img src="img/meet-kiosk.webp" alt="Syntra kiosk at the exhibit: a visitor in a VR headset in front of the lit backdrop and the screen" width="1245" height="945" loading="lazy" decoding="async" style="--l:23;--t:23;--r:22;--b:22"></figure>
+  <p class="a f16 w3 h12 tc" style="--x:284;--y:1330;--w:872">Our kiosk at the exhibit: the lit backdrop, the screen set into it, the controls on the table and the headset.</p>
+  <div class="grid">
+    <div class="card"><figure class="ph a bl" style="--w:282;--h:400;--x:120;--y:1480"><img src="img/meet-turn.webp" alt="The kiosk screen glowing in the backdrop" width="322" height="440" loading="lazy" decoding="async" style="--l:20;--t:20;--r:20;--b:20"></figure><h3 class="a f24 w5 h12" style="--x:120;--y:1910;--w:282">Turn</h3><p class="a f17 w3 h14 go" style="--x:120;--y:1946;--w:262">A knob and three sliders. No perfume words.</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:282;--h:400;--x:426;--y:1480"><img src="img/meet-see.webp" alt="The screen showing Femme as the match" width="322" height="440" loading="lazy" decoding="async" style="--l:20;--t:20;--r:20;--b:20"></figure><h3 class="a f24 w5 h12" style="--x:426;--y:1910;--w:282">See</h3><p class="a f17 w3 h14 go" style="--x:426;--y:1946;--w:262">The screen answers with one scent and how close it is.</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:282;--h:400;--x:732;--y:1480"><img src="img/meet-step.webp" alt="A visitor in a Meta Quest 3 headset, others watching" width="322" height="440" loading="lazy" decoding="async" style="--l:20;--t:20;--r:20;--b:20"></figure><h3 class="a f24 w5 h12" style="--x:732;--y:1910;--w:282">Step in</h3><p class="a f17 w3 h14 go" style="--x:732;--y:1946;--w:262">A double press opens the scent as a place in VR.</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:282;--h:400;--x:1038;--y:1480"><img src="img/meet-take.webp" alt="A visitor scanning the printed ticket with a phone" width="322" height="440" loading="lazy" decoding="async" style="--l:20;--t:20;--r:20;--b:20"></figure><h3 class="a f24 w5 h12" style="--x:1038;--y:1910;--w:282">Take it home</h3><p class="a f17 w3 h14 go" style="--x:1038;--y:1946;--w:262">A thermal ticket that lifts off the paper in AR.</p></div>
+  </div>
+  <p class="a f32 w3 h12 tc" style="--x:184;--y:2180;--w:1072">Know the feeling, not the name. <b>Find the scent.</b></p>
+</section>
+
+<!-- 02 In Syntra / process -->
+<section class="s" style="--sh:2142" aria-labelledby="insyntra">
+  <i class="cl c1" style="--x:-284;--y:958;--w:705;--h:476;--o:.84"></i>
+  <i class="cl c1" style="--x:-13;--y:716;--w:705;--h:476;--o:.5"></i>
+  <i class="cl c1" style="--x:101;--y:1086;--w:705;--h:476;--o:.5"></i>
+  <i class="cl c1" style="--x:599;--y:670;--w:705;--h:476;--o:.5"></i>
+  <i class="cl c1" style="--x:-365;--y:929;--w:705;--h:476;--o:.42"></i>
+  <i class="cl c1" style="--x:925;--y:781;--w:705;--h:476;--o:.29"></i>
+  <i class="cl c1" style="--x:759;--y:1074;--w:705;--h:476;--o:.08"></i>
+  <i class="cl c1" style="--x:-190;--y:482;--w:705;--h:476;--o:.29"></i>
+  <i class="cl c1" style="--x:-334;--y:161;--w:705;--h:476;--o:.29"></i>
+  <p class="a f40 w3 h13 tc" style="--x:188;--y:82;--w:1063">Choosing a scent is choosing how you'll be remembered.</p>
+  <p class="a f40 w5 h13 tc" style="--x:188;--y:140;--w:1063">Mood. Memory. Presence.</p>
+  <h2 class="a hd h13" id="insyntra" style="--x:188;--y:409;--w:1063">In <b class="w6">Syntra</b></h2>
+  <p class="a f25 w3 h131 tc o49" style="--x:421;--y:512;--w:597">The search starts with you, not the shelf.<br>A moment, a mood, a feeling you can't quite name,<br>each choice bringing you a little closer.<br>Until, out of endless bottles, one feels less<br>like a choice and more like a discovery.</p>
+  <h2 class="a hd h13" style="--x:188;--y:1060;--w:1063">How we went about <b>the process</b></h2>
+  <div class="scroller" data-center><span class="swipe only-narrow">Swipe →</span>
+  <div class="box" style="--x:0;--y:1250;--bw:1440;--bh:762">
+    <figure class="ph p mul" style="--w:491;--h:762;--x:482;--y:0"><img src="img/process-bottle.webp" alt="A perfume bottle drawn in five coloured layers, from concept at the neck to experience at the base" width="491" height="762" loading="lazy" decoding="async"></figure>
+    <p class="p f30 w5 h10 tr go nw" style="--x:333;--y:102;--w:158">Concept<br>Layer</p>
+    <p class="p f30 w5 h10 tr go nw" style="--x:333;--y:254;--w:158">Research<br>Layer</p>
+    <p class="p f30 w5 h10 tr go nw" style="--x:333;--y:369;--w:158">Ideation<br>Layer</p>
+    <p class="p f30 w5 h10 tr go nw" style="--x:333;--y:506;--w:158">Prototyping<br>Layer</p>
+    <p class="p f30 w5 h10 tr go nw" style="--x:339;--y:652;--w:158">Experience<br>Layer</p>
+    <p class="p f20 w3 h13 go" style="--x:949;--y:108;--w:263">Exploring tactility, emotion and choice in fragrance retail.</p>
+    <p class="p f20 w3 h13 go" style="--x:949;--y:234;--w:402">Store observations, contextual interviews, buyer journeys, scent perceptions.</p>
+    <p class="p f20 w3 h13 go" style="--x:949;--y:369;--w:326">Mapping the flow from physical input to digital output to AR keepsake.</p>
+    <p class="p f20 w3 h13 go" style="--x:949;--y:506;--w:280">ESP32 + JavaScript + VR worlds + AR-enabled scent tickets.</p>
+    <p class="p f20 w3 h13 go" style="--x:949;--y:643;--w:263">Feeling turned into fragrance. A scent found, felt and kept.</p>
+  </div></div>
+</section>
+
+<!-- 03 The problem -->
+<section class="s" style="--sh:2520" aria-labelledby="problem">
+  <i class="cl c1" style="--x:921;--y:1657;--w:705;--h:476;--o:.29"></i>
+  <i class="cl c1" style="--x:904;--y:1865;--w:705;--h:476;--o:.5"></i>
+  <i class="cl c1" style="--x:813;--y:1590;--w:705;--h:476;--o:.5"></i>
+  <i class="cl c1" style="--x:-275;--y:898;--w:705;--h:476;--o:.5"></i>
+  <h2 class="a hd h13" id="problem" style="--x:188;--y:200;--w:1063">The <b>Problem</b></h2>
+  <div class="a tc go h13" style="--x:243;--y:316;--w:953">
+    <p class="f20 w3">Choosing a perfume is one of the few purchases we make almost entirely through a sense we can't explain. Shoppers arrive knowing a mood: something fresh for work, something warm for an evening, something that feels like them. But the store speaks a different language: names, notes and bottles that all look alike. After a few sprays, the nose begins to blur what the mind is trying to compare. What should feel personal becomes a guess, and the feeling people came in with quietly gets lost between the shelf and the counter.</p>
+    <p class="f32 w3" style="margin-top:calc(26*var(--k))"><b>How might we</b> help shoppers find a perfume that feels like them, even when they can't put it into words?</p>
+  </div>
+  <div class="a go h13" style="--x:187;--y:760;--w:395">
+    <p class="f32 w5">The choice problem</p>
+    <p class="f20 w3 it" style="margin-top:calc(14*var(--k))">24 options turns into 3% bought<br>6 options turns into 30% bought</p>
+    <p class="f20 w4" style="margin-top:calc(14*var(--k))">A wall of perfumes works the same way: plenty to look at, hard to pick.<br>(Iyengar &amp; Lepper, 2000)</p>
+  </div>
+  <figure class="ph a bl" style="--w:380;--h:380;--x:674;--y:731"><img src="img/problem-shelf.webp" alt="Close-up of perfume testers on a lit shelf" width="448" height="448" loading="lazy" decoding="async" style="--l:34;--t:34;--r:34;--b:34"></figure>
+  <p class="a f20 w3 h13 go" style="--x:1094;--y:941;--w:163">60% of US perfume users discover fragrances by trying them in store. (YouGov, 2025)</p>
+  <figure class="ph a bl" style="--w:450;--h:487;--x:185;--y:984"><img src="img/problem-display.webp" alt="A Jean Paul Gaultier display in a perfume store" width="556" height="593" loading="lazy" decoding="async" style="--l:53;--t:53;--r:53;--b:53"></figure>
+  <figure class="ph a bl" style="--w:568;--h:433;--x:674;--y:1157"><img src="img/problem-store.webp" alt="A perfume store seen from above, shoppers at the counters" width="591" height="456" loading="lazy" decoding="async" style="--l:12;--t:12;--r:11;--b:11"></figure>
+  <p class="a f20 w3 h13 go" style="--x:185;--y:1497;--w:410">India's perfume market was USD 1.25 billion<b> in 2025 and is expected to reach about USD 2 billion by 2034 (IMARC Group).</b></p>
+  <h2 class="a hd h13" style="--x:184;--y:1783;--w:1063">When every scent <b>smells the same</b></h2>
+  <div class="a go h13" style="--x:185;--y:2033;--w:355">
+    <p class="f20 w3">Your nose gets tired after 3–4 perfumes, scents start to blur together.</p>
+    <p class="f20 w3" style="margin-top:calc(26*var(--k))">Stores offer coffee beans to "reset" it, but research shows they work no better than fresh air.</p>
+    <p class="f32 w3" style="margin-top:calc(26*var(--k))">So the problem isn't the nose, it's <b>smelling too many</b>.</p>
+  </div>
+  <figure class="ph a mul" style="--w:641;--h:555;--x:619;--y:1895"><img src="img/problem-nose.webp" alt="Six noses in a row, each smaller, each sniffing a perfume bottle" width="641" height="555" loading="lazy" decoding="async"></figure>
+</section>
+
+<!-- 04 Journey and voices -->
+<section class="s" style="--sh:1972" aria-labelledby="journey">
+  <h2 class="a hd w5 h12" id="journey" style="--x:403;--y:85;--w:634;font-weight:500">Current journey map</h2>
+  <div class="scroller"><span class="swipe only-narrow">Swipe →</span>
+  <div class="box jmap" style="--x:0;--y:224;--bw:1440;--bh:595">
+    <figure class="ph p" style="--w:273;--h:318;--x:0;--y:61"><img src="img/journey-1.webp" alt="A shopper facing a wall of similar bottles" width="273" height="318" loading="lazy" decoding="async"></figure>
+    <figure class="ph p" style="--w:256;--h:318;--x:287;--y:271"><img src="img/journey-2.webp" alt="Shoppers reading the bottles on a shelf" width="256" height="318" loading="lazy" decoding="async"></figure>
+    <figure class="ph p" style="--w:293;--h:318;--x:557;--y:61"><img src="img/journey-3.webp" alt="Shoppers testing scents at a counter" width="293" height="318" loading="lazy" decoding="async"></figure>
+    <figure class="ph p" style="--w:268;--h:319;--x:866;--y:270"><img src="img/journey-4.webp" alt="A shopper asking a staff member" width="268" height="319" loading="lazy" decoding="async"></figure>
+    <figure class="ph p" style="--w:291;--h:318;--x:1149;--y:61"><img src="img/journey-5.webp" alt="A shopper walking away" width="291" height="318" loading="lazy" decoding="async"></figure>
+    <svg class="p" style="--x:0;--y:274.5;--w:1440" viewBox="0 0 1440 360" fill="none" aria-hidden="true"><path d="M0 75.4213C0 75.4213 207.377 -8.8826 272 75.4213C321.536 140.044 223.703 218.367 272 283.921C337.554 372.899 489.446 372.899 555 283.921C603.297 218.367 507.791 141.763 555 75.4213C621.342 -17.8071 781.658 -17.8071 848 75.4213C895.209 141.763 800.951 217.466 848 283.921C914.455 377.787 1076.04 377.787 1142.5 283.921C1189.55 217.466 1095.82 142.137 1142.5 75.4213C1209.22 -19.9328 1440.5 75.4213 1440.5 75.4213" stroke="url(#jg)" stroke-width="11"/><defs><linearGradient id="jg" x1="0" y1="179.671" x2="1440.5" y2="179.671" gradientUnits="userSpaceOnUse"><stop stop-color="#FD9C31"/><stop offset="1" stop-color="#311E09"/></linearGradient></defs></svg>
+    <i class="dot ring34" style="--cx:228;--cy:321"></i><i class="dot dot14" style="--cx:228;--cy:321"></i>
+    <i class="dot ring34" style="--cx:536;--cy:582"></i><i class="dot dot14" style="--cx:536;--cy:582"></i>
+    <i class="dot ring34" style="--cx:778;--cy:297"></i><i class="dot dot14" style="--cx:778;--cy:297"></i>
+    <i class="dot ring34" style="--cx:1122;--cy:582"></i><i class="dot dot14" style="--cx:1122;--cy:582"></i>
+    <i class="dot ring34" style="--cx:1312;--cy:314"></i><i class="dot dot14" style="--cx:1312;--cy:314"></i>
+    <p class="p f15 h13 tc go" style="--x:0;--y:0;--w:263"><b>Walks in</b><br>Faces a wall of similar bottles</p>
+    <p class="p f15 h13 tc go" style="--x:312;--y:189;--w:207"><b>Browse</b><br>Reads names that say nothing about the smell</p>
+    <p class="p f15 h13 tc go" style="--x:578;--y:0;--w:263"><b>Test</b><br>Sprays 3–4 on paper strips</p>
+    <p class="p f15 h13 tc go" style="--x:903;--y:189;--w:178"><b>Ask staff</b><br>Staff may be busy or untrained in scent</p>
+    <p class="p f15 h13 tc go" style="--x:1167;--y:0;--w:263"><b>Decide</b><br>Picks the last one smelled, or leaves</p>
+  </div></div>
+  <h3 class="a f24 w5 h12 tc" style="--x:185;--y:1010;--w:1070">Where it breaks</h3>
+  <ul class="grid">
+    <li class="a pain tc" style="--x:26;--y:1080;--w:210"><span class="ring" aria-hidden="true"><i></i></span><b class="f20 h13" style="display:block;margin-top:calc(26*var(--k))">Overwhelm</b><span class="f16 w3 h13 go" style="display:block;margin-top:calc(8*var(--k))">24 near-identical bottles, no place to start</span></li>
+    <li class="a pain tc" style="--x:310;--y:1080;--w:210"><span class="ring" aria-hidden="true"><i></i></span><b class="f20 h13" style="display:block;margin-top:calc(26*var(--k))">No language</b><span class="f16 w3 h13 go" style="display:block;margin-top:calc(8*var(--k))">Names and notes say nothing about the smell</span></li>
+    <li class="a pain tc" style="--x:605;--y:1080;--w:210"><span class="ring" aria-hidden="true"><i></i></span><b class="f20 h13" style="display:block;margin-top:calc(26*var(--k))">Nose fatigue</b><span class="f16 w3 h13 go" style="display:block;margin-top:calc(8*var(--k))">After 3–4 strips, scents blur together</span></li>
+    <li class="a pain tc" style="--x:887;--y:1080;--w:210"><span class="ring" aria-hidden="true"><i></i></span><b class="f20 h13" style="display:block;margin-top:calc(26*var(--k))">Guesswork</b><span class="f16 w3 h13 go" style="display:block;margin-top:calc(8*var(--k))">Staff are busy, or not trained in scent</span></li>
+    <li class="a pain tc" style="--x:1193;--y:1080;--w:210"><span class="ring" aria-hidden="true"><i></i></span><b class="f20 h13" style="display:block;margin-top:calc(26*var(--k))">Last one wins</b><span class="f16 w3 h13 go" style="display:block;margin-top:calc(8*var(--k))">Picks the last scent smelled, or leaves</span></li>
+  </ul>
+  <h2 class="a hd h12" style="--x:443;--y:1337;--w:634;font-weight:500">What they say?</h2>
+  <div class="grid one">
+    <blockquote class="a" style="--x:185;--y:1520;--w:480"><p class="f24 w3 h13 go">“I know I want something fresh for work. I just don’t know what that’s called.”</p><p class="f14 w3 h13 go" style="margin-top:calc(16*var(--k))"><b>Shopper</b>&nbsp; · &nbsp;mall visit</p></blockquote>
+    <blockquote class="a" style="--x:775;--y:1520;--w:480"><p class="f24 w3 h13 go">“By the fourth strip, everything smells the same to me.”</p><p class="f14 w3 h13 go" style="margin-top:calc(16*var(--k))"><b>Shopper</b>&nbsp; · &nbsp;mall visit</p></blockquote>
+    <blockquote class="a" style="--x:185;--y:1820;--w:480"><p class="f24 w3 h13 go">“Most people ask for ‘something nice’. I end up guessing from what they’re wearing.”</p><p class="f14 w3 h13 go" style="margin-top:calc(16*var(--k))"><b>Store staff</b>&nbsp; · &nbsp;fragrance counter</p></blockquote>
+    <blockquote class="a" style="--x:775;--y:1820;--w:480"><p class="f24 w3 h13 go">“They read the name on the bottle and put it back. The name tells them nothing.”</p><p class="f14 w3 h13 go" style="margin-top:calc(16*var(--k))"><b>Store staff</b>&nbsp; · &nbsp;fragrance counter</p></blockquote>
+  </div>
+</section>
+
+<!-- 05 What we heard -->
+<section class="s" style="--sh:2350" aria-labelledby="heard">
+  <i class="cl c1" style="--x:-300;--y:200;--w:900;--h:700;--o:.45"></i>
+  <i class="cl c2" style="--x:900;--y:1100;--w:900;--h:700;--o:.22"></i>
+  <i class="cl c1" style="--x:-200;--y:1800;--w:800;--h:500;--o:.35"></i>
+  <h2 class="a hd" id="heard" style="--x:184;--y:140;--w:1072">What we heard, <b>again and again.</b></h2>
+  <p class="a f20 w3 h14 tc go" style="--x:284;--y:215;--w:872">Four patterns from our store visits, shoppers and staff.</p>
+  <figure class="ph a bl" style="--w:496;--h:420;--x:184;--y:360"><img src="img/heard-1.webp" alt="A long perfume wall with shoppers browsing" width="608" height="532" loading="lazy" decoding="async" style="--l:56;--t:56;--r:56;--b:56"></figure>
+  <p class="a f96 w2 h12 go sbn" style="--x:184;--y:800;--w:112" aria-hidden="true">01</p>
+  <div class="a" style="--x:314;--y:828;--w:366"><h3 class="f24 w5 h12">People know the mood, not the notes.</h3><p class="f17 w3 h14 go" style="margin-top:calc(14*var(--k))">Shoppers walk in with a feeling: fresh for work, warm for an evening. The shelf answers in names and notes they can’t translate.</p></div>
+  <figure class="ph a bl" style="--w:496;--h:420;--x:760;--y:360"><img src="img/heard-2.webp" alt="A perfume store with a shopper looking up at the displays" width="608" height="532" loading="lazy" decoding="async" style="--l:56;--t:56;--r:56;--b:56"></figure>
+  <p class="a f96 w2 h12 go" style="--x:760;--y:800;--w:112" aria-hidden="true">02</p>
+  <div class="a" style="--x:890;--y:828;--w:366"><h3 class="f24 w5 h12">Too many choices, too few words.</h3><p class="f17 w3 h14 go" style="margin-top:calc(43*var(--k))">24 options turn into 3% bought; 6 options turn into 30%. A wall of bottles gives plenty to look at and nothing to hold on to.</p></div>
+  <figure class="ph a bl" style="--w:496;--h:420;--x:184;--y:1180"><img src="img/heard-3.webp" alt="Paper strips and testers on a counter" width="608" height="532" loading="lazy" decoding="async" style="--l:56;--t:56;--r:56;--b:56"></figure>
+  <p class="a f96 w2 h12 go" style="--x:184;--y:1620;--w:112" aria-hidden="true">03</p>
+  <div class="a" style="--x:314;--y:1648;--w:366"><h3 class="f24 w5 h12">The nose gives up before the mind does.</h3><p class="f17 w3 h14 go" style="margin-top:calc(14*var(--k))">After 3–4 sprays, scents blur together. Coffee beans don’t reset it. The problem isn’t the nose, it’s smelling too many.</p></div>
+  <figure class="ph a bl" style="--w:496;--h:420;--x:760;--y:1180"><img src="img/heard-4.webp" alt="Shoppers in a store with no staff in sight" width="608" height="532" loading="lazy" decoding="async" style="--l:56;--t:56;--r:56;--b:56"></figure>
+  <p class="a f96 w2 h12 go" style="--x:760;--y:1620;--w:112" aria-hidden="true">04</p>
+  <div class="a" style="--x:890;--y:1648;--w:366"><h3 class="f24 w5 h12">Nobody is there to translate.</h3><p class="f17 w3 h14 go" style="margin-top:calc(43*var(--k))">Staff are busy or untrained in scent, so shoppers guess from the name, the box, or the last strip they smelled.</p></div>
+  <i class="a only-wide" style="--x:680;--y:2020;--w:80;height:1px;background:rgba(189,104,15,.5)"></i>
+  <p class="a f30 w3 h12 tc" style="--x:234;--y:2060;--w:972"><b>How might we</b> let people turn a feeling into a scent they can find, without smelling a single strip?</p>
+</section>
+
+<!-- 06 Why these choices -->
+<section class="s" style="--sh:2700" aria-labelledby="why">
+  <i class="cl c1" style="--x:800;--y:100;--w:900;--h:700;--o:.45"></i>
+  <i class="cl c2" style="--x:-300;--y:1100;--w:900;--h:700;--o:.20"></i>
+  <i class="cl c1" style="--x:700;--y:2000;--w:900;--h:600;--o:.45"></i>
+  <h2 class="a hd" id="why" style="--x:184;--y:140;--w:1072">Why <b>these choices.</b></h2>
+  <p class="a f20 w3 h14 tc go" style="--x:284;--y:215;--w:872">Three decisions that shaped everything else.</p>
+  <figure class="ph a bl" style="--w:560;--h:640;--x:120;--y:360"><img src="img/why-1.webp" alt="A visitor turning the knob at the kiosk, the screen showing Amber Fusion" width="672" height="752" loading="lazy" decoding="async" style="--l:56;--t:56;--r:56;--b:56"></figure>
+  <div class="a" style="--x:740;--y:400;--w:520">
+    <p class="f96 w2 h12 go" aria-hidden="true">01</p>
+    <h3 class="f32 w5 h12" style="margin-top:calc(15*var(--k))">Why physical controls?</h3>
+    <p class="f22 w3 it h12" style="margin-top:calc(22*var(--k))">Turning a knob feels like playing, not like filling in a form.</p>
+    <p class="f18 w3 h14 go" style="margin-top:calc(34*var(--k));max-width:calc(500*var(--k))">A screen full of filters feels like work. A knob has a start, an end and a feel in between, so people answer before they can name the answer. Strangers at the exhibit reached for it without being asked.</p>
+  </div>
+  <div class="a" style="--x:184;--y:1160;--w:520">
+    <p class="f96 w2 h12 go" aria-hidden="true">02</p>
+    <h3 class="f32 w5 h12" style="margin-top:calc(15*var(--k))">Why ZARA?</h3>
+    <p class="f22 w3 it h12" style="margin-top:calc(22*var(--k))">Affordable, wide, and focused.</p>
+    <p class="f18 w3 h14 go" style="margin-top:calc(34*var(--k));max-width:calc(500*var(--k))">ZARA’s range covers every price band, and one brand keeps the system honest: every setting points to a real bottle on a real shelf. Nineteen scents are enough to feel like a choice and few enough to match well.</p>
+  </div>
+  <figure class="ph a bl" style="--w:560;--h:640;--x:760;--y:1120"><img src="img/why-2.webp" alt="ZARA perfume boxes and bottles on store shelves" width="608" height="688" loading="lazy" decoding="async" style="--l:24;--t:24;--r:24;--b:24"></figure>
+  <figure class="ph a bl" style="--w:560;--h:640;--x:120;--y:1880"><img src="img/why-3.webp" alt="Classmates watching a visitor try the VR headset" width="672" height="752" loading="lazy" decoding="async" style="--l:56;--t:56;--r:56;--b:56"></figure>
+  <div class="a" style="--x:740;--y:1920;--w:520">
+    <p class="f96 w2 h12 go" aria-hidden="true">03</p>
+    <h3 class="f32 w5 h12" style="margin-top:calc(15*var(--k))">Why VR and AR?</h3>
+    <p class="f22 w3 it h12" style="margin-top:calc(22*var(--k))">People remember a scent as a place.</p>
+    <p class="f18 w3 h14 go" style="margin-top:calc(34*var(--k));max-width:calc(500*var(--k))">VR drops you into the world the scent belongs to, so you remember a garden or a starry lake, not a name. The AR ticket lets that world leave the kiosk and come home with you.</p>
+  </div>
+</section>
+
+<!-- 07 How Syntra works -->
+<section class="s" style="--sh:3300" aria-labelledby="how">
+  <i class="cl c1" style="--x:-300;--y:100;--w:900;--h:700;--o:.45"></i>
+  <i class="cl c2" style="--x:900;--y:900;--w:900;--h:700;--o:.22"></i>
+  <i class="cl c1" style="--x:-200;--y:2000;--w:900;--h:700;--o:.45"></i>
+  <i class="cl c1" style="--x:900;--y:2700;--w:800;--h:600;--o:.35"></i>
+  <h2 class="a hd" id="how" style="--x:184;--y:140;--w:1072">From a turn <b>to a scent.</b></h2>
+  <p class="a f20 w3 h14 tc go" style="--x:284;--y:215;--w:872">A knob turns, the screen answers, a world opens, a ticket goes home.</p>
+  <div class="scroller"><span class="swipe only-narrow">Swipe →</span>
+  <div class="box flowmap" style="--x:0;--y:380;--bw:1440;--bh:800">
+    <svg class="p" style="--x:218;--y:149;--w:994" viewBox="0 0 994 62" fill="none" aria-hidden="true"><path class="draw" d="M2.00011 30.8675C132 -69.1325 202 130.868 332 30.8675C462 -69.1325 532 130.868 662 30.8675C792 -69.1325 862 130.868 992 30.8675" stroke="url(#fa)" stroke-width="4" stroke-linecap="round"/><defs><linearGradient id="fa" x1="2" y1="30.8" x2="992" y2="30.8" gradientUnits="userSpaceOnUse"><stop stop-color="#F99C36"/><stop offset="1" stop-color="#593314"/></linearGradient></defs></svg>
+    <svg class="p" style="--x:878.5;--y:178.5;--w:333" viewBox="0 0 333 283" fill="none" aria-hidden="true"><path class="draw" d="M331.5 1.5C331.5 121.5 21.5002 141.5 1.50018 281.5" stroke="url(#fb)" stroke-width="3" stroke-linecap="round"/><defs><linearGradient id="fb" x1="1.5" y1="141.5" x2="331.5" y2="141.5" gradientUnits="userSpaceOnUse"><stop stop-color="#F99C36"/><stop offset="1" stop-color="#593314"/></linearGradient></defs></svg>
+    <svg class="p" style="--x:1208.5;--y:178.5;--w:63" viewBox="0 0 63 283" fill="none" aria-hidden="true"><path class="draw" d="M1.5 1.5C81.5 91.5 81.5 201.5 1.5 281.5" stroke="url(#fc)" stroke-width="3" stroke-linecap="round"/><defs><linearGradient id="fc" x1="1.5" y1="141.5" x2="61.5" y2="141.5" gradientUnits="userSpaceOnUse"><stop stop-color="#F99C36"/><stop offset="1" stop-color="#593314"/></linearGradient></defs></svg>
+    <svg class="p" style="--x:1148.5;--y:458.5;--w:63" viewBox="0 0 63 243" fill="none" aria-hidden="true"><path class="draw" d="M61.5 1.5C-18.5 81.5 -18.5 161.5 61.5 241.5" stroke="url(#fd)" stroke-width="3" stroke-linecap="round"/><defs><linearGradient id="fd" x1="1.5" y1="121.5" x2="61.5" y2="121.5" gradientUnits="userSpaceOnUse"><stop stop-color="#F99C36"/><stop offset="1" stop-color="#593314"/></linearGradient></defs></svg>
+    <i class="dot node" style="--cx:220;--cy:180"><i></i></i>
+    <i class="dot node" style="--cx:550;--cy:180"><i></i></i>
+    <i class="dot node" style="--cx:880;--cy:180"><i></i></i>
+    <i class="dot node" style="--cx:1210;--cy:180"><i></i></i>
+    <i class="dot node" style="--cx:880;--cy:460"><i></i></i>
+    <i class="dot node" style="--cx:1210;--cy:460"><i></i></i>
+    <i class="dot node" style="--cx:1210;--cy:700"><i></i></i>
+    <div class="p tc" style="--x:100;--y:20;--w:240"><h3 class="f22 w5 h12">Turn</h3><p class="f15 w3 h14 go" style="margin-top:calc(10*var(--k))">A mood knob and three sliders on the table.</p></div>
+    <div class="p tc" style="--x:430;--y:20;--w:240"><h3 class="f22 w5 h12">Read</h3><p class="f15 w3 h14 go" style="margin-top:calc(10*var(--k))">An ESP32 reads every control about every 30 ms and sends it over USB.</p></div>
+    <div class="p tc" style="--x:760;--y:20;--w:240"><h3 class="f22 w5 h12">Score</h3><p class="f15 w3 h14 go" style="margin-top:calc(10*var(--k))">The kiosk page scores all 19 ZARA scents against your settings.</p></div>
+    <div class="p tc" style="--x:1090;--y:20;--w:240"><h3 class="f22 w5 h12">Match</h3><p class="f15 w3 h14 go" style="margin-top:calc(10*var(--k))">The closest scent, and how close it is.</p></div>
+    <div class="p tr" style="--x:560;--y:446;--w:290"><h3 class="f20 w5 h12">Step in · double press</h3><p class="f15 w3 h14 go" style="margin-top:calc(10*var(--k))">The scent’s world opens on a Meta Quest 3 and on the kiosk screen.</p></div>
+    <div class="p" style="--x:1240;--y:446;--w:200"><h3 class="f20 w5 h12">Print · hold 2 s</h3><p class="f15 w3 h14 go" style="margin-top:calc(10*var(--k));max-width:calc(180*var(--k))">A 58 mm thermal ticket with its own drawing and a QR code.</p></div>
+    <div class="p" style="--x:1240;--y:686;--w:200"><h3 class="f20 w5 h12">Take it home · AR</h3><p class="f15 w3 h14 go" style="margin-top:calc(10*var(--k));max-width:calc(180*var(--k))">Point a phone at the drawing and it lifts off the paper.</p></div>
+    <p class="p f26 w3 h14 go only-wide" style="--x:184;--y:630;--w:560">One turn, three outputs: a match on screen, a world in VR, and a ticket that opens in AR.</p>
+  </div></div>
+  <p class="a f26 w3 h14 go only-narrow">One turn, three outputs: a match on screen, a world in VR, and a ticket that opens in AR.</p>
+
+  <h2 class="a hd" style="--x:184;--y:1380;--w:1072">Four controls, <b>four answers.</b></h2>
+  <div class="scroller pad"><span class="swipe only-narrow">Swipe → and play with the controls</span>
+  <div class="box ctl" id="ctl" style="--x:170;--y:1500;--bw:1100;--bh:420" role="group" aria-label="Syntra control box: a mood knob, three sliders and a button. Try them.">
+    <span class="play-hint">TRY IT · DRAG THE KNOB AND SLIDERS</span>
+    <!-- mood knob -->
+    <span class="lb" data-mood="0" style="--x:101;--y:307">Fresh</span><i class="md" data-mood="0" style="--x:133;--y:287"></i>
+    <span class="lb" data-mood="1" style="--x:43;--y:202">Playful</span><i class="md" data-mood="1" style="--x:92;--y:208"></i>
+    <span class="lb" data-mood="2" style="--x:90;--y:97">Romantic</span><i class="md" data-mood="2" style="--x:133;--y:129"></i>
+    <span class="lb" data-mood="3" style="--x:246;--y:97">Warm</span><i class="md" data-mood="3" style="--x:243;--y:129"></i>
+    <span class="lb" data-mood="4" style="--x:305;--y:202">Bold</span><i class="md" data-mood="4" style="--x:284;--y:208"></i>
+    <span class="lb" data-mood="5" style="--x:232;--y:307">Mysterious</span><i class="md" data-mood="5" style="--x:243;--y:287"></i>
+    <div class="knob" id="knob" role="slider" tabindex="0" aria-label="Mood" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2" aria-valuetext="Romantic"><span class="ind"></span></div>
+    <span class="nm" style="--x:130;--w:120">Mood · knob</span>
+    <!-- three sliders -->
+    <i class="trk" style="--x:430"></i><i class="tick" style="--x:442;--y:95"></i><i class="tick" style="--x:442;--y:210"></i><i class="tick" style="--x:442;--y:325"></i>
+    <span class="lb" data-s="0" data-v="2" style="--x:460;--y:86">12 h</span><span class="lb" data-s="0" data-v="1" style="--x:460;--y:201">8 h</span><span class="lb" data-s="0" data-v="0" style="--x:460;--y:316">4 h</span>
+    <span class="thumb" data-s="0" role="slider" tabindex="0" aria-label="Longevity" style="--x:418;--ty:325"></span>
+    <span class="nm" style="--x:380;--w:150">Longevity · slider 1</span>
+    <i class="trk" style="--x:620"></i><i class="tick" style="--x:632;--y:95"></i><i class="tick" style="--x:632;--y:210"></i><i class="tick" style="--x:632;--y:325"></i>
+    <span class="lb" data-s="1" data-v="2" style="--x:650;--y:86">Masculine</span><span class="lb" data-s="1" data-v="1" style="--x:650;--y:201">Unisex</span><span class="lb" data-s="1" data-v="0" style="--x:650;--y:316">Feminine</span>
+    <span class="thumb" data-s="1" role="slider" tabindex="0" aria-label="Expression" style="--x:608;--ty:210"></span>
+    <span class="nm" style="--x:570;--w:150">Expression · slider 2</span>
+    <i class="trk" style="--x:810"></i><i class="tick" style="--x:822;--y:95"></i><i class="tick" style="--x:822;--y:210"></i><i class="tick" style="--x:822;--y:325"></i>
+    <span class="lb" data-s="2" data-v="2" style="--x:840;--y:86">Special</span><span class="lb" data-s="2" data-v="1" style="--x:840;--y:201">Evening</span><span class="lb" data-s="2" data-v="0" style="--x:840;--y:316">Everyday</span>
+    <span class="thumb" data-s="2" role="slider" tabindex="0" aria-label="Occasion" style="--x:798;--ty:325"></span>
+    <span class="nm" style="--x:760;--w:150">Occasion · slider 3</span>
+    <!-- button -->
+    <button class="btn" id="btn" type="button" aria-label="Button: press to find, double press for VR, hold two seconds to print"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46"/></svg></button>
+    <span class="nm" style="--x:930;--w:100">Button</span>
+    <p class="btxt go"><span data-b="find">press · find</span><span data-b="vr">double · VR</span><span data-b="print">hold 2 s · print</span></p>
+    <p class="readout" id="readout" aria-live="polite"></p>
+  </div></div>
+  <p class="a f16 w3 h12 tc" style="--x:284;--y:1985;--w:872">Drawn from the real control box: an A10K knob on pin D34 with the six moods at their printed dial angles, three slide pots on D35, D32 and D33, and a push button on D27.</p>
+
+  <p class="a f180 w2 h12 go" style="--x:184;--y:2140;--w:314;line-height:1.2">162</p>
+  <p class="a f22 w3 h14 go" style="--x:560;--y:2190;--w:700">possible settings (6 moods × 3 × 3 × 3). Each one points to a real bottle, and every one of the 19 bottles is the top match for at least one setting, so the kiosk never says “no match”.</p>
+  <h3 class="a f20 w5 h12" style="--x:184;--y:2440;--w:233">How the match is weighed</h3>
+  <div class="bars-wrap"><div class="bars" id="bars">
+    <i class="bar" style="--x:184;--w:382;--x2:0;--w2:36;background:#E39A1B"></i>
+    <i class="bar" style="--x:570;--w:275;--x2:36.4;--w2:25.6;background:#D37A19"></i>
+    <i class="bar" style="--x:849;--w:232;--x2:62.4;--w2:21.6;background:#BD680F"></i>
+    <i class="bar" style="--x:1084;--w:168;--x2:84.4;--w2:15.6;background:#975C1C"></i>
+  </div>
+  <p class="a pct" style="--x:184;--y:2516;--w:120;--x2:0"><span class="f28 w3 h12" style="display:block">36%</span><span class="f15 w4 h12 br" style="display:block;margin-top:calc(6*var(--k))">Mood</span></p>
+  <p class="a pct" style="--x:570;--y:2516;--w:120;--x2:36.4"><span class="f28 w3 h12" style="display:block">26%</span><span class="f15 w4 h12 br" style="display:block;margin-top:calc(6*var(--k))">Expression</span></p>
+  <p class="a pct" style="--x:849;--y:2516;--w:120;--x2:62.4"><span class="f28 w3 h12" style="display:block">22%</span><span class="f15 w4 h12 br" style="display:block;margin-top:calc(6*var(--k))">Occasion</span></p>
+  <p class="a pct" style="--x:1084;--y:2516;--w:120;--x2:84.4"><span class="f28 w3 h12" style="display:block">16%</span><span class="f15 w4 h12 br" style="display:block;margin-top:calc(6*var(--k))">Longevity</span></p>
+  </div>
+  <p class="a f16 w3 h14 go" style="--x:184;--y:2610;--w:900">From the kiosk code: score = 0.36 mood + 0.26 expression + 0.22 occasion + 0.16 longevity. Mood leads because it is what people walk in knowing.</p>
+
+  <h2 class="a hd" style="--x:184;--y:2760;--w:1072">Before <b>and after.</b></h2>
+  <div class="grid">
+    <div class="a" style="--x:184;--y:2860;--w:520">
+      <h3 class="f20 w4 h12 gy">In store today</h3>
+      <ul style="margin-top:calc(26*var(--k));display:grid;gap:calc(44*var(--k))">
+        <li class="li f17 w3 h12 gy" style="--bc:rgba(148,133,115,.7)">Walks in · a wall of similar bottles</li>
+        <li class="li f17 w3 h12 gy" style="--bc:rgba(148,133,115,.7)">Browse · names say nothing</li>
+        <li class="li f17 w3 h12 gy" style="--bc:rgba(148,133,115,.7)">Test · 3–4 strips, the nose tires</li>
+        <li class="li f17 w3 h12 gy" style="--bc:rgba(148,133,115,.7)">Ask staff · busy or untrained</li>
+        <li class="li f17 w3 h12 gy" style="--bc:rgba(148,133,115,.7)">Decide · the last one smelled, or leaves</li>
+      </ul>
+    </div>
+    <div class="a" style="--x:760;--y:2860;--w:520">
+      <h3 class="f20 w5 h12">With Syntra</h3>
+      <ul style="margin-top:calc(26*var(--k));display:grid;gap:calc(40*var(--k))">
+        <li class="li f17 w3 h14" style="--bc:var(--or)"><span class="go">Turn · mood, longevity, expression, occasion</span></li>
+        <li class="li f17 w3 h14" style="--bc:var(--or)"><span class="go">See · one match and how close it is</span></li>
+        <li class="li f17 w3 h14" style="--bc:var(--or)"><span class="go">Step in · the VR world of the scent</span></li>
+        <li class="li f17 w3 h14" style="--bc:var(--or)"><span class="go">Take · hold the button for a ticket</span></li>
+        <li class="li f17 w3 h14" style="--bc:var(--or)"><span class="go">Scan · the drawing lifts off in AR</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 08 The screens -->
+<section class="s" style="--sh:2950" aria-labelledby="screens">
+  <i class="cl c1" style="--x:-300;--y:1300;--w:900;--h:700;--o:.45"></i>
+  <i class="cl c2" style="--x:900;--y:2100;--w:900;--h:700;--o:.22"></i>
+  <h2 class="a hd" id="screens" style="--x:184;--y:140;--w:1072">What the screen <b>says back.</b></h2>
+  <p class="a f20 w3 h14 tc go" style="--x:234;--y:215;--w:972">A TV set into the backdrop. The type is Instrument Serif and Manrope over a photo of a sunlit wall, and every turn of a control changes the light, the colour and the words.</p>
+  <figure class="ph a bl" style="--w:1440;--h:810;--x:0;--y:360"><img src="img/screen-femme.webp" alt="The result screen: ZARA Femme, notes on the left, profile on the right, 99% match" width="1440" height="890" loading="lazy" decoding="async" style="--l:0;--t:40;--r:0;--b:40"></figure>
+  <p class="a f17 w3 h14 tc go" style="--x:284;--y:1190;--w:872">Romantic · Unisex · 4 hours · Everyday → Femme, 99%. Notes on the left, wearing profile on the right, the match in the corner, three words under the bottle.</p>
+  <div class="grid">
+    <div class="card"><figure class="ph a bl" style="--w:236;--h:133;--x:100;--y:1340"><img src="img/screen-01.webp" alt="Intro screen: Find your perfume" width="316" height="213" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><h3 class="a f16 w5 h12" style="--x:100;--y:1492;--w:236;white-space:pre">01  Wake it up</h3><p class="a f14 w3 h14 go" style="--x:100;--y:1518;--w:230">“Find your perfume.” One press zooms in.</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:236;--h:133;--x:352;--y:1340"><img src="img/screen-02.webp" alt="Discover your scent screen" width="316" height="213" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><h3 class="a f16 w5 h12" style="--x:352;--y:1492;--w:236;white-space:pre">02  Tune your mood</h3><p class="a f14 w3 h14 go" style="--x:352;--y:1518;--w:230">A caption names the last control you moved.</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:236;--h:133;--x:604;--y:1340"><img src="img/screen-03.webp" alt="Discover screen in the mysterious mood, darker" width="316" height="213" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><h3 class="a f16 w5 h12" style="--x:604;--y:1492;--w:236;white-space:pre">03  Mysterious</h3><p class="a f14 w3 h14 go" style="--x:604;--y:1518;--w:230">The room darkens; the type turns white.</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:236;--h:133;--x:856;--y:1340"><img src="img/screen-04.webp" alt="A spray of mist while the kiosk explores the scents" width="316" height="213" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><h3 class="a f16 w5 h12" style="--x:856;--y:1492;--w:236;white-space:pre">04  Exploring</h3><p class="a f14 w3 h14 go" style="--x:856;--y:1518;--w:230">A spray, then “Exploring 19 possibilities”.</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:236;--h:133;--x:1108;--y:1340"><img src="img/screen-05.webp" alt="The mist collapsing into one bottle" width="316" height="213" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><h3 class="a f16 w5 h12" style="--x:1108;--y:1492;--w:236;white-space:pre">05  Your scent</h3><p class="a f14 w3 h14 go" style="--x:1108;--y:1518;--w:230">The mist collapses into one bottle.</p></div>
+  </div>
+  <h2 class="a f32 w3 h12 tc" style="--x:184;--y:1700;--w:1072">Every setting, <b>a different answer.</b></h2>
+  <div class="grid one">
+    <div class="card"><figure class="ph a bl" style="--w:560;--h:315;--x:140;--y:1800"><img src="img/result-blue-spirit.webp" alt="Result screen: Man Blue Spirit, 97%" width="640" height="395" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><p class="a f15 w3 h14 go" style="--x:140;--y:2130;--w:560">Playful · Masculine · 8 h · Everyday → Man Blue Spirit</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:560;--h:315;--x:740;--y:1800"><img src="img/result-nuit.webp" alt="Result screen: Nuit, 99%" width="640" height="395" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><p class="a f15 w3 h14 go" style="--x:740;--y:2130;--w:560">Mysterious · Feminine · 12 h · Evening → Nuit</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:560;--h:315;--x:140;--y:2240"><img src="img/result-waterlily.webp" alt="Result screen: Waterlily Tea Dress, 99%" width="640" height="395" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><p class="a f15 w3 h14 go" style="--x:140;--y:2570;--w:560">Fresh · Unisex · 4 h · Everyday → Waterlily Tea Dress</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:560;--h:315;--x:740;--y:2240"><img src="img/result-tobacco.webp" alt="Result screen: Tobacco Collection, 99%" width="640" height="395" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><p class="a f15 w3 h14 go" style="--x:740;--y:2570;--w:560">Bold · Masculine · 12 h · Special → Tobacco Collection</p></div>
+  </div>
+  <p class="a f20 h12 tc" style="--x:284;--y:2760;--w:872"><a class="lk" href="https://www.figma.com/design/v3R5CzdA9RcYoI9QCeGlv9" target="_blank" rel="noopener">Every screen, state and component in the product file →</a></p>
+</section>
+
+<!-- 09 Step inside (VR) -->
+<section class="s" style="--sh:3050" aria-labelledby="vr" id="vr-worlds">
+  <i class="cl c1" style="--x:-300;--y:150;--w:900;--h:600;--o:.45"></i>
+  <i class="cl c2" style="--x:900;--y:1500;--w:900;--h:700;--o:.20"></i>
+  <i class="cl c1" style="--x:-200;--y:2300;--w:900;--h:700;--o:.45"></i>
+  <h2 class="a hd" id="vr" style="--x:184;--y:140;--w:1072">Step <b>inside the scent.</b></h2>
+  <p class="a f20 w3 h14 tc go" style="--x:234;--y:215;--w:972">A double press, and your scent becomes a place. Each of the 19 scents opens one of nine real 360° worlds on a Meta Quest 3, and the same world fills the kiosk screen so the queue can watch. The bottle stands on an oak plinth; its notes float around you as photo bubbles, top notes high, base notes low.</p>
+  <figure class="ph a bl" style="--w:1440;--h:810;--x:0;--y:420"><img src="img/vr-nightlake.webp" alt="Inside VR: the Nuit bottle on an oak plinth by a starry lake, pink pepper floating as a note" width="1440" height="890" loading="lazy" decoding="async" style="--l:0;--t:40;--r:0;--b:40"></figure>
+  <p class="a f17 w3 h14 tc go" style="--x:284;--y:1250;--w:872">Starry lake · Nuit. The night collection gets the only lake under the stars.</p>
+  <h3 class="a f24 w5 h12 tc" style="--x:184;--y:1380;--w:1072">Turn around inside a world</h3>
+  <p class="a f16 w3 h14 tc go" style="--x:284;--y:1418;--w:872">The panorama below is one of the real 360° photos the headset wraps around you. Drag it in the viewer to look in every direction.</p>
+  <div class="pano" id="pano" tabindex="0" role="img" aria-label="360° panorama of a formal flower garden. Drag or use the arrow keys to look around.">
+    <div class="track" id="panoTrack"><img src="img/band-garden.jpg" alt="" width="1440" height="281" draggable="false"><img src="img/band-garden.jpg" alt="" width="1440" height="281" draggable="false"><img src="img/band-garden.jpg" alt="" width="1440" height="281" draggable="false"></div>
+    <span class="deg" id="panoDeg" aria-hidden="true">0°</span>
+    <span class="hint" aria-hidden="true"><svg width="22" height="12" viewBox="0 0 22 12" fill="none"><path d="M6 1 1 6l5 5M16 1l5 5-5 5M1 6h20" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Drag to look around · 360°</span>
+  </div>
+  <p class="a f20 h12 tc" style="--x:284;--y:1790;--w:872"><a class="lk" href="https://claude.ai/artifact/NBbJC1XNuEbCijH5batXVY" target="_blank" rel="noopener">Look around all ten worlds in 360° →</a></p>
+  <div class="grid">
+    <div class="card"><figure class="ph a bl" style="--w:300;--h:169;--x:100;--y:1900"><img src="img/vr-floral.webp" alt="Formal flower garden world with Gardenia" width="380" height="249" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><h3 class="a f17 w5 h12" style="--x:100;--y:2084;--w:300">Formal flower garden</h3><p class="a f13 w3 h14 go" style="--x:100;--y:2110;--w:300">Femme · Gardenia · Orchid · Wonder Rose</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:300;--h:169;--x:416;--y:1900"><img src="img/vr-aquatic.webp" alt="Lake pier world with Waterlily Tea Dress" width="380" height="249" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><h3 class="a f17 w5 h12" style="--x:416;--y:2084;--w:300">Lake pier</h3><p class="a f13 w3 h14 go" style="--x:416;--y:2110;--w:300">Waterlily Tea Dress · Man Blue Spirit</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:300;--h:169;--x:732;--y:1900"><img src="img/vr-warm.webp" alt="Golden autumn forest world with Tobacco Collection" width="380" height="249" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><h3 class="a f17 w5 h12" style="--x:732;--y:2084;--w:300">Golden autumn forest</h3><p class="a f13 w3 h14 go" style="--x:732;--y:2110;--w:300">Tobacco Collection · Amber Fusion · Man Gold</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:300;--h:169;--x:1048;--y:1900"><img src="img/vr-night.webp" alt="Milky Way over the hills world with Ebony Wood" width="380" height="249" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><h3 class="a f17 w5 h12" style="--x:1048;--y:2084;--w:300">Milky Way over the hills</h3><p class="a f13 w3 h14 go" style="--x:1048;--y:2110;--w:300">Tobacco Intense Dark · Ebony Wood · Hypnotic Vanilla</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:300;--h:169;--x:100;--y:2230"><img src="img/vr-citrus.webp" alt="Fruit orchard world with Applejuice" width="380" height="249" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><h3 class="a f17 w5 h12" style="--x:100;--y:2414;--w:300">Fruit orchard</h3><p class="a f13 w3 h14 go" style="--x:100;--y:2440;--w:300">Applejuice · Rose Gourmand</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:300;--h:169;--x:416;--y:2230"><img src="img/vr-snow.webp" alt="Snowy Alps world with Man Silver" width="380" height="249" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><h3 class="a f17 w5 h12" style="--x:416;--y:2414;--w:300">Snowy Alps</h3><p class="a f13 w3 h14 go" style="--x:416;--y:2440;--w:300">Man Silver</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:300;--h:169;--x:732;--y:2230"><img src="img/vr-forest.webp" alt="Sunlit pine forest world with Red Temptation" width="380" height="249" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><h3 class="a f17 w5 h12" style="--x:732;--y:2414;--w:300">Sunlit pine forest</h3><p class="a f13 w3 h14 go" style="--x:732;--y:2440;--w:300">Red Temptation</p></div>
+    <div class="card"><figure class="ph a bl" style="--w:300;--h:169;--x:1048;--y:2230"><img src="img/vr-dark.webp" alt="Desert at dawn world with Vibrant Leather" width="380" height="249" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure><h3 class="a f17 w5 h12" style="--x:1048;--y:2414;--w:300">Desert at dawn</h3><p class="a f13 w3 h14 go" style="--x:1048;--y:2440;--w:300">Red Temptation &amp; Tobacco · Vibrant Leather</p></div>
+  </div>
+  <div class="grid">
+    <div class="a" style="--x:100;--y:2600;--w:260"><p class="f96 w2 h12 go">9</p><p class="f16 w3 h14 go" style="margin-top:calc(5*var(--k))">worlds, plus a lobby between visitors</p></div>
+    <div class="a" style="--x:416;--y:2600;--w:260"><p class="f96 w2 h12 go">8K</p><p class="f16 w3 h14 go" style="margin-top:calc(5*var(--k))">360° photos (Poly Haven, CC0), each with a depth map</p></div>
+    <div class="a" style="--x:732;--y:2600;--w:260"><p class="f96 w2 h12 go">65</p><p class="f16 w3 h14 go" style="margin-top:calc(5*var(--k))">ingredient photos floating as notes</p></div>
+    <div class="a" style="--x:1048;--y:2600;--w:260"><p class="f96 w2 h12 go">1</p><p class="f16 w3 h14 go" style="margin-top:calc(5*var(--k))">piece of music per world, composed live</p></div>
+  </div>
+  <p class="a f20 h12 tc" style="--x:284;--y:2880;--w:872"><a class="lk" href="https://www.figma.com/proto/v3R5CzdA9RcYoI9QCeGlv9/Syntra-Product-Design?node-id=11-7&amp;starting-point-node-id=11%3A7&amp;scaling=contain" target="_blank" rel="noopener">Drag-to-look prototype in the product file →</a></p>
+</section>
+
+<!-- 10 Take it home -->
+<section class="s" style="--sh:2160" aria-labelledby="ticket">
+  <i class="cl c1" style="--x:-200;--y:300;--w:1000;--h:800;--o:.50"></i>
+  <i class="cl c2" style="--x:700;--y:500;--w:900;--h:700;--o:.22"></i>
+  <i class="cl c1" style="--x:-200;--y:1700;--w:900;--h:700;--o:.45"></i>
+  <h2 class="a hd" id="ticket" style="--x:184;--y:140;--w:1072">This isn’t just <b>a ticket.</b></h2>
+  <p class="a f20 w3 h14 tc go" style="--x:234;--y:215;--w:972">Hold the button for two seconds and a 58 mm thermal printer hands you your scent: its name, notes and a drawing made for that scent alone. “Your scent lives in this drawing.”</p>
+  <div class="scroller"><span class="swipe only-narrow">Swipe →</span>
+  <div class="box" style="--x:0;--y:400;--bw:1440;--bh:562">
+    <figure class="ph p bl" style="--w:192;--h:562;--x:110;--y:0"><img src="img/ticket-femme.webp" alt="Printed ticket: Femme, a spiral drawing" width="272" height="642" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure>
+    <figure class="ph p bl" style="--w:192;--h:562;--x:318;--y:0"><img src="img/ticket-leather.webp" alt="Printed ticket: Vibrant Leather, shards drawing" width="272" height="642" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure>
+    <figure class="ph p bl" style="--w:192;--h:562;--x:526;--y:0"><img src="img/ticket-rose.webp" alt="Printed ticket: Rose Gourmand, playful shapes drawing" width="272" height="642" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure>
+    <figure class="ph p bl" style="--w:192;--h:562;--x:734;--y:0"><img src="img/ticket-wonder.webp" alt="Printed ticket: Wonder Rose, waves and petals drawing" width="272" height="642" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure>
+    <figure class="ph p bl" style="--w:192;--h:562;--x:942;--y:0"><img src="img/ticket-nuit.webp" alt="Printed ticket: Nuit, moon and stars drawing" width="272" height="642" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure>
+    <figure class="ph p bl" style="--w:192;--h:562;--x:1150;--y:0"><img src="img/ticket-gold.webp" alt="Printed ticket: Man Gold, sun drawing" width="272" height="642" loading="lazy" decoding="async" style="--l:40;--t:22;--r:40;--b:58"></figure>
+  </div></div>
+  <p class="a f16 w3 h14 tc" style="--x:284;--y:990;--w:872">Six tickets printed at our exhibit on 30 Sep 2026: Femme, Vibrant Leather, Rose Gourmand, Wonder Rose, Nuit and Man Gold. Each scent family has its own drawing.</p>
+  <figure class="ph a bl" style="--w:560;--h:746;--x:120;--y:1140"><img src="img/ar-scan.webp" alt="A visitor scanning her ticket; the drawing comes alive on the phone" width="672" height="858" loading="lazy" decoding="async" style="--l:56;--t:56;--r:56;--b:56"></figure>
+  <div class="a" style="--x:760;--y:1180;--w:520">
+    <h3 class="f32 w5 h12">Scan it, and it comes alive.</h3>
+    <p class="f19 w3 h14 go" style="margin-top:calc(31*var(--k));max-width:calc(500*var(--k))">Scan the QR with a phone camera and point it at the drawing. The drawing lifts off the paper with the bottle, and the scent’s ingredients revolve around it in 3D, so the memory of the kiosk goes home in a pocket.</p>
+    <p class="f15 w3 it h14 go" style="margin-top:calc(62*var(--k));max-width:calc(500*var(--k))">Image tracking with MindAR in the phone’s browser; nothing to install.</p>
+    <p class="f140 w2 h12 go" style="margin-top:calc(79*var(--k))">66</p>
+    <p class="f19 w3 h14 go" style="margin-top:calc(12*var(--k));max-width:calc(480*var(--k))">tickets printed on 30 Sep 2026, between 14:00 and 20:12, from the printer’s own log.</p>
+  </div>
+  <p class="a f32 w3 h12 tc" style="--x:184;--y:1980;--w:1072">A scent found, felt <b>and kept.</b></p>
+</section>
+
+<!-- 11 Building it -->
+<section class="s" style="--sh:3500" aria-labelledby="build">
+  <i class="cl c1" style="--x:-300;--y:150;--w:900;--h:700;--o:.45"></i>
+  <i class="cl c2" style="--x:900;--y:1100;--w:900;--h:700;--o:.22"></i>
+  <i class="cl c1" style="--x:-200;--y:2300;--w:900;--h:700;--o:.45"></i>
+  <h2 class="a hd" id="build" style="--x:184;--y:140;--w:1072">Wires, foam <b>and light.</b></h2>
+  <p class="a f20 w3 h14 tc go" style="--x:284;--y:215;--w:872">Two weeks, one table, one wall: the circuit, the screen, the worlds and a backdrop that glows.</p>
+  <div class="a" style="--x:184;--y:360;--w:440">
+    <p class="f96 w2 h12 go" aria-hidden="true">01</p>
+    <h3 class="f32 w5 h12" style="margin-top:calc(5*var(--k))">The circuit</h3>
+    <p class="f18 w3 h14 go" style="margin-top:calc(22*var(--k))">An ESP32 reads five inputs: a mood knob, three slide pots and a push button. Each was wired and tested on a breadboard before it went into the casing. The knob is calibrated to its printed dial, so each mood changes exactly halfway between two labels.</p>
+    <dl class="pin" style="margin-top:calc(115*var(--k));display:grid;grid-template-columns:calc(116*var(--k)) 1fr;row-gap:calc(18*var(--k))">
+      <dt class="f16 w5 h12">D34</dt><dd class="f16 w3 h12 go">Mood · A10K knob</dd>
+      <dt class="f16 w5 h12">D35</dt><dd class="f16 w3 h12 go">Longevity · slider 1</dd>
+      <dt class="f16 w5 h12">D32</dt><dd class="f16 w3 h12 go">Expression · slider 2</dd>
+      <dt class="f16 w5 h12">D33</dt><dd class="f16 w3 h12 go">Occasion · slider 3</dd>
+      <dt class="f16 w5 h12">D27</dt><dd class="f16 w3 h12 go">Button</dd>
+      <dt class="f16 w5 h12">3V3 · GND</dt><dd class="f16 w3 h12 go">Power rails (never VIN)</dd>
+    </dl>
+    <p class="f15 w3 it h14 go" style="margin-top:calc(31*var(--k))">It sends “V,knob,s1,s2,s3” (0–4095) about every 30 ms over USB at 115200 baud.</p>
+  </div>
+  <figure class="ph a bl" style="--w:560;--h:420;--x:700;--y:360"><img src="img/build-circuit.webp" alt="The ESP32 on a breadboard, wired to the knob" width="656" height="516" loading="lazy" decoding="async" style="--l:48;--t:48;--r:48;--b:48"></figure>
+  <div class="grid">
+    <figure class="ph a bl" style="--w:270;--h:360;--x:700;--y:800"><img src="img/build-wiring.webp" alt="Wiring the controls at a desk" width="366" height="456" loading="lazy" decoding="async" style="--l:48;--t:48;--r:48;--b:48"></figure>
+    <figure class="ph a bl" style="--w:270;--h:360;--x:990;--y:800"><img src="img/build-casing.webp" alt="Building the casing for the controls" width="366" height="456" loading="lazy" decoding="async" style="--l:48;--t:48;--r:48;--b:48"></figure>
+  </div>
+  <div class="a" style="--x:184;--y:1300;--w:560">
+    <p class="f96 w2 h12 go" aria-hidden="true">02</p>
+    <h3 class="f32 w5 h12" style="margin-top:calc(5*var(--k))">The backdrop</h3>
+    <p class="f18 w3 h14 go" style="margin-top:calc(22*var(--k))">It started as a foam model of branching channels for light. We cut the channels, set an LED strip into each one over an MDF base, and set the screen into the middle, so the kiosk pulls people across the room.</p>
+  </div>
+  <div class="grid">
+    <div class="card"><figure class="ph a bl" style="--w:300;--h:400;--x:100;--y:1680"><img src="img/build-foam.webp" alt="Cutting the foam pieces on the floor" width="396" height="496" loading="lazy" decoding="async" style="--l:48;--t:48;--r:48;--b:48"></figure><h3 class="a f18 w5 h12" style="--x:100;--y:2100;--w:300;white-space:pre">01  Foam model</h3></div>
+    <div class="card"><figure class="ph a bl" style="--w:300;--h:400;--x:416;--y:1680"><img src="img/build-channels.webp" alt="Branching channels cut into the foam" width="396" height="496" loading="lazy" decoding="async" style="--l:48;--t:48;--r:48;--b:48"></figure><h3 class="a f18 w5 h12" style="--x:416;--y:2100;--w:300;white-space:pre">02  Channels cut</h3></div>
+    <div class="card"><figure class="ph a bl" style="--w:300;--h:400;--x:732;--y:1680"><img src="img/build-light.webp" alt="The LED strips lit for the first time" width="396" height="496" loading="lazy" decoding="async" style="--l:48;--t:48;--r:48;--b:48"></figure><h3 class="a f18 w5 h12" style="--x:732;--y:2100;--w:300;white-space:pre">03  First light</h3></div>
+    <div class="card"><figure class="ph a bl" style="--w:300;--h:400;--x:1048;--y:1680"><img src="img/build-glow.webp" alt="The backdrop glowing in the dark" width="396" height="496" loading="lazy" decoding="async" style="--l:48;--t:48;--r:48;--b:48"></figure><h3 class="a f18 w5 h12" style="--x:1048;--y:2100;--w:300;white-space:pre">04  The glow</h3></div>
+  </div>
+  <figure class="ph a bl" style="--w:1200;--h:700;--x:120;--y:2240"><img src="img/build-kiosk.webp" alt="A visitor at the finished kiosk, the backdrop glowing around the screen" width="1280" height="780" loading="lazy" decoding="async" style="--l:40;--t:40;--r:40;--b:40"></figure>
+  <div class="a" style="--x:184;--y:3020;--w:1076">
+    <div style="display:flex;align-items:center;gap:calc(32*var(--k))"><span class="f72 w2 h12 go" aria-hidden="true">03</span><h3 class="f28 w5 h12">What changed, first try to final</h3></div>
+    <div class="row3" style="display:grid;grid-template-columns:calc(216*var(--k)) calc(380*var(--k)) calc(50*var(--k)) 1fr;margin-top:calc(26*var(--k))"><span class="f18 w5 h12">Panel questions</span><span class="f16 w3 h14 go">“Which side of you should it speak to?”</span><span class="arr f18 w3 h12">→</span><span class="f16 w3 h14 go">Short one-liners: “What’s your mood?” “How long?”</span></div>
+    <div class="row3" style="display:grid;grid-template-columns:calc(216*var(--k)) calc(380*var(--k)) calc(50*var(--k)) 1fr;margin-top:calc(88*var(--k))"><span class="f18 w5 h12">Matching</span><span class="f16 w3 h14 go">Look for one exact match across every setting</span><span class="arr f18 w3 h12">→</span><span class="f16 w3 h14 go">Score every scent and show the closest, so there is always an answer</span></div>
+    <div class="row3" style="display:grid;grid-template-columns:calc(216*var(--k)) calc(380*var(--k)) calc(50*var(--k)) 1fr;margin-top:calc(66*var(--k))"><span class="f18 w5 h12">Paper</span><span class="f16 w3 h14 go">A receipt</span><span class="arr f18 w3 h12">→</span><span class="f16 w3 h14 go">A scent ticket with its own drawing: “This isn’t just a ticket.”</span></div>
+  </div>
+</section>
+
+<!-- 12 Testing -->
+<section class="s" style="--sh:2100" aria-labelledby="test">
+  <i class="cl c1" style="--x:800;--y:100;--w:900;--h:700;--o:.45"></i>
+  <i class="cl c2" style="--x:-300;--y:1000;--w:900;--h:700;--o:.20"></i>
+  <i class="cl c1" style="--x:700;--y:1900;--w:800;--h:600;--o:.45"></i>
+  <h2 class="a hd" id="test" style="--x:184;--y:140;--w:1072">Putting it <b>in their hands.</b></h2>
+  <p class="a f20 w3 h14 tc go" style="--x:284;--y:215;--w:872">What people tried at our exhibit, what confused them, and what we changed.</p>
+  <div class="grid one">
+    <figure class="ph a bl" style="--w:760;--h:570;--x:120;--y:360"><img src="img/test-vr.webp" alt="A visitor in VR at the kiosk while others queue" width="856" height="666" loading="lazy" decoding="async" style="--l:48;--t:48;--r:48;--b:48"></figure>
+    <figure class="ph a bl" style="--w:420;--h:570;--x:900;--y:360"><img src="img/test-screen.webp" alt="The screen showing Red Temptation &amp; Tobacco" width="516" height="666" loading="lazy" decoding="async" style="--l:48;--t:48;--r:48;--b:48"></figure>
+  </div>
+  <div class="a" style="--x:184;--y:990;--w:620"><h3 class="f24 w5 h12">Who tried it</h3><p class="f18 w3 h14 go" style="margin-top:calc(15*var(--k))">Visitors at our exhibit, many wearing a VR headset for the first time. They turned the knob, read the screen, stepped into a world and scanned their own ticket. The printer’s log holds 66 tickets from that day.</p></div>
+  <div class="a" style="--x:184;--y:1220;--w:1076">
+    <div class="row3 only-wide" style="display:grid;grid-template-columns:calc(506*var(--k)) calc(70*var(--k)) 1fr"><span class="f20 w4 h12 gy">We saw</span><span></span><span class="f20 w5 h12">We changed</span></div>
+    <div class="row3" style="display:grid;grid-template-columns:calc(506*var(--k)) calc(70*var(--k)) 1fr;margin-top:calc(26*var(--k))"><span class="f18 w3 h14 go" style="max-width:calc(480*var(--k))">People walked past the AR ticket without scanning it.</span><span class="arr f20 w3 h12">→</span><span class="f18 w3 h14 go">Added a line beside the printer: “This isn’t just a ticket. Scan to see where your scent takes you.”</span></div>
+    <div class="row3" style="display:grid;grid-template-columns:calc(506*var(--k)) calc(70*var(--k)) 1fr;margin-top:calc(70*var(--k))"><span class="f18 w3 h14 go" style="max-width:calc(480*var(--k))">Long panel questions were slow to read in a dim room.</span><span class="arr f20 w3 h12">→</span><span class="f18 w3 h14 go">Cut them to one-liners: “How long?” “What’s your mood?”</span></div>
+    <div class="row3" style="display:grid;grid-template-columns:calc(506*var(--k)) calc(70*var(--k)) 1fr;margin-top:calc(95*var(--k))"><span class="f18 w3 h14 go" style="max-width:calc(480*var(--k))">Not everyone knew what a “note” was.</span><span class="arr f20 w3 h12">→</span><span class="f18 w3 h14 go">Described notes as plain families: fruity, woody, vanilla, aqua and fresh.</span></div>
+  </div>
+  <div class="grid one">
+    <blockquote class="a" style="--x:184;--y:1720;--w:330"><p class="f22 w3 h12" style="min-height:calc(130*var(--k))">“I didn’t know what ‘woody’ meant until I walked into the forest.”</p><p class="f14 w5 h12">Tester · our exhibit</p></blockquote>
+    <blockquote class="a" style="--x:544;--y:1720;--w:330"><p class="f22 w3 h12" style="min-height:calc(130*var(--k))">“It felt like playing, not choosing.”</p><p class="f14 w5 h12">Tester · our exhibit</p></blockquote>
+    <blockquote class="a" style="--x:904;--y:1720;--w:330"><p class="f22 w3 h12" style="min-height:calc(130*var(--k))">“I wanted to keep it, and then I realised the ticket was the keepsake.”</p><p class="f14 w5 h12">Tester · our exhibit</p></blockquote>
+  </div>
+  <p class="a f14 w3 it h14 go" style="--x:184;--y:1940;--w:872">Paraphrased from what testers told us at the exhibit.</p>
+</section>
+
+<!-- 13 The experience -->
+<section class="s" style="--sh:2200" aria-labelledby="exp">
+  <i class="cl c1" style="--x:-300;--y:200;--w:1000;--h:800;--o:.45"></i>
+  <i class="cl c2" style="--x:800;--y:1300;--w:900;--h:700;--o:.20"></i>
+  <h2 class="a hd" id="exp" style="--x:184;--y:140;--w:1072">A scent found, <b>felt and kept.</b></h2>
+  <p class="a f20 w3 h14 tc go" style="--x:284;--y:215;--w:872">What it feels like to turn, step in and take it home, and the printed manual that teaches it at a glance.</p>
+  <figure class="ph a bl" style="--w:520;--h:700;--x:120;--y:360"><img src="img/manual.webp" alt="The printed Syntra Manual and posters hanging beside the kiosk" width="616" height="796" loading="lazy" decoding="async" style="--l:48;--t:48;--r:48;--b:48"></figure>
+  <div class="a" style="--x:720;--y:380;--w:560">
+    <h3 class="f32 w5 h12">The Syntra Manual</h3>
+    <p class="f18 w3 h14 go" style="margin-top:calc(22*var(--k));max-width:calc(520*var(--k))">A printed manual hangs beside the kiosk. It explains the whole system in eight steps, so nobody has to ask staff how it works.</p>
+    <ol class="lst" style="margin-top:calc(70*var(--k));display:grid;row-gap:calc(43*var(--k));grid-auto-rows:calc(19*var(--k))">
+      <li class="sb" style="display:grid;grid-template-columns:calc(50*var(--k)) calc(240*var(--k)) 1fr"><span class="f16 w3 h12">00</span><b class="f16 h12">Know your controls</b><span class="f15 w3 h14 go">A knob for mood, three sliders, one button.</span></li>
+      <li class="sb" style="display:grid;grid-template-columns:calc(50*var(--k)) calc(240*var(--k)) 1fr"><span class="f16 w3 h12">01</span><b class="f16 h12">Wake it up</b><span class="f15 w3 h14 go">Press the button.</span></li>
+      <li class="sb" style="display:grid;grid-template-columns:calc(50*var(--k)) calc(240*var(--k)) 1fr"><span class="f16 w3 h12">02</span><b class="f16 h12">Tune your mood</b><span class="f15 w3 h14 go">Turn and slide until it feels right.</span></li>
+      <li class="sb" style="display:grid;grid-template-columns:calc(50*var(--k)) calc(240*var(--k)) 1fr"><span class="f16 w3 h12">03</span><b class="f16 h12">Meet your match</b><span class="f15 w3 h14 go">Press again: one scent, and how close it is.</span></li>
+      <li class="sb" style="display:grid;grid-template-columns:calc(50*var(--k)) calc(240*var(--k)) 1fr"><span class="f16 w3 h12">04</span><b class="f16 h12">Step inside</b><span class="f15 w3 h14 go">Double press: the scent becomes a place.</span></li>
+      <li class="sb" style="display:grid;grid-template-columns:calc(50*var(--k)) calc(240*var(--k)) 1fr"><span class="f16 w3 h12">05</span><b class="f16 h12">Claim your ticket</b><span class="f15 w3 h14 go">Hold the button for two seconds.</span></li>
+      <li class="sb" style="display:grid;grid-template-columns:calc(50*var(--k)) calc(240*var(--k)) 1fr"><span class="f16 w3 h12">06</span><b class="f16 h12">Find it. Smell it. Decide</b><span class="f15 w3 h14 go">Take the ticket to the shelf and try the real bottle.</span></li>
+      <li class="sb" style="display:grid;grid-template-columns:calc(50*var(--k)) calc(240*var(--k)) 1fr"><span class="f16 w3 h12">07</span><b class="f16 h12">Bring it to life</b><span class="f15 w3 h14 go">Scan the drawing and watch it lift off.</span></li>
+    </ol>
+  </div>
+  <p class="a f22 w3 it h14 go" style="--x:720;--y:1080;--w:560">“A feeling, found. A world, felt. A memory, kept.”</p>
+  <figure class="ph a bl" style="--w:1200;--h:800;--x:120;--y:1200"><img src="img/exhibit.webp" alt="The kiosk in use at the exhibit: a visitor smiling at his match, Femme 99%" width="1280" height="880" loading="lazy" decoding="async" style="--l:40;--t:40;--r:40;--b:40"></figure>
+  <p class="a f16 w3 h14 tc go" style="--x:284;--y:2030;--w:872">In use at our exhibit: the backdrop glowing, the screen answering, the next visitor waiting their turn.</p>
+</section>
+
+<!-- 14 Reflection -->
+<section class="s" style="--sh:2420" aria-labelledby="refl">
+  <i class="cl c1" style="--x:800;--y:150;--w:900;--h:700;--o:.45"></i>
+  <i class="cl c2" style="--x:-300;--y:900;--w:900;--h:700;--o:.20"></i>
+  <i class="cl c1" style="--x:-200;--y:2000;--w:1100;--h:800;--o:.50"></i>
+  <h2 class="a hd" id="refl" style="--x:184;--y:140;--w:1072">What we <b>carry forward.</b></h2>
+  <p class="a f20 w3 h14 tc go" style="--x:284;--y:215;--w:872">What worked, what comes next, and who made it.</p>
+  <div class="a" style="--x:184;--y:360;--w:500">
+    <h3 class="f24 w5 h12">What worked</h3>
+    <ol class="lst" style="margin-top:calc(31*var(--k));display:grid;row-gap:calc(63*var(--k));grid-auto-rows:calc(67*var(--k))">
+      <li class="rl" style="display:grid;grid-template-columns:calc(86*var(--k)) 1fr;align-items:start"><span class="f56 w2 h12 go" aria-hidden="true">01</span><span class="f19 w3 h14 go" style="margin-top:calc(18*var(--k))">Turning a knob made strangers curious enough to try.</span></li>
+      <li class="rl" style="display:grid;grid-template-columns:calc(86*var(--k)) 1fr;align-items:start"><span class="f56 w2 h12 go" aria-hidden="true">02</span><span class="f19 w3 h14 go" style="margin-top:calc(18*var(--k))">One brand kept the system simple and the matches believable.</span></li>
+      <li class="rl" style="display:grid;grid-template-columns:calc(86*var(--k)) 1fr;align-items:start"><span class="f56 w2 h12 go" aria-hidden="true">03</span><span class="f19 w3 h14 go" style="margin-top:calc(18*var(--k))">The ticket let the experience leave the kiosk.</span></li>
+    </ol>
+  </div>
+  <div class="a" style="--x:760;--y:360;--w:500">
+    <h3 class="f24 w5 h12">What we’d do next</h3>
+    <ol class="lst" style="margin-top:calc(31*var(--k));display:grid;row-gap:calc(63*var(--k));grid-auto-rows:calc(67*var(--k))">
+      <li class="rl" style="display:grid;grid-template-columns:calc(86*var(--k)) 1fr;align-items:start"><span class="f56 w2 h12 go" aria-hidden="true">01</span><span class="f19 w3 h14 go" style="margin-top:calc(18*var(--k))">Connect to ZARA’s live store stock, so every match is on the shelf.</span></li>
+      <li class="rl" style="display:grid;grid-template-columns:calc(86*var(--k)) 1fr;align-items:start"><span class="f56 w2 h12 go" aria-hidden="true">02</span><span class="f19 w3 h14 go" style="margin-top:calc(18*var(--k))">Let staff see the settings, so the conversation can carry on.</span></li>
+      <li class="rl" style="display:grid;grid-template-columns:calc(86*var(--k)) 1fr;align-items:start"><span class="f56 w2 h12 go" aria-hidden="true">03</span><span class="f19 w3 h14 go" style="margin-top:calc(18*var(--k))">Grow beyond 19 scents, with notes and prices checked against the real bottles.</span></li>
+    </ol>
+  </div>
+  <figure class="ph a bl" style="--w:1200;--h:800;--x:120;--y:880"><img src="img/team.webp" alt="The team with friends from the class at the exhibit" width="1280" height="880" loading="lazy" decoding="async" style="--l:40;--t:40;--r:40;--b:40"></figure>
+  <p class="a f15 w3 h12 tc go" style="--x:184;--y:1690;--w:1072">At our exhibit, with friends from the class.</p>
+  <dl class="a" style="--x:184;--y:1750;--w:1076;display:grid;grid-template-columns:calc(176*var(--k)) 1fr;row-gap:calc(23*var(--k));align-items:baseline">
+    <dt class="f16 w5 h12">Team</dt><dd class="f18 w3 h14 go">Utsav Sharma · Sijo Joseph · Rajat Chaple</dd>
+    <dt class="f16 w5 h12">Module</dt><dd class="f18 w3 h14 go">Retail Tech, NID · 2 weeks</dd>
+    <dt class="f16 w5 h12">Built with</dt><dd class="f18 w3 h14 go">ESP32 · JavaScript · WebXR on Meta Quest 3 · MindAR · thermal printer · foam, MDF and LED</dd>
   </dl>
+  <p class="a f40 w3 h13 tc go" style="--x:189;--y:2140;--w:1063">Know the feeling, not the name?</p>
+  <p class="a fyp" style="--x:273;--y:2192;--w:894"><img src="img/find-your-perfume.webp" alt="Let's find your perfume." width="894" height="107" loading="lazy"></p>
+  <p class="a f13 w3 h14 tc gy" style="--x:184;--y:2336;--w:1072">Photos: our store visits, build and exhibit · VR worlds: Poly Haven (CC0) · ingredient photos: Wikimedia Commons (CC BY-SA) · ZARA is not affiliated with this student project; notes and prices on the kiosk are approximations for the exhibit.</p>
+</section>
 
-  <p class="lede rv">Most people walk into a perfume store knowing a mood, not a name. Syntra lets shoppers find a scent through touch and feeling, in a guided physical-to-digital experience that ends with a scent they can keep.</p>
-
-  <section class="chapter rv">
-    <div class="label mono">01 / The problem</div>
-    <div>
-      <h2>After three sprays, every scent smells the same.</h2>
-      <p>Choosing a perfume is one of the few purchases we make almost entirely through a sense we can’t explain. In store, shoppers face a wall of similar bottles with names that say nothing about the smell. After three or four sprays the nose tires and the scents blur together, so people pick the last one they smelled, or leave.</p>
-    </div>
-  </section>
-
-  <section class="stats bend rv"><span class="bg"></span>
-    <div class="stat"><b>60%</b><span>of people discover fragrances by trying them in store</span></div>
-    <div class="stat"><b>3–4</b><span>sprays before the nose gets tired and scents blur</span></div>
-    <div class="stat"><b>3%</b><span>bought from 24 options, against 30% from 6</span></div>
-    <div class="stat"><b>3×</b><span>growth expected in India’s fragrance market, from $1.14B in 2025 to $3.48B by 2034</span></div>
-  </section>
-
-  <blockquote class="quote rv">How might we help shoppers find a perfume that feels like them, even when they can’t put it into words?<cite class="mono">Design question</cite></blockquote>
-
-  <section class="chapter rv">
-    <div class="label mono">02 / Journey</div>
-    <div>
-      <h2>What happens in store today.</h2>
-      <p>We observed shoppers in stores and mapped the five steps most of them follow.</p>
-      <ol class="flow">
-        <li><b>Walks in</b><span>Faces a wall of similar bottles.</span></li>
-        <li><b>Browses</b><span>Reads names that say nothing about the smell.</span></li>
-        <li><b>Tests</b><span>Sprays 3–4 on paper strips.</span></li>
-        <li><b>Asks staff</b><span>Staff may be busy or untrained in scent.</span></li>
-        <li><b>Decides</b><span>Picks the last one smelled, or leaves.</span></li>
-      </ol>
-    </div>
-  </section>
-
-  <figure class="stage bend rv tight" style="--tc:#F6EFE6"><span class="bg"></span>
-    <img class="flat" src="journey.jpg" alt="Current journey map with photos from perfume stores" loading="lazy" width="1080" height="620">
-  </figure>
-
-  <section class="chapter rv">
-    <div class="label mono">03 / Process</div>
-    <div>
-      <h2>Five layers, from concept to experience.</h2>
-
-      <ul class="points">
-        <li><b>Concept</b><span>Exploring touch, emotion and choice in fragrance retail.</span></li>
-        <li><b>Research</b><span>Store observations, contextual interviews, buyer journeys and scent perceptions.</span></li>
-        <li><b>Ideation</b><span>Mapping the flow from physical input to digital output to an AR keepsake.</span></li>
-        <li><b>Prototyping</b><span>ESP32 and p5.js, VR worlds and AR-enabled scent tickets.</span></li>
-        <li><b>Experience</b><span>Feeling turned into fragrance. A scent found, felt and kept.</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <figure class="stage bend rv c2 tight" style="--tc:#F6EFE6"><span class="bg"></span>
-    <img class="flat" src="layers.jpg" alt="Perfume bottle illustration split into five coloured layers" loading="lazy" width="491" height="762">
-    <img class="flat" src="bottles.jpg" alt="Blurred perfume bottles" loading="lazy" width="977" height="808">
-    <figcaption class="mono">The five layers · Mood imagery</figcaption>
-  </figure>
-
-  <section class="chapter rv">
-    <div class="label mono">04 / Next</div>
-    <div>
-      <h2>Documentation in progress.</h2>
-      <p>The prototype and findings are still being written up. <a href="https://www.figma.com/design/RFow6mVvYRDVcu5NrMgO7D/retail-tech-documentation?node-id=0-1" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline">See the full process file on Figma ↗</a></p>
-    </div>
-  </section>
-
-  <div class="next-label mono"><span>Next project</span><span>01 / 04</span></div>
-  <a class="card bend" href="../aadmiwala/" style="--tc:#2A1C12"><span class="bg"></span><img class="media" src="../aadmiwala/hero.jpg" alt="" loading="lazy">
-    <span class="bar mono"><span class="pill">Aadmiwala</span><span class="pill soft">Hiring platform · Real Glide</span><span class="arrow" aria-hidden="true">↗</span></span>
-  </a>
-
-  <section class="contact bend" id="contact" aria-label="Contact"><span class="bg"></span>
-    <h2>Got a question worth chasing? Write to me.</h2>
-    <span></span>
-    <div class="row">
-      <ul class="socials mono">
-        <li><a href="#">↳ Behance</a></li>
-        <li><a href="#">↳ LinkedIn</a></li>
-        <li><a href="#">↳ Instagram</a></li>
-      </ul>
-      <div class="direct">
-        <span class="big" id="email">utsavsharma2710@gmail.com</span>
-        <span class="big">+91 82991 45430</span>
-        <button class="copy mono" id="copyBtn" type="button">Copy email</button>
-      </div>
-    </div>
-  </section>
 </main>
 
-<footer class="mono">
+<footer class="end">
+  <a href="../../#work">← All work</a>
   <span>© 2026 Utsav Sharma</span>
-  <a href="../../">Back to all work</a>
+  <a href="../aadmiwala/">Next: Aadmiwala →</a>
 </footer>
 
-<div class="edge-blur" aria-hidden="true"><i></i><i></i></div>
-<div class="dot" id="dot" aria-hidden="true"></div>
-<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="../../assets/case.js"></script>
+<script>
+(function(){
+  'use strict';
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* phones: the wide drawings scroll sideways; start each one where its content starts (the bottle centred) */
+  function fitScrollers(){
+    document.querySelectorAll('.scroller').forEach(function(sc){
+      if (sc.scrollWidth <= sc.clientWidth + 2) return;
+      var box = sc.querySelector('.box'), br = box.getBoundingClientRect(), lo = 1e9, hi = -1e9;
+      box.querySelectorAll('.p, .ph, .lb, .knob').forEach(function(n){ var r = n.getBoundingClientRect(); if (r.width){ lo = Math.min(lo, r.left - br.left); hi = Math.max(hi, r.right - br.left); } });
+      if (box.classList.contains('ctl')) lo = 0;
+      var c = sc.hasAttribute('data-center') && box.querySelector('.ph'), cr = c && c.getBoundingClientRect();
+      var target = c ? cr.left - br.left + cr.width / 2 - sc.clientWidth / 2 + 20 : lo;
+      sc.scrollLeft = Math.max(0, target);
+    });
+  }
+  if (matchMedia('(max-width: 999px)').matches){ fitScrollers(); addEventListener('load', fitScrollers); }
+
+  /* reveal the weight bars when they scroll in */
+  var bars = document.getElementById('bars');
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(es, o){ es.forEach(function(e){ if (e.isIntersecting){ bars.classList.add('in'); o.disconnect(); } }); }, {threshold:.4}).observe(bars);
+  } else bars.classList.add('in');
+
+  /* ---------- 360° panorama: drag, fling, arrow keys; wraps forever ---------- */
+  (function(){
+    var pano = document.getElementById('pano'), track = document.getElementById('panoTrack'), deg = document.getElementById('panoDeg');
+    var img = track.querySelector('img');
+    var x = 0, v = 0, w = 0, drag = null, last = 0, idle = 0, raf = 0, seen = false;
+    function measure(){ w = img.getBoundingClientRect().width || pano.clientHeight * 1440 / 281; }
+    function place(){
+      if (!w) measure();
+      x = ((x % w) + w) % w;                       /* keep x in [0, w) and show copies 1 and 2 */
+      track.style.transform = 'translate3d(' + (-x - w) + 'px,0,0)';
+      deg.textContent = Math.round(x / w * 360) % 360 + '°';
+    }
+    function tick(t){
+      raf = 0;
+      if (!drag){
+        if (Math.abs(v) > .02){ x += v * 16; v *= .94; }
+        else if (!reduce && seen && t - idle > 2200){ x += .25; }   /* slow drift once it has been idle */
+      }
+      place();
+      if (seen) raf = requestAnimationFrame(tick);
+    }
+    function go(){ if (!raf) raf = requestAnimationFrame(tick); }
+    pano.addEventListener('pointerdown', function(e){
+      drag = {x:e.clientX, y:e.clientY, sx:x, t:performance.now(), lx:e.clientX, moved:false}; v = 0;
+      pano.setPointerCapture(e.pointerId); pano.classList.add('grab');
+    });
+    pano.addEventListener('pointermove', function(e){
+      if (!drag) return;
+      var dx = e.clientX - drag.x;
+      if (!drag.moved && Math.abs(dx) > 4){ drag.moved = true; pano.classList.add('used'); }
+      var now = performance.now();
+      v = -(e.clientX - drag.lx) / Math.max(8, now - drag.t);
+      drag.t = now; drag.lx = e.clientX;
+      x = drag.sx - dx; place();
+    });
+    function up(){ if (!drag) return; drag = null; idle = performance.now(); pano.classList.remove('grab'); go(); }
+    pano.addEventListener('pointerup', up); pano.addEventListener('pointercancel', up);
+    pano.addEventListener('keydown', function(e){
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight'){ e.preventDefault(); v = (e.key === 'ArrowRight' ? 1 : -1) * 1.6; idle = performance.now(); pano.classList.add('used'); go(); }
+    });
+    pano.addEventListener('wheel', function(e){
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)){ e.preventDefault(); x += e.deltaX; idle = performance.now(); pano.classList.add('used'); place(); }
+    }, {passive:false});
+    addEventListener('resize', function(){ var f = w ? x / w : 0; w = 0; measure(); x = f * w; place(); });
+    img.complete ? (measure(), place()) : img.addEventListener('load', function(){ measure(); place(); });
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){ es.forEach(function(e){ seen = e.isIntersecting; if (seen){ idle = performance.now(); go(); } }); }).observe(pano);
+    }
+  })();
+
+  /* ---------- control box: knob, three sliders, button ---------- */
+  (function(){
+    var box = document.getElementById('ctl'), knob = document.getElementById('knob'), btn = document.getElementById('btn'), out = document.getElementById('readout');
+    var MOODS = ['Fresh','Playful','Romantic','Warm','Bold','Mysterious'];
+    var ANG = [-145,-90,-35,35,90,145];                    /* printed dial angles, from the drawing */
+    var SL = [['4 h','8 h','12 h'],['Feminine','Unisex','Masculine'],['Everyday','Evening','Special']];
+    var TY = [325,210,95];                                  /* slider stops, bottom to top */
+    var state = {mood:2, s:[0,1,0]}, touched = false, demo = 0, action = '';
+    var thumbs = box.querySelectorAll('.thumb');
+
+    function render(){
+      knob.querySelector('.ind').style.setProperty('--a', (state.angle != null ? state.angle : ANG[state.mood]) + 'deg');
+      knob.setAttribute('aria-valuenow', state.mood); knob.setAttribute('aria-valuetext', MOODS[state.mood]);
+      box.querySelectorAll('[data-mood]').forEach(function(n){ n.classList.toggle('on', +n.dataset.mood === state.mood); });
+      thumbs.forEach(function(t){
+        var i = +t.dataset.s;
+        if (!t.classList.contains('drag')) t.style.setProperty('--ty', TY[state.s[i]]);
+        t.setAttribute('aria-valuenow', state.s[i]); t.setAttribute('aria-valuetext', SL[i][state.s[i]]);
+      });
+      box.querySelectorAll('.lb[data-s]').forEach(function(n){ n.classList.toggle('on', +n.dataset.v === state.s[+n.dataset.s]); });
+      var hrs = SL[0][state.s[0]].replace(' h',' hours');
+      out.innerHTML = '<em>' + MOODS[state.mood] + '</em> · ' + SL[1][state.s[1]] + ' · ' + hrs + ' · ' + SL[2][state.s[2]] + (action ? ' &nbsp;→&nbsp; <em>' + action + '</em>' : '');
+    }
+    function touch(){ if (!touched){ touched = true; box.classList.add('touched'); clearTimeout(demo); } }
+    function scale(){ return box.getBoundingClientRect().width / 1100; }
+
+    /* knob: drag around it; snaps to the nearest mood on release */
+    function angleAt(e){
+      var r = knob.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      return Math.atan2(e.clientX - cx, cy - e.clientY) * 180 / Math.PI;   /* 0 = up, clockwise positive */
+    }
+    function nearest(a){ var b = 0, d = 1e9; ANG.forEach(function(g, i){ var dd = Math.abs(g - a); if (dd < d){ d = dd; b = i; } }); return b; }
+    knob.addEventListener('pointerdown', function(e){
+      touch(); e.preventDefault(); knob.setPointerCapture(e.pointerId); box.classList.add('dragging');
+      var move = function(ev){ var a = Math.max(-160, Math.min(160, angleAt(ev))); state.angle = a; state.mood = nearest(a); action = ''; render(); };
+      var upf = function(){ knob.removeEventListener('pointermove', move); knob.removeEventListener('pointerup', upf); knob.removeEventListener('pointercancel', upf); box.classList.remove('dragging'); state.angle = null; render(); };
+      knob.addEventListener('pointermove', move); knob.addEventListener('pointerup', upf); knob.addEventListener('pointercancel', upf);
+      move(e);
+    });
+    knob.addEventListener('keydown', function(e){
+      var d = (e.key === 'ArrowRight' || e.key === 'ArrowUp') ? 1 : (e.key === 'ArrowLeft' || e.key === 'ArrowDown') ? -1 : 0;
+      if (!d) return; e.preventDefault(); touch(); state.mood = Math.max(0, Math.min(5, state.mood + d)); action = ''; render();
+    });
+
+    /* sliders: drag up and down; three stops */
+    thumbs.forEach(function(t){
+      var i = +t.dataset.s;
+      t.addEventListener('pointerdown', function(e){
+        touch(); e.preventDefault(); t.setPointerCapture(e.pointerId); t.classList.add('drag'); box.classList.add('dragging');
+        var br = box.getBoundingClientRect(), k = scale();
+        var move = function(ev){
+          var y = (ev.clientY - br.top) / k; y = Math.max(95, Math.min(325, y));
+          t.style.setProperty('--ty', y);
+          state.s[i] = y > 267 ? 0 : y > 152 ? 1 : 2; action = ''; render();
+        };
+        var upf = function(){ t.removeEventListener('pointermove', move); t.removeEventListener('pointerup', upf); t.removeEventListener('pointercancel', upf); t.classList.remove('drag'); box.classList.remove('dragging'); render(); };
+        t.addEventListener('pointermove', move); t.addEventListener('pointerup', upf); t.addEventListener('pointercancel', upf);
+      });
+      t.addEventListener('keydown', function(e){
+        var d = e.key === 'ArrowUp' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowDown' || e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return; e.preventDefault(); touch(); state.s[i] = Math.max(0, Math.min(2, state.s[i] + d)); action = ''; render();
+      });
+    });
+
+    /* button: press = find, double press = VR, hold 2 s = print (as on the kiosk) */
+    var pressT = 0, holdT = 0, clickT = 0, clicks = 0, held = false;
+    function flash(which, label){
+      action = label;
+      box.querySelectorAll('[data-b]').forEach(function(n){ n.classList.toggle('on', n.dataset.b === which); });
+      render();
+      clearTimeout(flash.t); flash.t = setTimeout(function(){ box.querySelectorAll('[data-b]').forEach(function(n){ n.classList.remove('on'); }); }, 1600);
+    }
+    function down(){
+      touch(); btn.classList.add('down'); held = false;
+      btn.classList.remove('holding'); void btn.offsetWidth; btn.classList.add('holding');
+      holdT = setTimeout(function(){ held = true; btn.classList.remove('holding'); flash('print', 'printing your ticket'); clicks = 0; }, 2000);
+    }
+    function upb(){
+      btn.classList.remove('down'); btn.classList.remove('holding'); clearTimeout(holdT);
+      if (held) return;
+      clicks++;
+      clearTimeout(clickT);
+      clickT = setTimeout(function(){ flash(clicks > 1 ? 'vr' : 'find', clicks > 1 ? 'stepping into its world' : 'finding your match'); clicks = 0; }, 280);
+    }
+    btn.addEventListener('pointerdown', function(e){ e.preventDefault(); down(); });
+    btn.addEventListener('pointerup', upb);
+    btn.addEventListener('pointerleave', function(){ if (btn.classList.contains('down')){ btn.classList.remove('down','holding'); clearTimeout(holdT); } });
+    btn.addEventListener('keydown', function(e){ if ((e.key === ' ' || e.key === 'Enter') && !e.repeat){ e.preventDefault(); down(); } });
+    btn.addEventListener('keyup', function(e){ if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); upb(); } });
+
+    /* until someone touches it, the box plays itself like a short film */
+    var script = [
+      function(){ state.mood = 2; state.s = [0,1,0]; },
+      function(){ state.mood = 3; }, function(){ state.mood = 4; }, function(){ state.s[1] = 2; },
+      function(){ state.s[0] = 1; }, function(){ flash('find', 'finding your match'); },
+      function(){ state.mood = 5; action = ''; }, function(){ state.s[1] = 0; }, function(){ state.s[2] = 1; }, function(){ state.s[0] = 2; },
+      function(){ flash('vr', 'stepping into its world'); },
+      function(){ state.mood = 1; action = ''; }, function(){ state.mood = 0; }, function(){ state.s = [0,1,0]; },
+      function(){ flash('print', 'printing your ticket'); }
+    ];
+    var step = 0, playing = false;
+    function play(){
+      if (touched || !playing) return;
+      script[step % script.length](); render(); step++;
+      demo = setTimeout(play, step % script.length === 0 ? 2600 : 1100);
+    }
+    render();
+    if (!reduce && 'IntersectionObserver' in window){
+      new IntersectionObserver(function(es){ es.forEach(function(e){
+        if (e.isIntersecting && !touched){ if (!playing){ playing = true; demo = setTimeout(play, 700); } }
+        else { playing = false; clearTimeout(demo); }
+      }); }, {threshold:.5}).observe(box);
+    }
+  })();
+})();
+</script>
 </body>
 </html>
