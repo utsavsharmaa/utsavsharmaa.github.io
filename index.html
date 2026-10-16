@@ -601,7 +601,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   });
 
   /* 9. "Hello" bubble: while the pointer is over the name, a speech bubble sits right on it
-        and says hello in a different Indian language every 2 seconds. Each change: the old word
+        and says hello in a different Indian language every 1.5 seconds. Each change: the old word
         slides up and fades out, the bubble eases to the new width, the new word rises in. */
   var hello = document.getElementById('hello'), pill = document.getElementById('helloPill');
   var helloText = document.getElementById('helloText'), helloMeasure = document.getElementById('helloMeasure');
@@ -631,7 +631,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       if (root.classList.contains('intro')) return;
       moveHello(e); showWord(0, true); hello.classList.add('on');
       clearInterval(helloTimer);
-      helloTimer = setInterval(function(){ showWord(hi + 1); }, 2000);
+      helloTimer = setInterval(function(){ showWord(hi + 1); }, 1500);
     });
     name.addEventListener('mousemove', function(e){ if (hello.classList.contains('on')) moveHello(e); });
     name.addEventListener('mouseleave', function(){ hello.classList.remove('on'); clearInterval(helloTimer); clearTimeout(swapT); });
