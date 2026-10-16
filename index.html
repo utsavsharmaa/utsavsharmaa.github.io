@@ -7,40 +7,41 @@
 <title>Utsav Sharma Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=DM+Mono&display=swap">
 <style>
 /* Layout: landing from Utsav's Figma (Desktop 1 light / Desktop 2 dark): nav pill, meta row, two-line gold name with
    stamps and a smiley stuck on it, mono tagline. Then rounded media cards in a 2-col grid, about panel, gold contact card. */
 /* Light = white ruled paper (black lines at 20%, 24 lines per screen) with black type and gold name.
    Dark = deep brown-black with gold lines at 10% and everything in gold. */
 :root{
-  --bg:#FFFFFF; --rule:rgba(0,0,0,.2); --fg:#111111; --ink:#111111; --muted:#6B6457;
-  --panel:#F4F2EE; --accent:#E9B300; --on-accent:#140F00;
+  --bg:#FFFFFF; --rule:rgba(0,0,0,.05); --fg:#111111; --ink:#111111; --muted:#6B6457; --hero-fg:#140F00; --hero-wt:400;
+  --panel:#EEEFF1; --about-fg:#111216; --accent:#E9B300; --on-accent:#140F00;
   --pill:#FFFFFF; --pill-fg:#111111; --pill-soft:rgba(255,255,255,.5);
-  --nav-bg:rgba(255,255,255,.85); --nav-edge:linear-gradient(180deg,#E3E3E3,rgba(238,238,238,.6)); --nav-shadow:0 2px 10px rgba(0,0,0,.07);
-  --nav-fg:#000; --icon:#FFC300; --btn-edge:linear-gradient(180deg,#fff,#D7D7D7); --hover:rgba(17,17,17,.07);
+  --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#E3E3E3,rgba(238,238,238,.6)); --nav-shadow:none;
+  --nav-fg:#140F00; --icon:#FFC300; --btn-edge:linear-gradient(180deg,#fff,#D7D7D7); --hover:rgba(17,17,17,.07);
   --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
   --namefont:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
   --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --dmmono:"DM Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
   --gap:clamp(12px,3.33vw,48px);   /* original: 48px between cards at desktop */
   --ov:12vw; /* room for the bend to push edges outward */
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#140F00; --rule:rgba(233,179,0,.1); --fg:#E9B300; --ink:#E9B300; --muted:#A08A50;
-    --panel:#1F1800; --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
+    --bg:#140F00; --rule:rgba(233,179,0,.05); --fg:#E9B300; --ink:#E9B300; --muted:#A08A50; --hero-fg:#D9D5C6; --hero-wt:500;
+    --panel:#1F1800; --about-fg:#E9B300; --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
     --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#140F00,#674F00); --nav-shadow:none;
-    --nav-fg:#E9B300; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#140F00,#674F00); --hover:rgba(233,179,0,.12);
+    --nav-fg:#D9D5C6; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#FFFFFF,#D7D7D7); --hover:rgba(233,179,0,.12);
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#140F00; --rule:rgba(233,179,0,.1); --fg:#E9B300; --ink:#E9B300; --muted:#A08A50;
-  --panel:#1F1800; --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
-  --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#140F00,#674F00); --nav-shadow:none;
-    --nav-fg:#E9B300; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#140F00,#674F00); --hover:rgba(233,179,0,.12);
+    --bg:#140F00; --rule:rgba(233,179,0,.05); --fg:#E9B300; --ink:#E9B300; --muted:#A08A50; --hero-fg:#D9D5C6; --hero-wt:500;
+    --panel:#1F1800; --about-fg:#E9B300; --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
+    --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#140F00,#674F00); --nav-shadow:none;
+    --nav-fg:#D9D5C6; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#FFFFFF,#D7D7D7); --hover:rgba(233,179,0,.12);
   color-scheme:dark;
 }
 
@@ -56,13 +57,13 @@ a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .mono{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
 
-/* landing, from the Figma frames "Desktop - 3" (light) and "Desktop - 4" (dark), 1440 wide.
+/* landing, from the Figma frames "Desktop - 13" (light) and "Desktop - 14" (dark), 1440 wide.
    --k is one Figma pixel: every hero size below is written as Figma px x --k so the layout scales with the window. */
 :root{--k:calc(100vw / 1440)}
-.hero{position:relative;padding-top:calc(108 * var(--k))}
+.hero{position:relative;padding-top:calc(152 * var(--k))}
 /* nav pill: 600 x 40 at the top, 14px DM Sans with -1% tracking, 24px apart; glass fill with a 0.5px gradient edge.
    It's fixed, so it travels down the page with you. */
-.nav{position:fixed;top:28px;left:50%;transform:translateX(-50%);z-index:47;display:flex;align-items:center;height:40px;gap:24px;
+.nav{position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:47;display:flex;align-items:center;height:40px;gap:24px;
   padding:4px 16px;border-radius:40px;background:var(--nav-bg);box-shadow:var(--nav-shadow);
   backdrop-filter:blur(8px) saturate(1.2);-webkit-backdrop-filter:blur(8px) saturate(1.2);
   color:var(--nav-fg);font-size:14px;line-height:1.2;letter-spacing:-.01em;white-space:nowrap}
@@ -83,9 +84,11 @@ a{color:inherit;text-decoration:none}
 .theme-btn svg{width:29px;height:29px;display:block;transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
 .theme-btn[aria-pressed="true"] svg{transform:rotate(180deg)}
 
-/* meta row: 886 wide, 16px DM Sans */
-.hero-meta{display:flex;justify-content:space-between;gap:16px;width:calc(886 * var(--k));margin-inline:auto;color:var(--ink);font-size:max(11px,calc(16 * var(--k)));letter-spacing:-.01em;line-height:1.2}
-.name-box{position:relative;margin-top:calc(12 * var(--k))}
+/* meta row: 886 wide; "Multidisciplinary Designer" 24px DM Sans, title case, -2% tracking, with a hand-drawn stroke under it */
+.hero-meta{display:flex;justify-content:space-between;gap:16px;width:calc(886 * var(--k));margin-inline:auto;color:var(--hero-fg);font-weight:var(--hero-wt);font-size:max(13px,calc(24 * var(--k)));letter-spacing:-.02em;line-height:1.4;text-transform:capitalize}
+.hero-meta .role{position:relative}
+.hero-meta .swoosh{position:absolute;left:calc(57 * var(--k));top:calc(27 * var(--k));width:calc(275 * var(--k));height:calc(10 * var(--k));fill:currentColor;pointer-events:none}
+.name-box{position:relative;margin-top:calc(32 * var(--k))}
 /* name: UTSAV 400px / SHARMA 300px Big Shoulders Black, 84% line height, -0.5% tracking */
 .name{position:relative;z-index:1;margin:0;font-family:var(--namefont);font-weight:900;text-transform:uppercase;color:var(--accent);line-height:.84;white-space:nowrap;text-align:center}
 .name .ln{display:block;width:max-content;margin-inline:auto;letter-spacing:-.005em}
@@ -101,13 +104,10 @@ a{color:inherit;text-decoration:none}
   transform:translate(-50%,-50%) rotate(calc(var(--r) + var(--rh,0deg))) scale(var(--s,1));
   transition:transform .7s cubic-bezier(.3,1.45,.5,1) var(--d,0s),opacity .4s ease var(--d,0s),left .6s ease,top .6s ease;
   cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none}
-/* light frame (Desktop 3) / dark frame (Desktop 4) put the stamps a few px apart, so each theme gets its own spot */
-.st-var{--x:-431;--y:303;--w:120.7;--r:-16.66deg;--d:.05s}
-.st-luck{--x:443.5;--y:308.5;--w:135.5;--r:18.13deg;--d:.2s}
-.smile{--x:682;--y:134;--w:68.5;--r:0deg;--d:.35s}
-:root[data-theme="dark"] .st-var{--x:-443;--y:291}
-:root[data-theme="dark"] .st-luck{--y:298.5}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .st-var{--x:-443;--y:291} :root:not([data-theme="light"]) .st-luck{--y:298.5}}
+/* Desktop 13 (light) and Desktop 14 (dark) put the stamps in the same spot */
+.st-var{--x:-489.1;--y:174.2;--w:120.65;--r:-16.66deg;--d:.05s}
+.st-luck{--x:480.4;--y:368.5;--w:135.5;--r:18.13deg;--d:.2s}
+.smile{--x:620.8;--y:78.8;--w:68.5;--r:0deg;--d:.35s}
 .stk:hover{--s:1.06;--rh:-5deg;transition-delay:0s}
 .stk.drag{cursor:grabbing;--s:1.1;--rh:4deg;transition-delay:0s;z-index:3}
 .stk.drag img,.stk.drag{filter:drop-shadow(0 18px 18px rgba(0,0,0,.22))}
@@ -125,20 +125,20 @@ a{color:inherit;text-decoration:none}
 .hello{position:fixed;left:0;top:0;z-index:55;pointer-events:none;opacity:0;transition:opacity .2s ease}
 .hello.on{opacity:1}
 .hello-in{position:absolute;left:-11px;bottom:10.5px;display:block;overflow:hidden;padding:8px 12px;border-radius:20px;background:#fff;color:#140F00;
-  font-family:var(--mono);font-size:20px;line-height:1.2;letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;
+  font-family:var(--dmmono);font-size:20px;line-height:1.2;letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;
   box-shadow:0 6px 18px -8px rgba(20,15,0,.35);transform-origin:11px calc(100% + 10.5px);scale:.4;
   transition:scale .35s cubic-bezier(.3,1.6,.5,1),width .6s cubic-bezier(.65,0,.35,1)}
 .hello.on .hello-in{scale:1}
 .hello svg{position:absolute;left:0;top:-15.5px;display:block}
 .hello-in .w{display:inline-block}
-.hello-measure{position:absolute;visibility:hidden;white-space:nowrap;font-family:var(--mono);font-size:20px;letter-spacing:-.01em;text-transform:uppercase}
+.hello-measure{position:absolute;visibility:hidden;white-space:nowrap;font-family:var(--dmmono);font-size:20px;letter-spacing:-.01em;text-transform:uppercase}
 
 /* load intro: everything but the name starts hidden, then fades in; stickers slap on afterwards */
 .intro .nav,.intro .hero-meta,.intro .tagline,.intro .work-head,.intro main > section,.intro footer,.intro .name .box{opacity:0}
 .intro .stk{opacity:0;--s:1.6;--rh:14deg}
 .nav,.hero-meta,.tagline,.work-head,main > section,footer{transition:opacity .9s ease}
-/* tagline: 16px DM Sans, 886 wide, starting at y 741 (12px under the 585px name frame; the 2 lines of name measure 588) */
-.tagline{margin:calc(9 * var(--k)) auto 0;max-width:calc(886 * var(--k));text-align:center;color:var(--ink);font-size:max(11px,calc(16 * var(--k)));letter-spacing:-.01em;line-height:1.2}
+/* tagline: 20px DM Sans, title case, 606 wide, 32px under the 585px name frame (the 2 lines of name measure 588, so 29) */
+.tagline{margin:calc(29 * var(--k)) auto 0;max-width:calc(606 * var(--k));text-align:center;color:var(--hero-fg);font-weight:var(--hero-wt);font-size:max(12px,calc(20 * var(--k)));letter-spacing:-.02em;line-height:1.4;text-transform:capitalize}
 
 /* bendable blocks: background is drawn wider than the box, and the visible shape is a clip-path set from script */
 .bend{position:relative;isolation:isolate;clip-path:inset(0 round 8px)}
@@ -176,18 +176,15 @@ a{color:inherit;text-decoration:none}
 .work-head h2{margin:0;font:inherit}
 
 /* about */
-.about{scroll-margin-top:88px;margin-block:var(--gap);padding:clamp(24px,3.5vw,40px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(40px,6vw,96px);min-height:clamp(380px,48vw,560px)}
-.about-l{display:flex;flex-direction:column;justify-content:space-between;gap:32px;min-width:0}
-.statement{margin:0;font-size:clamp(17px,1.6vw,21px);line-height:1.45;color:var(--ink);max-width:44ch}
-/* Utsav, drawn: plain on paper, cut out like a sticker on the dark panel */
-.me{display:block;height:clamp(220px,25vw,360px);width:auto;align-self:flex-start;margin-bottom:-4px}
-:root[data-theme="dark"] .me{filter:drop-shadow(2px 0 0 #F4EBD0) drop-shadow(-2px 0 0 #F4EBD0) drop-shadow(0 2px 0 #F4EBD0) drop-shadow(0 -2px 0 #F4EBD0)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .me{filter:drop-shadow(2px 0 0 #F4EBD0) drop-shadow(-2px 0 0 #F4EBD0) drop-shadow(0 2px 0 #F4EBD0) drop-shadow(0 -2px 0 #F4EBD0)}}
+/* about, from the Figma frame "About": 1344 x 560 panel, 40px padding, statement top left, services bottom right */
+.about{scroll-margin-top:88px;margin-block:var(--gap);padding:clamp(24px,2.78vw,40px);display:flex;justify-content:space-between;align-items:stretch;gap:40px;min-height:clamp(380px,38.9vw,560px);color:var(--about-fg)}
+.about-l{min-width:0}
+.statement{margin:0;font-size:clamp(17px,1.46vw,21px);line-height:1.45;color:var(--about-fg);max-width:508px}
 .statement .w{opacity:.22;transition:opacity .25s}
 .statement .w.on{opacity:1}
-.lists{align-self:end;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;color:var(--ink);text-align:right}
-.lists h2{margin:0 0 14px;font:inherit}
-.lists ul{list-style:none;margin:0;padding:0;display:grid;gap:3px;line-height:1.35}
+.lists{align-self:end;display:flex;gap:24px;color:var(--about-fg);text-align:right}
+.lists h2{margin:0 0 14px;font:400 12px/1.2 var(--dmmono);letter-spacing:.06em;text-transform:uppercase}
+.lists ul{list-style:none;margin:0;padding:0;font-size:clamp(16px,1.39vw,20px);line-height:1.2;letter-spacing:-.01em;text-transform:uppercase}
 
 /* contact */
 .contact{--tc:var(--accent);margin-block:var(--gap) 0;color:var(--on-accent);padding:clamp(24px,3.5vw,40px);display:grid;grid-template-rows:auto 1fr auto;min-height:clamp(320px,34vw,440px);gap:40px}
@@ -231,10 +228,9 @@ html.lenis,html.lenis body{height:auto}
   .hero{padding-top:84px}
   .hero-meta{width:auto}
   .tagline{max-width:none}
-  .me{height:240px}
   .grid{grid-template-columns:minmax(0,1fr)}
   .card,.card.wide{aspect-ratio:1/1.05}
-  .about{grid-template-columns:minmax(0,1fr)}
+  .about{flex-direction:column}
   .lists{text-align:left}
   .work .q{grid-template-columns:minmax(0,1fr)}
   .direct{justify-items:start;text-align:left}
@@ -269,7 +265,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch to dark mode"><svg aria-hidden="true" focusable="false" width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M26.0565 13.0485C26.0635 13.7941 26.1627 14.5754 26.0889 15.3175C25.7329 18.6943 24.2137 21.7202 21.4506 23.7597C19.878 24.9204 18.5744 25.5441 16.6057 25.916C8.42486 27.4617 1.17735 19.8874 3.24969 11.7442C4.5115 6.78593 8.27844 3.60389 13.4376 2.91602C14.1517 2.98101 14.9002 2.87883 15.621 3.02233C15.7318 3.04439 15.8288 3.10457 15.9298 3.09503L15.7933 3.13369C15.8434 3.21193 16.4367 3.28016 16.562 3.2878C16.7835 3.30134 17.036 3.26852 17.2566 3.30919C17.426 3.34697 17.5069 3.51575 17.715 3.58344L17.7303 3.58857C17.8779 3.636 18.0194 3.5771 18.1647 3.6029C18.293 3.62569 18.5139 3.77591 18.6283 3.84702C18.7466 3.92057 19.0831 3.89848 19.1303 3.95475C19.3262 4.18822 19.5483 4.18462 19.7861 4.31501C19.8928 4.37352 19.9524 4.49881 20.0532 4.56111C20.1404 4.61495 20.2595 4.61297 20.3504 4.66055C20.4004 4.68671 20.4324 4.73645 20.4793 4.76768C20.5648 4.82472 20.6694 4.85746 20.7575 4.91331C20.8878 4.99594 20.989 5.13143 21.1137 5.22571C21.3902 5.43465 21.6875 5.60342 21.9502 5.83159C22.1977 6.04671 22.4148 6.29318 22.6481 6.52312C22.793 6.66588 22.9605 6.79304 23.0927 6.94772C23.3328 7.2286 23.6238 7.88711 23.9063 8.07963C24.0597 8.18413 24.7984 9.58262 24.9086 9.84569C24.9268 9.88924 24.9487 9.9793 24.9952 9.97652C25.0036 9.94812 25.0089 9.93076 25.015 9.90156C25.0479 10.2314 25.0979 10.3816 25.2413 10.6776C25.3016 10.8021 25.357 11.3793 25.4375 11.4551C25.4313 11.2951 25.4241 11.1754 25.4712 11.022C25.6805 11.5053 25.5937 12.3953 25.8353 12.8639C25.8757 12.9424 25.9897 12.9876 26.0565 13.0485ZM10.2807 23.206C10.3643 23.3622 10.4372 23.3593 10.6004 23.4716L10.5454 23.467C10.7541 23.5765 10.9728 23.5959 11.1983 23.652C11.2014 23.6527 11.3285 23.8414 11.3609 23.8452C11.8708 23.9062 12.2725 23.9284 12.6031 24.1781C12.7418 24.2829 14.3289 24.2192 14.533 24.1815C14.6873 24.1626 14.9213 24.1737 15.0934 24.1557C15.4059 24.1229 15.8332 24.095 16.1363 24.0293C17.6684 23.6973 19.1187 23.1137 20.3723 22.166C20.6828 21.9313 21.4933 21.1335 21.7617 20.8463C22.8398 19.6924 23.6016 18.0689 23.942 16.5379C23.9777 16.3773 24.1107 15.9724 24.122 15.8535C24.1687 15.3625 24.1849 14.7542 24.1751 14.2636C24.153 13.1706 23.8948 11.9833 23.4725 10.9757C23.3897 10.778 23.3191 10.5272 23.2247 10.3349C23.0486 9.97647 22.8272 9.63824 22.6221 9.29491C22.3517 8.84215 22.0324 8.40645 21.6638 8.02775C21.5941 7.95612 21.4395 7.83401 21.334 7.84491C21.1708 7.86182 20.9751 8.03854 20.8587 8.15077C20.2505 8.73728 19.656 9.34079 19.0615 9.94076L17.0415 11.9631L12.5422 16.4645L9.43029 19.5654C8.94895 20.0477 8.44678 20.5436 7.98026 21.0406C7.88153 21.1457 7.80241 21.2966 7.81614 21.4469C8.01512 21.8871 9.80216 22.9209 10.2604 23.1897C10.2672 23.1951 10.2739 23.2006 10.2807 23.206Z"/></svg></button>
 
   <div class="hero-in">
-    <div class="hero-meta mono"><span>Multidisciplinary designer</span><span>2026</span></div>
+    <div class="hero-meta"><span class="role">Multidisciplinary designer<svg class="swoosh" viewBox="0 0 275 10" aria-hidden="true" focusable="false"><path d="M21.2339 6.58674C16.3284 4.30983 27.9112 4.2761 31.2865 4.11035C62.8405 2.56112 94.5961 1.90476 126.381 1.47056C154.215 0.986808 181.642 0.310026 209.597 0.0921154C223.632 -0.0335821 237.675 -0.0306377 251.71 0.100948C257.965 0.163841 264.374 0.205791 270.61 0.426939C271.798 0.469106 273.726 0.600562 274.49 0.96797C274.891 1.16094 275.068 1.40679 274.977 1.64926C274.729 2.3522 272.95 2.49667 271.362 2.49841C265.445 2.5049 259.479 2.55344 253.563 2.52864C244.802 2.49191 235.914 2.66602 227.174 2.62937C226.727 2.85893 226.409 3.02296 225.888 3.22928C222.277 3.69569 205.775 3.68441 201.307 3.72941L156.981 4.11021C149.721 4.14817 142.462 4.22008 135.208 4.32599C126.714 4.47497 117.569 4.78303 109.091 5.05667C97.0002 5.43623 84.9208 5.86274 72.8541 6.336C62.275 6.73655 51.7108 7.19087 41.1646 7.69882C33.4978 8.11088 25.8435 8.55464 18.2028 9.03015C12.6827 9.38762 6.99256 9.87643 1.4307 9.99904C0.402106 10.0217 -0.187976 9.63905 0.0540895 9.26249C1.21844 8.62334 28.2707 7.11487 32.6162 6.79305C33.3032 6.82685 39.217 6.46543 40.0544 6.35522C38.9822 6.33198 31.7679 6.56773 30.7266 6.66485C27.3531 6.63152 24.3996 7.05496 21.2339 6.58674Z"/></svg></span></div>
     <div class="name-box">
       <h1 class="name" id="name" aria-label="Utsav Sharma"><span class="box" aria-hidden="true"><span class="ln">Utsav</span><span class="ln">Sharma</span></span></h1>
       <img src="assets/home/varanasi.webp" width="483" height="618" alt="Varanasi postage stamp: मोक्ष की नगरी, death is not the end of life" draggable="false" class="stk st-var">
@@ -277,7 +273,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       <span class="stk smile" role="button" tabindex="0" aria-label="Want to play a game? Press and hold for 2 seconds, or press Enter"><span class="bob"><img src="assets/home/smiley.webp" width="455" height="455" alt="" draggable="false"></span><svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46"/></svg></span>
     </div>
   </div>
-  <p class="tagline mono">I notice weird things. Then I try to figure out why they happen. Sometimes that becomes a brand. Sometimes an interface. Sometimes a photograph.</p>
+  <p class="tagline">I notice weird things. Then I try to figure out why they happen. Sometimes that becomes a brand. Sometimes an interface. Sometimes a photograph.</p>
 </header>
 
 <main>
@@ -308,12 +304,10 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
 
   <section class="about bend" id="about" aria-label="About"><span class="bg"></span>
     <div class="about-l">
-      <p class="statement" id="statement">I’m Utsav. I trained as an image-maker in Banaras, studying Applied Arts at BHU. Now, at NID Bengaluru, I’m learning to design for people: going from making things look good to making things make sense.</p>
-      <img class="me" src="assets/home/portrait.webp" width="310" height="1026" alt="Illustration of Utsav: curly hair, beard, white tee, hands in his pockets" loading="lazy">
+      <p class="statement" id="statement">I’m Utsav — a designer trained in Applied Arts, currently exploring Design for Retail Experience at NID Bengaluru.</p>
     </div>
-    <div class="lists mono">
-      <div><h2>Worked with ↴</h2><ul><li>Real Glide</li><li>VRZ Visuals</li><li>MTB Freestyle Fed.</li><li>TAD Marketing</li><li>Gaurav Visuals</li><li>Indie Beer Community</li></ul></div>
-      <div><h2>Services ↴</h2><ul><li>Branding</li><li>Illustration</li><li>Packaging</li><li>UI / UX</li><li>Retail experience</li><li>Photo &amp; film</li></ul></div>
+    <div class="lists">
+      <div><h2>Services ↴</h2><ul><li>UI / UX</li><li>Branding</li><li>Campaign Design</li><li>Packaging</li><li>Retail experience</li><li>Photo &amp; film</li></ul></div>
     </div>
   </section>
 
