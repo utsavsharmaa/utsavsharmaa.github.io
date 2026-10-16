@@ -145,6 +145,9 @@ a{color:inherit;text-decoration:none}
 .bend > .bg{position:absolute;top:0;bottom:0;left:calc(-1 * var(--ov));right:calc(-1 * var(--ov));z-index:-1;background:var(--tc,var(--panel))}
 .bend > .media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(.2,.9,.25,1)}
 .card:hover > .media,.card:focus-visible > .media{transform:scale(1.04)}
+/* the picture drawn through the bend (WebGL), so near the bottom of the screen the image itself stretches out with the shape, like the original */
+.bend > .gl{position:absolute;top:0;left:calc(-1 * var(--ov));width:calc(100% + 2 * var(--ov));height:100%;display:block;pointer-events:none;z-index:0}
+.bend.gl-on > .media{opacity:0}
 .card .bar{z-index:1}
 
 /* work grid */
@@ -437,6 +440,87 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     if (clip !== el._clip){ el._clip = clip; el.style.clipPath = clip; }
   }
 
+  /* 3b. The picture inside each card goes through the same bend. Like the original's shader, every pixel of the
+         card's image is pushed sideways near the bottom of the screen, so the photo smears out into the flared
+         edges instead of the flare showing a flat colour. Drawn with WebGL on a canvas a little wider than the
+         card; the <img> stays underneath as the fallback (and still drives the hover zoom). */
+  var VS = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  var FS = [
+    'precision highp float;',
+    'uniform sampler2D tex;',
+    'uniform vec4 cv;',      /* canvas: left, top, width, height in CSS px (screen) */
+    'uniform vec4 box;',     /* card:   left, top, width, height in CSS px (screen) */
+    'uniform vec4 view;',    /* screen width, screen height, pixel ratio, mouse drift (px) */
+    'uniform vec4 bend;',    /* amount, spread, zoom, unused */
+    'uniform vec2 cover;',   /* object-fit: cover scale for u and v */
+    'void main(){',
+    '  float x = cv.x + gl_FragCoord.x / view.z;',
+    '  float y = cv.y + cv.w - gl_FragCoord.y / view.z;',
+    '  float f = pow(clamp(y / view.y, 0., 1.), bend.y);',
+    '  float cx = view.x * .5;',
+    '  float sx = cx + (x - cx - view.w * f) / (1. + bend.x * f);',  /* undo the bend: where this pixel came from */
+    '  vec2 uv = vec2((sx - box.x) / box.z, (y - box.y) / box.w);',
+    '  uv = .5 + (uv - .5) / bend.z;',                              /* hover zoom, same as the img */
+    '  uv = .5 + (uv - .5) * cover;',                               /* object-fit: cover */
+    '  gl_FragColor = texture2D(tex, clamp(uv, 0., 1.));',
+    '}'].join('\n');
+  function makeGL(card){
+    var img = card.querySelector('img.media'); if (!img) return null;
+    var cv = document.createElement('canvas'); cv.className = 'gl'; cv.setAttribute('aria-hidden', 'true');
+    var gl = cv.getContext('webgl', { premultipliedAlpha: false, antialias: false, alpha: false });
+    if (!gl) return null;
+    function sh(type, src){ var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null; }
+    var vs = sh(gl.VERTEX_SHADER, VS), fs = sh(gl.FRAGMENT_SHADER, FS); if (!vs || !fs) return null;
+    var pr = gl.createProgram(); gl.attachShader(pr, vs); gl.attachShader(pr, fs); gl.linkProgram(pr);
+    if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return null;
+    gl.useProgram(pr);
+    var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+    var loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    var U = {}; ['tex','cv','box','view','bend','cover'].forEach(function(n){ U[n] = gl.getUniformLocation(pr, n); });
+    var o = { card: card, img: img, cv: cv, gl: gl, U: U, ready: false, key: '' };
+    function upload(){
+      try {
+        var t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.uniform1i(U.tex, 0);
+        o.ready = true; o.key = '';
+        card.insertBefore(cv, img.nextSibling); card.classList.add('gl-on');
+      } catch(e){ o.ready = false; }
+    }
+    if (img.complete && img.naturalWidth) upload(); else img.addEventListener('load', upload, { once: true });
+    cv.addEventListener('webglcontextlost', function(e){ e.preventDefault(); o.ready = false; card.classList.remove('gl-on'); });
+    return o;
+  }
+  var GL = new Map();
+  blocks.forEach(function(b){ var o = makeGL(b); if (o) GL.set(b, o); });
+  function drawGL(o, r, vw, vh){
+    if (!o.ready) return;
+    var img = o.img, cv = o.cv, gl = o.gl, U = o.U;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var c = cv.getBoundingClientRect();
+    var W = Math.round(c.width * dpr), H = Math.round(c.height * dpr);
+    var m = getComputedStyle(img).transform, zoom = 1;
+    if (m && m !== 'none'){ var mm = m.match(/matrix\(([^,]+)/); if (mm) zoom = parseFloat(mm[1]) || 1; }
+    var mx = MOUSE_FACTOR * (mouseXs * 2 - 1) * vw;
+    var key = [W, H, c.left.toFixed(1), c.top.toFixed(1), r.width.toFixed(1), r.height.toFixed(1), vw, vh, mx.toFixed(2), zoom.toFixed(4)].join('|');
+    if (key === o.key) return;
+    o.key = key;
+    if (cv.width !== W || cv.height !== H){ cv.width = W; cv.height = H; }
+    gl.viewport(0, 0, W, H);
+    var ia = img.naturalWidth / img.naturalHeight, ba = r.width / r.height;
+    gl.uniform4f(U.cv, c.left, c.top, c.width, c.height);
+    gl.uniform4f(U.box, r.left, r.top, r.width, r.height);
+    gl.uniform4f(U.view, vw, vh, dpr, reduce ? 0 : mx);
+    gl.uniform4f(U.bend, reduce ? 0 : AMOUNT, SPREAD, zoom, 0);
+    gl.uniform2f(U.cover, ia > ba ? ba / ia : 1, ia > ba ? 1 : ia / ba);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
+
   /* Smooth scroll, same library and feel as the original */
   var lenis = null;
   if (!reduce && window.Lenis){
@@ -473,6 +557,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       var r = b.getBoundingClientRect();
       if (r.bottom < 0 || r.top > vh) return;
       shape(b, r, vw, vh, hs.v);
+      var o = GL.get(b); if (o) drawGL(o, r, vw, vh);
     });
     fillWords();
     requestAnimationFrame(frame);
