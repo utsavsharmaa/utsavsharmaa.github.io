@@ -14,7 +14,7 @@
 /* Light = white ruled paper (black lines at 20%, 24 lines per screen) with black type and gold name.
    Dark = deep brown-black with gold lines at 10% and everything in gold. */
 :root{
-  --bg:#FFFFFF; --rule:rgba(0,0,0,.05); --fg:#111111; --ink:#111111; --muted:#6B6457; --hero-fg:#140F00; --hero-wt:400;
+  --bg:#FFFFFF; --rule:rgba(233,179,0,.05); --fg:#111111; --ink:#111111; --muted:#6B6457; --hero-fg:#140F00; --hero-wt:400;
   --panel:#EEEFF1; --about-fg:#111216; --accent:#E9B300; --on-accent:#140F00;
   --pill:#FFFFFF; --pill-fg:#111111; --pill-soft:rgba(255,255,255,.5);
   --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#E3E3E3,rgba(238,238,238,.6)); --nav-shadow:none;
@@ -33,7 +33,7 @@
     --bg:#140F00; --rule:rgba(233,179,0,.05); --fg:#E9B300; --ink:#E9B300; --muted:#A08A50; --hero-fg:#D9D5C6; --hero-wt:500;
     --panel:#1F1800; --about-fg:#E9B300; --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
     --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#140F00,#674F00); --nav-shadow:none;
-    --nav-fg:#D9D5C6; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#FFFFFF,#D7D7D7); --hover:rgba(233,179,0,.12);
+    --btn-top:28px; --btn-right:40; --nav-fg:#D9D5C6; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#FFFFFF,#D7D7D7); --hover:rgba(233,179,0,.12);
     color-scheme:dark;
   }
 }
@@ -41,7 +41,7 @@
     --bg:#140F00; --rule:rgba(233,179,0,.05); --fg:#E9B300; --ink:#E9B300; --muted:#A08A50; --hero-fg:#D9D5C6; --hero-wt:500;
     --panel:#1F1800; --about-fg:#E9B300; --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
     --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#140F00,#674F00); --nav-shadow:none;
-    --nav-fg:#D9D5C6; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#FFFFFF,#D7D7D7); --hover:rgba(233,179,0,.12);
+    --btn-top:28px; --btn-right:40; --nav-fg:#D9D5C6; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#FFFFFF,#D7D7D7); --hover:rgba(233,179,0,.12);
   color-scheme:dark;
 }
 
@@ -60,7 +60,7 @@ a{color:inherit;text-decoration:none}
 /* landing, from the Figma frames "Desktop - 13" (light) and "Desktop - 14" (dark), 1440 wide.
    --k is one Figma pixel: every hero size below is written as Figma px x --k so the layout scales with the window. */
 :root{--k:calc(100vw / 1440)}
-.hero{position:relative;padding-top:calc(120 * var(--k))}
+.hero{position:relative;padding-top:calc(104 * var(--k))}
 /* nav pill: 600 x 40 at the top, 14px DM Sans with -1% tracking, 24px apart; glass fill with a 0.5px gradient edge.
    It's fixed, so it travels down the page with you. */
 .nav{position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:47;display:flex;align-items:center;height:40px;gap:24px;
@@ -74,10 +74,10 @@ a{color:inherit;text-decoration:none}
 /* pages that aren't built yet say so instead of going nowhere */
 .nav a[data-soon]::after{content:"Coming soon";position:absolute;left:50%;top:calc(100% + 12px);transform:translate(-50%,-4px);padding:6px 10px;border-radius:999px;background:var(--pill);color:var(--pill-fg);font-size:11px;letter-spacing:.04em;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
 .nav a[data-soon]:hover::after,.nav a[data-soon]:focus-visible::after,.nav a.soon::after{opacity:1;transform:translate(-50%,0)}
-/* light / dark switch: 40px glass circle level with the nav, 119px in from the right edge at 1440 */
-.theme-btn{position:fixed;z-index:47;top:28px;right:calc(119 * var(--k));display:grid;place-items:center;width:40px;height:40px;padding:0;border:0;border-radius:50%;
+/* light / dark switch: 40px glass circle near the top right corner (Figma: light 24px down / 34px in, dark 28px down / 40px in) */
+.theme-btn{position:fixed;z-index:47;top:var(--btn-top,24px);right:calc(var(--btn-right,34) * var(--k));display:grid;place-items:center;width:40px;height:40px;padding:0;border:0;border-radius:50%;
   background:var(--nav-bg);box-shadow:var(--nav-shadow);backdrop-filter:blur(8px) saturate(1.2);-webkit-backdrop-filter:blur(8px) saturate(1.2);
-  color:var(--icon);cursor:pointer;transition:background-color .25s,opacity .9s ease}
+  color:var(--icon);cursor:pointer;transition:background-color .25s,opacity .9s ease,top .6s ease,right .6s ease}
 .theme-btn::before{background:var(--btn-edge)}
 .theme-btn:hover{background:var(--hover)}
 .intro .theme-btn{opacity:0}
