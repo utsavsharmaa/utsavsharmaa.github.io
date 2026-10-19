@@ -170,7 +170,7 @@ a{color:inherit;text-decoration:none}
 .panel.sun{--pc:#F7C948;--pt:#191510}
 .panel.pop{--pc:#FF4D8D;--pt:#191510}
 .panel .tabs{display:flex;margin-left:calc(var(--i,0) * min(322px, (100% - 306px) / 3) - 72px * min(var(--i,0), 1))}
-.panel .tab{display:inline-flex;align-items:center;gap:14px;padding:24px 112px 24px 108px;background:var(--pc);color:var(--pt);
+.panel .tab{display:inline-flex;align-items:center;gap:14px;white-space:nowrap;padding:24px 112px 24px 108px;background:var(--pc);color:var(--pt);
   font:500 16px/1.5 var(--dmmono);letter-spacing:.2em;text-transform:uppercase;clip-path:polygon(76px 0,calc(100% - 76px) 0,100% 100%,0 100%)}
 .panel:first-child .tab{padding-left:36px;clip-path:polygon(0 0,calc(100% - 76px) 0,100% 100%,0 100%)}
 .panel .body{--tc:var(--pc);display:grid;grid-template-columns:1fr 1.1fr;gap:48px;padding:56px;min-height:calc(100vh - 14rem);color:var(--pt);clip-path:inset(0)}
@@ -200,7 +200,7 @@ a{color:inherit;text-decoration:none}
   .panel .chips{padding-top:32px}
 }
 @media (max-width:640px){
-  .panel .tabs{margin-left:max(0px, calc(var(--i,0) * 21% - 72px))}
+  .panel .tabs{margin-left:calc(var(--i,0) * (100% - 244px) / 3)}   /* staggered, and the last tab still fits */
   .panel .tab{font-size:12px;padding:14px 56px 14px 64px;gap:8px;clip-path:polygon(44px 0,calc(100% - 44px) 0,100% 100%,0 100%)}
   .panel:first-child .tab{padding-left:20px;clip-path:polygon(0 0,calc(100% - 44px) 0,100% 100%,0 100%)}
   .panel .body{padding:24px}
