@@ -15,7 +15,7 @@
    Dark = deep brown-black with gold lines at 10% and everything in gold. */
 :root{
   --bg:#FFFFFF; --rule:rgba(233,179,0,.05); --fg:#111111; --ink:#111111; --muted:#6B6457; --hero-fg:#140F00; --hero-wt:400;
-  --panel:#EEEFF1; --about-fg:#111216; --accent:#E9B300; --on-accent:#140F00;
+  --panel:#EEEFF1; --about-fg:#111216; --line:#DAD9D2; --accent:#E9B300; --on-accent:#140F00;
   --pill:#FFFFFF; --pill-fg:#111111; --pill-soft:rgba(255,255,255,.5);
   --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#E3E3E3,rgba(238,238,238,.6)); --nav-shadow:none;
   --nav-fg:#140F00; --icon:#FFC300; --btn-edge:linear-gradient(180deg,#fff,#D7D7D7); --hover:rgba(17,17,17,.07);
@@ -31,7 +31,7 @@
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     --bg:#140F00; --rule:rgba(233,179,0,.05); --fg:#E9B300; --ink:#E9B300; --muted:#A08A50; --hero-fg:#D9D5C6; --hero-wt:500;
-    --panel:#1F1800; --about-fg:#E9B300; --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
+    --panel:#1F1800; --about-fg:#E9B300; --line:rgba(233,179,0,.22); --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
     --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#140F00,#674F00); --nav-shadow:none;
     --btn-top:28px; --btn-right:40; --nav-fg:#D9D5C6; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#FFFFFF,#D7D7D7); --hover:rgba(233,179,0,.12);
     color-scheme:dark;
@@ -39,7 +39,7 @@
 }
 :root[data-theme="dark"]{
     --bg:#140F00; --rule:rgba(233,179,0,.05); --fg:#E9B300; --ink:#E9B300; --muted:#A08A50; --hero-fg:#D9D5C6; --hero-wt:500;
-    --panel:#1F1800; --about-fg:#E9B300; --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
+    --panel:#1F1800; --about-fg:#E9B300; --line:rgba(233,179,0,.22); --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
     --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#140F00,#674F00); --nav-shadow:none;
     --btn-top:28px; --btn-right:40; --nav-fg:#D9D5C6; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#FFFFFF,#D7D7D7); --hover:rgba(233,179,0,.12);
   color-scheme:dark;
@@ -134,9 +134,9 @@ a{color:inherit;text-decoration:none}
 .hello-measure{position:absolute;visibility:hidden;white-space:nowrap;font-family:var(--dmmono);font-size:20px;letter-spacing:-.01em;text-transform:uppercase}
 
 /* load intro: everything but the name starts hidden, then fades in; stickers slap on afterwards */
-.intro .nav,.intro .hero-meta,.intro .tagline,.intro .work-head,.intro main > section,.intro footer,.intro .name .box{opacity:0}
+.intro .nav,.intro .hero-meta,.intro .tagline,.intro main > section,.intro footer,.intro .name .box{opacity:0}
 .intro .stk{opacity:0;--s:1.6;--rh:14deg}
-.nav,.hero-meta,.tagline,.work-head,main > section,footer{transition:opacity .9s ease}
+.nav,.hero-meta,.tagline,main > section,footer{transition:opacity .9s ease}
 /* tagline: 20px DM Sans, title case, 606 wide, 20px under the 585px name frame (the 2 lines of name measure 588, so 17) */
 .tagline{margin:calc(17 * var(--k)) auto 0;max-width:calc(606 * var(--k));text-align:center;color:var(--hero-fg);font-weight:var(--hero-wt);font-size:max(12px,calc(20 * var(--k)));letter-spacing:-.02em;line-height:1.4;text-transform:capitalize}
 
@@ -150,32 +150,53 @@ a{color:inherit;text-decoration:none}
 .bend.gl-on > .media{opacity:0}
 .card .bar{z-index:1}
 
-/* work grid */
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap)}
-.card{display:block;aspect-ratio:1/1.13;max-width:100%}
-.card.wide{aspect-ratio:16/9}
-.card .glyph{position:absolute;left:-.03em;bottom:-.14em;font-family:var(--display);font-weight:900;line-height:.8;font-size:clamp(150px,30vw,520px);color:var(--fg);opacity:.09;transition:transform .8s cubic-bezier(.2,.9,.25,1);pointer-events:none}
-.card.wide .glyph{font-size:clamp(150px,34vw,620px)}
-.card .hint{position:absolute;right:20px;bottom:18px;color:var(--muted)}
-.card .bar{position:absolute;top:22px;left:22px;right:22px;display:flex;align-items:center;gap:6px;opacity:0;transform:translateY(-6px);transition:opacity .35s,transform .45s cubic-bezier(.2,.9,.25,1)}
-.pill{padding:8px 12px;border-radius:999px;background:var(--pill);color:var(--pill-fg);white-space:nowrap}
-.pill.soft{background:var(--pill-soft);color:var(--fg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.arrow{margin-left:auto;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--pill-soft);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--fg);font-size:15px;flex:none}
-.card:hover .bar,.card:focus-visible .bar{opacity:1;transform:none}
-.card:hover .glyph,.card:focus-visible .glyph{transform:scale(1.06) translateY(-3%)}
-@media (hover:none){.card .bar{opacity:1;transform:none}}
+/* work section, laid out like giripoonati.design: big heading + count, a 2-column grid with wide cards first and last.
+   Each card: a soft tinted tile with the project's screens floating on it, then meta line, the question, a short
+   description, number chips and a link. The tile bends at the bottom of the screen like the rest of the page. */
+.work{padding-top:clamp(64px,8vw,120px);padding-bottom:clamp(40px,5vw,64px);scroll-margin-top:88px}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap;margin-bottom:40px;color:var(--ink)}
+.sec-head h2{margin:0;font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(56px,7.5vw,112px);line-height:.88;letter-spacing:-.005em;color:var(--accent)}
+.sec-head h2 .count{display:inline-block;vertical-align:top;margin:.45em 0 0 .5em;font:400 14px/1 var(--dmmono);letter-spacing:.06em;color:var(--muted)}
+.sec-head p{margin:0;max-width:40ch;color:var(--muted);font-size:16px;line-height:1.5}
+.work-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,4vw,56px) 28px}
+.work-card{display:block;color:inherit;text-decoration:none;min-width:0}
+.work-card.wide{grid-column:1/-1}
+.work-visual{position:relative;isolation:isolate;border-radius:28px;clip-path:inset(0 round 28px);overflow:visible;aspect-ratio:16/10;background:var(--tile-bg,var(--panel))}
+.work-card.wide .work-visual{aspect-ratio:2.1/1}
+.work-visual > .bg{background:var(--tile-bg,var(--panel))}
+.work-visual img{position:absolute;height:auto;display:block;border-radius:14px;transform:rotate(var(--r,0deg));transition:transform .6s cubic-bezier(.2,.8,.2,1);
+  box-shadow:0 1px 2px rgba(18,18,17,.06),0 12px 32px -12px rgba(18,18,17,.22)}
+.work-visual img.lift{z-index:1;box-shadow:0 2px 4px rgba(18,18,17,.08),0 30px 60px -20px rgba(18,18,17,.4)}
+.work-card:hover .work-visual img.base,.work-card:focus-visible .work-visual img.base{transform:translateY(-8px) rotate(var(--r,0deg))}
+.work-card:hover .work-visual img.lift,.work-card:focus-visible .work-visual img.lift{transform:translateY(-16px) rotate(var(--r,0deg))}
+.work-visual.gl-on img{opacity:0}
+.work-visual .arrow{position:absolute;z-index:2;top:18px;right:18px;width:44px;height:44px;margin:0;border-radius:50%;background:var(--pill);color:var(--pill-fg);display:grid;place-items:center;
+  box-shadow:0 1px 2px rgba(18,18,17,.06),0 12px 32px -12px rgba(18,18,17,.22);transition:transform .3s}
+.work-card:hover .arrow,.work-card:focus-visible .arrow{transform:rotate(-45deg)}
+.work-body{display:grid;grid-template-columns:1fr 1fr;gap:12px 32px;padding-top:24px}
+.work-card:not(.wide) .work-body{grid-template-columns:1fr}
+.work-body .meta{grid-column:1/-1;font:400 12px/1.3 var(--dmmono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.work-body h3{margin:0;font-family:var(--body);font-weight:500;font-size:clamp(26px,2.6vw,38px);line-height:1.06;letter-spacing:-.03em;color:var(--ink);text-wrap:balance}
+.work-body p{margin:0;color:var(--muted);font-size:16.5px;line-height:1.5}
+.metrics{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.metric{display:inline-flex;align-items:baseline;gap:8px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;font-size:14px;line-height:1.3;color:var(--muted)}
+.metric b{font-weight:600;font-size:18px;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+.work-link{display:inline-flex;justify-self:start;align-items:center;gap:6px;margin-top:18px;font-weight:500;font-size:15px;color:var(--ink);padding-bottom:2px;
+  background:linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat}
+.work-card:hover .work-link{animation:redraw .7s cubic-bezier(.2,.8,.2,1)}
+@keyframes redraw{0%{background-size:100% 1px;background-position:100% 100%}45%{background-size:0 1px;background-position:100% 100%}46%{background-position:0 100%}100%{background-size:100% 1px;background-position:0 100%}}
+/* the pill that follows the pointer over a card */
+.cursor-pill{position:fixed;left:0;top:0;z-index:60;pointer-events:none;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 16px;border-radius:999px;
+  background:var(--ink);color:var(--bg);font-size:14px;font-weight:500;white-space:nowrap;opacity:0;scale:.6;transform-origin:0 0;
+  transition:opacity .2s,scale .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 10px 30px -10px rgba(0,0,0,.4)}
+.cursor-pill.show{opacity:1;scale:1}
+.dot.hide{opacity:0!important}
+@media (max-width:720px){
+  .work-grid{grid-template-columns:1fr}
+  .work-card.wide .work-visual{aspect-ratio:16/10}
+  .work-body{grid-template-columns:1fr}
+}
 
-/* work: each card sits in a wrapper with its question underneath */
-.work{display:flex;flex-direction:column;gap:14px;min-width:0}
-.work.wide{grid-column:1/-1}
-.work .q{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 24px;align-items:baseline}
-.work .q p{margin:0;font-size:clamp(18px,1.7vw,24px);line-height:1.25;letter-spacing:-.01em;max-width:34ch;text-wrap:balance}
-.work .q span{color:var(--ink);white-space:nowrap}
-.work .q span b{font-weight:500}
-.work-head{display:flex;justify-content:space-between;gap:16px;color:var(--ink);margin:clamp(56px,7.5vw,108px) 0 14px;scroll-margin-top:88px}
-.work-head h2{margin:0;font:inherit}
-
-/* about */
 /* about, from the Figma frame "About": 1344 x 560 panel, 40px padding, statement top left, services bottom right */
 .about{scroll-margin-top:88px;margin-block:var(--gap);padding:clamp(24px,2.78vw,40px);display:flex;justify-content:space-between;align-items:stretch;gap:40px;min-height:clamp(380px,38.9vw,560px);color:var(--about-fg)}
 .about-l{min-width:0}
@@ -228,11 +249,8 @@ html.lenis,html.lenis body{height:auto}
   .hero{padding-top:84px}
   .hero-meta{width:auto}
   .tagline{max-width:none}
-  .grid{grid-template-columns:minmax(0,1fr)}
-  .card,.card.wide{aspect-ratio:1/1.05}
   .about{flex-direction:column}
   .lists{text-align:left}
-  .work .q{grid-template-columns:minmax(0,1fr)}
   .direct{justify-items:start;text-align:left}
 }
 @media (prefers-reduced-motion:reduce){
@@ -277,29 +295,53 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
 </header>
 
 <main>
-  <div class="work-head mono" id="work"><h2>Questions I couldn’t leave alone ↴</h2><span>4 projects</span></div>
-  <section class="grid" aria-label="Selected work">
-    <article class="work wide">
-      <a class="card wide bend" href="work/aadmiwala/" style="--tc:#2A1C12"><span class="bg"></span>
-        <img class="media" src="work/aadmiwala/cover.jpg" alt="" loading="lazy">
-        <span class="bar mono"><span class="pill">Aadmiwala</span><span class="pill soft">Hiring platform · Real Glide</span><span class="arrow" aria-hidden="true">↗</span></span>
+  <section class="work" id="work" aria-labelledby="work-h">
+    <div class="sec-head">
+      <h2 id="work-h">Selected work<span class="count">(4)</span></h2>
+      <p>Questions I couldn’t leave alone. Each card opens the full case study.</p>
+    </div>
+    <div class="work-grid">
+      <a class="work-card wide" href="work/aadmiwala/" data-cursor="View case study ↗">
+        <div class="work-visual bend" data-r="28" data-tint="orange"><span class="bg"></span><span class="arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <img class="base" src="assets/work/aad-dash.webp" alt="Aadmiwala employer dashboard with demand insights and charts" width="1440" height="1024" loading="lazy" decoding="async" style="left:4%;top:12%;width:58%"><img class="lift" src="assets/work/aad-jobs.webp" alt="Aadmiwala job search with filters" width="1200" height="853" loading="lazy" decoding="async" style="right:5%;top:30%;width:45%;--r:-2deg">
+        </div>
+        <div class="work-body">
+          <span class="meta">01 / Aadmiwala · Client work · Real Glide</span>
+          <h3>Why is hiring through recruiting firms so hard to track?</h3>
+          <div><p>Aadmiwala is a B2B talent marketplace. Employers share hiring needs, recruiting firms supply candidates, and job seekers find work. I designed the platform for Real Glide, from the public website to a separate dashboard for each side.</p><div class="metrics"><span class="metric"><b>3</b>sides, one marketplace</span><span class="metric"><b>2</b>versions</span><span class="metric"><b>3</b>screen sizes</span></div><span class="work-link">View case study ↗</span></div>
+        </div>
       </a>
-      <div class="q"><p>Why is hiring through recruiting firms so hard to track?</p><span class="mono"><b>01 / Aadmiwala</b> · Client work · Real Glide</span></div>
-    </article>
-    <article class="work">
-      <a class="card bend" href="work/sukoon/" style="--tc:#1834BE"><span class="bg"></span>
-        <img class="media" src="work/sukoon/cover.jpg" alt="" loading="lazy">
-        <span class="bar mono"><span class="pill">Sukoon</span><span class="pill soft">Men's mental wellbeing app</span><span class="arrow" aria-hidden="true">↗</span></span>
+      <a class="work-card" href="work/sukoon/" data-cursor="View case study ↗">
+        <div class="work-visual bend" data-r="28" data-tint="lilac"><span class="bg"></span><span class="arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <img class="base" src="assets/work/suk-checkin.webp" alt="Sukoon check-in: how are you feeling this evening?" width="590" height="1278" loading="lazy" decoding="async" style="left:9%;top:12%;width:27%"><img class="lift" src="assets/work/suk-chat.webp" alt="Sukoon anonymous chat list" width="590" height="1278" loading="lazy" decoding="async" style="left:37%;top:22%;width:27%;--r:-2deg"><img class="base" src="assets/work/suk-room.webp" alt="Sukoon support rooms" width="590" height="1278" loading="lazy" decoding="async" style="left:65%;top:10%;width:27%">
+        </div>
+        <div class="work-body">
+          <span class="meta">02 / Sukoon · Self-initiated research</span>
+          <h3>Why don’t men ask for help, even when they need it?</h3>
+          <p>In India, men are expected to carry their problems alone. Sukoon started as a question about why men don’t ask for help, and became an anonymous app and an awareness campaign built on what people told me.</p><div class="metrics"><span class="metric"><b>35</b>people surveyed</span><span class="metric"><b>26%</b>had ever asked for help</span></div><span class="work-link">View case study ↗</span>
+        </div>
       </a>
-      <div class="q"><p>Why don’t men ask for help, even when they need it?</p><span class="mono"><b>02 / Sukoon</b> · Self-initiated research</span></div>
-    </article>
-    <article class="work">
-      <a class="card bend" href="work/kashikriti/" style="--tc:#3E454B"><span class="bg"></span>
-        <img class="media" src="work/kashikriti/cover.jpg" alt="" loading="lazy">
-        <span class="bar mono"><span class="pill">KASHIKRITI</span><span class="pill soft">Branding & packaging</span><span class="arrow" aria-hidden="true">↗</span></span>
+      <a class="work-card" href="work/kashikriti/" data-cursor="View case study ↗">
+        <div class="work-visual bend" data-r="28" data-tint="blue"><span class="bg"></span><span class="arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <img class="base" src="assets/work/kash-box.webp" alt="Kashikriti six-sided packaging box and its two halves" width="1440" height="960" loading="lazy" decoding="async" style="left:6%;top:14%;width:64%"><img class="lift" src="assets/work/kash-poster.webp" alt="Kashikriti campaign poster: the logo seen through a stone arch" width="736" height="1052" loading="lazy" decoding="async" style="right:7%;top:9%;width:30%;--r:2deg">
+        </div>
+        <div class="work-body">
+          <span class="meta">03 / KASHIKRITI · Branding &amp; packaging</span>
+          <h3>Why do people walk past a craft this old?</h3>
+          <p>A branding and packaging project centred on the traditional soft-stone jaali craft of Varanasi: how a craft rooted in material, skill and architectural heritage can be told through a contemporary identity, packaging and storytelling.</p><div class="metrics"><span class="metric"><b>6</b>storefronts compared</span><span class="metric"><b>9</b>marks digitised</span></div><span class="work-link">View case study ↗</span>
+        </div>
       </a>
-      <div class="q"><p>Why do people walk past a craft this old?</p><span class="mono"><b>03 / KASHIKRITI</b> · Branding & packaging</span></div>
-    </article>
+      <a class="work-card wide" href="work/syntra/" data-cursor="View case study ↗">
+        <div class="work-visual bend" data-r="28" data-tint="rose"><span class="bg"></span><span class="arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <img class="base" src="assets/work/syn-kiosk.webp" alt="A visitor in a VR headset at the Syntra kiosk" width="1328" height="982" loading="lazy" decoding="async" style="left:4%;top:12%;width:56%"><img class="lift" src="assets/work/syn-screen.webp" alt="Syntra screen showing the matched ZARA scent, Femme, at 99%" width="1200" height="742" loading="lazy" decoding="async" style="right:5%;top:30%;width:45%;--r:-2deg">
+        </div>
+        <div class="work-body">
+          <span class="meta">04 / Syntra · Retail tech · Group project</span>
+          <h3>How do you find a scent you can’t put into words?</h3>
+          <div><p>A kiosk you play like an instrument. Turn a knob and three sliders, and the screen finds your ZARA scent. A double press takes you into its world in VR; hold the button, and a ticket prints that comes alive in AR.</p><div class="metrics"><span class="metric"><b>66</b>tickets printed at the exhibit</span><span class="metric"><b>19</b>bottles to match</span><span class="metric"><b>2</b>weeks</span></div><span class="work-link">View case study ↗</span></div>
+        </div>
+      </a>
+    </div>
   </section>
 
   <section class="about bend" id="about" aria-label="About"><span class="bg"></span>
@@ -311,15 +353,6 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     </div>
   </section>
 
-  <section class="grid" aria-label="More work">
-    <article class="work wide">
-      <a class="card wide bend" href="work/syntra/" style="--tc:#F1E6D8"><span class="bg"></span>
-        <img class="media" src="work/syntra/cover.jpg" alt="" loading="lazy">
-        <span class="bar mono"><span class="pill">Syntra</span><span class="pill soft">Interactive perfume finder · Retail Tech</span><span class="arrow" aria-hidden="true">↗</span></span>
-      </a>
-      <div class="q"><p>How do you find a scent you can’t put into words?</p><span class="mono"><b>04 / Syntra</b> · Retail tech · Group project</span></div>
-    </article>
-  </section>
 
   <section class="contact bend" id="contact" aria-label="Contact"><span class="bg"></span>
     <h2>Got a question worth chasing? Write to me.</h2>
@@ -403,7 +436,8 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   function shape(el, r, vw, vh, hv){
     var w = r.width, h = r.height;
     var ins = 10 * hv;              /* hover: block shrinks 10px on every side */
-    var R = 8 + 14 * hv;            /* corners: 8px like the original, softening to 22px on hover */
+    var R0 = el._r0 || (el._r0 = parseFloat(el.getAttribute('data-r')) || 8);
+    var R = R0 + 14 * hv;           /* corners: 8px like the original (28px on the work tiles), softening on hover */
     var cx = vw / 2;
     var bottomF = strength(r.bottom, vh);
     if (bottomF < 0.002 && hv < 0.002){ if (el._clip !== ''){ el._clip = ''; el.style.clipPath = ''; } return; }
@@ -458,8 +492,76 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     '  uv = .5 + (uv - .5) * cover;',                               /* object-fit: cover */
     '  gl_FragColor = texture2D(tex, clamp(uv, 0., 1.));',
     '}'].join('\n');
+  /* 3c. Work tiles: the tinted background and the floating screens are painted into one canvas (exactly where the
+         CSS puts them, including the hover lift), and that canvas goes through the bend as one picture. */
+  var TINTS = {
+    orange: { l: ['#F7E2CF', [60,55,88,15,'#F5B978',62],[55,55,12,20,'#FFE1B8',60],[60,60,30,90,'#C97B3D',65],[50,50,90,85,'#FCE4C8',58]],
+              d: ['#2D1F15', [60,55,88,15,'rgba(245,185,120,.32)',62],[55,55,12,20,'rgba(255,210,160,.18)',60],[60,60,30,88,'rgba(180,100,50,.4)',65]] },
+    lilac:  { l: ['#E6E2F4', [60,55,85,15,'#B9A8E0',62],[55,55,12,18,'#E0D4F5',60],[60,60,30,90,'#7C5FB0',65],[50,50,90,85,'#D6C8ED',58]],
+              d: ['#1F1C2C', [60,55,85,15,'rgba(180,160,230,.3)',62],[55,55,12,20,'rgba(210,190,240,.18)',60],[60,60,30,88,'rgba(100,70,160,.45)',65]] },
+    blue:   { l: ['#DDE4F4', [60,55,85,15,'#A9C0F0',62],[55,55,12,18,'#E3D9F5',60],[60,60,30,90,'#7C93D9',65],[50,50,90,85,'#CFE0F7',58]],
+              d: ['#182034', [60,55,85,15,'rgba(120,150,240,.3)',62],[55,55,12,20,'rgba(190,160,240,.2)',60],[60,60,30,88,'rgba(50,70,160,.45)',65]] },
+    rose:   { l: ['#F2E2E0', [60,55,90,12,'#F3B9AE',62],[55,55,10,20,'#FBE0C8',60],[60,60,25,90,'#E793A0',65],[50,50,88,88,'#FAD8D2',58]],
+              d: ['#2A1C1C', [60,55,88,15,'rgba(230,120,110,.28)',62],[55,55,12,20,'rgba(250,190,150,.18)',60],[60,60,25,88,'rgba(160,60,70,.4)',65]] }
+  };
+  function darkNow(){ var t = document.documentElement.getAttribute('data-theme'); return t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches); }
+  function clear(c){ if (c[0] === '#'){ var n = parseInt(c.slice(1), 16); return 'rgba(' + (n >> 16) + ',' + (n >> 8 & 255) + ',' + (n & 255) + ',0)'; } return c.replace(/,[\d.]+\)$/, ',0)'); }
+  function tintCSS(t){ return t.slice(1).map(function(g){ return 'radial-gradient(' + g[0] + '% ' + g[1] + '% at ' + g[2] + '% ' + g[3] + '%,' + g[4] + ' 0%,' + clear(g[4]) + ' ' + g[5] + '%)'; }).join(',') + ',' + t[0]; }
+  function paintTint(ctx, W, H, t){
+    ctx.fillStyle = t[0]; ctx.fillRect(0, 0, W, H);
+    for (var i = t.length - 1; i >= 1; i--){
+      var g = t[i], rx = g[0] / 100 * W, ry = g[1] / 100 * H, cx = g[2] / 100 * W, cy = g[3] / 100 * H;
+      ctx.save(); ctx.translate(cx, cy); ctx.scale(rx, ry);
+      var gr = ctx.createRadialGradient(0, 0, 0, 0, 0, 1); gr.addColorStop(0, g[4]); gr.addColorStop(g[5] / 100, clear(g[4]));
+      ctx.fillStyle = gr; ctx.fillRect(-cx / rx, -cy / ry, W / rx, H / ry); ctx.restore();
+    }
+  }
+  function rrect(ctx, x, y, w, h, r){ ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+  function setTint(v){ var t = TINTS[v.getAttribute('data-tint')] || TINTS.orange; var tt = darkNow() ? t.d : t.l; v.style.setProperty('--tile-bg', tintCSS(tt)); return tt; }
+  function setupComp(o){
+    var v = o.card, a = v.closest('.work-card');
+    o.c2 = document.createElement('canvas'); o.x2 = o.c2.getContext('2d');
+    o.imgs = Array.prototype.slice.call(v.querySelectorAll('img'));
+    o.imgs.forEach(function(im){ im.loading = 'eager'; if (!im.complete) im.addEventListener('load', function(){ o.need = true; }); });
+    if (a){
+      a.addEventListener('mouseenter', function(){ o.ht = 1; }); a.addEventListener('mouseleave', function(){ o.ht = 0; });
+      a.addEventListener('focus', function(){ o.ht = 1; }); a.addEventListener('blur', function(){ o.ht = 0; });
+    }
+    addEventListener('resize', function(){ o.need = true; });
+    setTint(v);
+  }
+  function compose(o){
+    var v = o.card, W = v.clientWidth, H = v.clientHeight; if (!W || !H) return;
+    if (!o.imgs.every(function(im){ return im.complete && im.naturalWidth; })) return;
+    var d = Math.min(window.devicePixelRatio || 1, 2), c = o.c2, ctx = o.x2;
+    var cw = Math.round(W * d), ch = Math.round(H * d);
+    if (c.width !== cw || c.height !== ch){ c.width = cw; c.height = ch; }
+    ctx.setTransform(d, 0, 0, d, 0, 0); ctx.clearRect(0, 0, W, H);
+    paintTint(ctx, W, H, setTint(v));
+    var e = o.hv < .5 ? 2 * o.hv * o.hv : 1 - Math.pow(-2 * o.hv + 2, 2) / 2;   /* ease the lift */
+    o.imgs.forEach(function(im){
+      var x = im.offsetLeft, y = im.offsetTop, w = im.offsetWidth, h = im.offsetHeight;
+      var rot = (parseFloat(im.style.getPropertyValue('--r')) || 0) * Math.PI / 180, lift = im.classList.contains('lift');
+      ctx.save(); ctx.translate(x + w / 2, y + h / 2 - (lift ? 16 : 8) * e); ctx.rotate(rot);
+      ctx.shadowColor = lift ? 'rgba(18,18,17,.34)' : 'rgba(18,18,17,.2)'; ctx.shadowBlur = lift ? 44 : 26; ctx.shadowOffsetY = lift ? 20 : 10;
+      rrect(ctx, -w / 2, -h / 2, w, h, 14); ctx.fillStyle = '#fff'; ctx.fill();
+      ctx.shadowColor = 'transparent'; ctx.clip(); ctx.drawImage(im, -w / 2, -h / 2, w, h);
+      ctx.restore();
+    });
+    o.ver = (o.ver || 0) + 1;
+    o.upload(c);
+  }
+  function stepComp(o){
+    var prev = o.hv;
+    o.hv += (o.ht - o.hv) * (reduce ? 1 : 0.12); if (Math.abs(o.ht - o.hv) < 0.002) o.hv = o.ht;
+    if (o.need || o.hv !== prev){ o.need = false; compose(o); if (!o.ready) o.need = true; }
+  }
+  new MutationObserver(function(){ GL.forEach(function(o){ if (o.comp) o.need = true; }); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(){ GL.forEach(function(o){ if (o.comp) o.need = true; }); });
+
   function makeGL(card){
-    var img = card.querySelector('img.media'); if (!img) return null;
+    var comp = card.classList.contains('work-visual');
+    var img = comp ? null : card.querySelector('img.media'); if (!img && !comp) return null;
     var cv = document.createElement('canvas'); cv.className = 'gl'; cv.setAttribute('aria-hidden', 'true');
     var gl = cv.getContext('webgl', { premultipliedAlpha: false, antialias: false, alpha: false });
     if (!gl) return null;
@@ -472,41 +574,45 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
     var loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     var U = {}; ['tex','cv','box','view','bend','cover'].forEach(function(n){ U[n] = gl.getUniformLocation(pr, n); });
-    var o = { card: card, img: img, cv: cv, gl: gl, U: U, ready: false, key: '' };
-    function upload(){
+    var o = { card: card, img: img, comp: comp, cv: cv, gl: gl, U: U, ready: false, key: '', tex: null, hv: 0, ht: 0, need: true };
+    function upload(src){
       try {
-        var t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img);
+        if (!o.tex) o.tex = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, o.tex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, src || img);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.uniform1i(U.tex, 0);
         o.ready = true; o.key = '';
-        card.insertBefore(cv, img.nextSibling); card.classList.add('gl-on');
+        if (!cv.parentNode){ var bg = card.querySelector('.bg'); card.insertBefore(cv, comp && bg ? bg.nextSibling : img.nextSibling); card.classList.add('gl-on'); }
       } catch(e){ o.ready = false; }
     }
-    if (img.complete && img.naturalWidth) upload(); else img.addEventListener('load', upload, { once: true });
+    o.upload = upload;
+    if (comp) setupComp(o);
+    else if (img.complete && img.naturalWidth) upload(); else img.addEventListener('load', function(){ upload(); }, { once: true });
     cv.addEventListener('webglcontextlost', function(e){ e.preventDefault(); o.ready = false; card.classList.remove('gl-on'); });
     return o;
   }
   var GL = new Map();
   blocks.forEach(function(b){ var o = makeGL(b); if (o) GL.set(b, o); });
   function drawGL(o, r, vw, vh){
+    if (o.comp) stepComp(o);
     if (!o.ready) return;
     var img = o.img, cv = o.cv, gl = o.gl, U = o.U;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var c = cv.getBoundingClientRect();
     var W = Math.round(c.width * dpr), H = Math.round(c.height * dpr);
-    var m = getComputedStyle(img).transform, zoom = 1;
+    var zoom = 1, m = img ? getComputedStyle(img).transform : 'none';
     if (m && m !== 'none'){ var mm = m.match(/matrix\(([^,]+)/); if (mm) zoom = parseFloat(mm[1]) || 1; }
     var mx = MOUSE_FACTOR * (mouseXs * 2 - 1) * vw;
-    var key = [W, H, c.left.toFixed(1), c.top.toFixed(1), r.width.toFixed(1), r.height.toFixed(1), vw, vh, mx.toFixed(2), zoom.toFixed(4)].join('|');
+    var key = [W, H, c.left.toFixed(1), c.top.toFixed(1), r.width.toFixed(1), r.height.toFixed(1), vw, vh, mx.toFixed(2), zoom.toFixed(4), o.ver || 0].join('|');
     if (key === o.key) return;
     o.key = key;
     if (cv.width !== W || cv.height !== H){ cv.width = W; cv.height = H; }
     gl.viewport(0, 0, W, H);
-    var ia = img.naturalWidth / img.naturalHeight, ba = r.width / r.height;
+    var ba = r.width / r.height, ia = img ? img.naturalWidth / img.naturalHeight : ba;
     gl.uniform4f(U.cv, c.left, c.top, c.width, c.height);
     gl.uniform4f(U.box, r.left, r.top, r.width, r.height);
     gl.uniform4f(U.view, vw, vh, dpr, reduce ? 0 : mx);
@@ -570,6 +676,15 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       el.addEventListener('mouseleave', function(){ dot.classList.remove('big'); });
     });
     (function loop(){ x += (tx - x) * 0.22; y += (ty - y) * 0.22; dot.style.transform = 'translate(' + x + 'px,' + y + 'px)'; requestAnimationFrame(loop); })();
+    /* over a work card, a pill with "View case study" follows the pointer instead of the dot */
+    var pill = document.createElement('div'); pill.className = 'cursor-pill'; pill.setAttribute('aria-hidden', 'true'); document.body.appendChild(pill);
+    var px = 0, py = 0, pax = 0, pay = 0;
+    document.querySelectorAll('[data-cursor]').forEach(function(el){
+      el.addEventListener('mouseenter', function(e){ pill.textContent = el.getAttribute('data-cursor'); pax = px = e.clientX + 14; pay = py = e.clientY + 14; pill.classList.add('show'); dot.classList.add('hide'); });
+      el.addEventListener('mouseleave', function(){ pill.classList.remove('show'); dot.classList.remove('hide'); });
+      el.addEventListener('mousemove', function(e){ px = e.clientX + 14; py = e.clientY + 14; });
+    });
+    (function pl(){ pax += (px - pax) * 0.25; pay += (py - pay) * 0.25; pill.style.transform = 'translate(' + pax + 'px,' + pay + 'px)'; requestAnimationFrame(pl); })();
   }
 
   /* 6. Load intro, timed from the original:
