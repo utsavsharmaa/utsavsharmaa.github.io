@@ -164,8 +164,8 @@ a{color:inherit;text-decoration:none}
 .panel.ink{--pc:#191510;--pt:#fff}
 .panel.sun{--pc:#F7C948;--pt:#191510}
 .panel.pop{--pc:#FF4D8D;--pt:#191510}
-.panel .tabs{display:flex}
-.panel .tab{display:inline-flex;align-items:center;gap:14px;padding:24px 112px 24px 96px;background:var(--pc);color:var(--pt);
+.panel .tabs{display:flex;margin-left:calc(var(--i,0) * min(322px, (100% - 306px) / 3) - 72px * min(var(--i,0), 1))}
+.panel .tab{display:inline-flex;align-items:center;gap:14px;padding:24px 112px 24px 108px;background:var(--pc);color:var(--pt);
   font:500 16px/1.5 var(--dmmono);letter-spacing:.2em;text-transform:uppercase;clip-path:polygon(76px 0,calc(100% - 76px) 0,100% 100%,0 100%)}
 .panel:first-child .tab{padding-left:36px;clip-path:polygon(0 0,calc(100% - 76px) 0,100% 100%,0 100%)}
 .panel .body{--tc:var(--pc);display:grid;grid-template-columns:1fr 1.1fr;gap:48px;padding:56px;min-height:calc(100vh - 14rem);color:var(--pt);clip-path:inset(0)}
@@ -195,7 +195,8 @@ a{color:inherit;text-decoration:none}
   .panel .chips{padding-top:32px}
 }
 @media (max-width:640px){
-  .panel .tab{font-size:12px;padding:14px 56px 14px 56px;gap:8px;clip-path:polygon(44px 0,calc(100% - 44px) 0,100% 100%,0 100%)}
+  .panel .tabs{margin-left:max(0px, calc(var(--i,0) * 21% - 72px))}
+  .panel .tab{font-size:12px;padding:14px 56px 14px 64px;gap:8px;clip-path:polygon(44px 0,calc(100% - 44px) 0,100% 100%,0 100%)}
   .panel:first-child .tab{padding-left:20px;clip-path:polygon(0 0,calc(100% - 44px) 0,100% 100%,0 100%)}
   .panel .body{padding:24px}
   .panel .meta,.panel .go{font-size:12px}
@@ -340,7 +341,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     </div>
     <div class="stack">
       <article class="panel" aria-labelledby="p1">
-        <div class="tabs" style="margin-left:0"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 01</span></div>
+        <div class="tabs" style="--i:0"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 01</span></div>
         <div class="body bend" data-r="0"><span class="bg"></span>
           <div class="info">
             <span class="meta"><i></i>Client work · Real Glide</span>
@@ -353,7 +354,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
         </div>
       </article>
       <article class="panel ink" aria-labelledby="p2">
-        <div class="tabs" style="margin-left:min(calc(21% - 72px), calc(100% - 340px))"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 02</span></div>
+        <div class="tabs" style="--i:1"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 02</span></div>
         <div class="body bend" data-r="0"><span class="bg"></span>
           <div class="info">
             <span class="meta"><i></i>Self-initiated research</span>
@@ -366,7 +367,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
         </div>
       </article>
       <article class="panel sun" aria-labelledby="p3">
-        <div class="tabs" style="margin-left:min(calc(42% - 72px), calc(100% - 340px))"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 03</span></div>
+        <div class="tabs" style="--i:2"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 03</span></div>
         <div class="body bend" data-r="0"><span class="bg"></span>
           <div class="info">
             <span class="meta"><i></i>Design Project 01 · NID</span>
@@ -379,7 +380,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
         </div>
       </article>
       <article class="panel pop" aria-labelledby="p4">
-        <div class="tabs" style="margin-left:min(calc(63% - 72px), calc(100% - 340px))"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 04</span></div>
+        <div class="tabs" style="--i:3"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 04</span></div>
         <div class="body bend" data-r="0"><span class="bg"></span>
           <div class="info">
             <span class="meta"><i></i>Retail tech · Group project</span>
