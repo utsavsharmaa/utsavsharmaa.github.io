@@ -112,10 +112,15 @@ a{color:inherit;text-decoration:none}
 .stk.drag{cursor:grabbing;--s:1.1;--rh:4deg;transition-delay:0s;z-index:3}
 .stk.drag img,.stk.drag{filter:drop-shadow(0 18px 18px rgba(0,0,0,.22))}
 .smile{aspect-ratio:1}
-.smile img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;rotate:30deg}
+.smile .face{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;rotate:30deg}
+/* the smiley blinks every few seconds, like the template's; the same face sits above "Let's talk" */
+.face .blink{fill:#171513;transform-box:fill-box;transform-origin:50% 50%;animation:blink 4.2s infinite}
+.talk .face .blink{animation-delay:1.3s}
+@keyframes blink{0%,90%,100%{transform:scaleY(1)}93%{transform:scaleY(.1)}96%{transform:scaleY(1)}}
+@media (prefers-reduced-motion:reduce){.face .blink{animation:none}}
 .smile .bob{position:absolute;inset:0;transition:scale .35s cubic-bezier(.3,1.5,.5,1)}
-/* after the intro the smiley comes loose and rolls around the whole screen; script moves it */
-.smile.roam{position:fixed;left:0;top:0;z-index:45;transition:opacity .4s ease;translate:none}
+/* after the intro the smiley comes loose and rolls around the hero (it stays in the hero); script moves it */
+.smile.roam{position:absolute;left:0;top:0;z-index:45;transition:opacity .4s ease;translate:none}
 .smile.roam.drag .bob{scale:1.2}
 /* little squash each time it hits an edge */
 .smile .bob.boing{animation:boing .38s cubic-bezier(.3,1.4,.5,1)}
@@ -205,7 +210,7 @@ a{color:inherit;text-decoration:none}
 
 /* let's talk, like the template's contact: smiley, big heading, a taped sticky note, and a yellow box with a hard shadow */
 .talk{padding:clamp(64px,8vw,96px) 0 72px;text-align:center;scroll-margin-top:88px}
-.talk .smile-big{display:block;width:clamp(160px,15vw,240px);height:auto;margin:0 auto;transform:rotate(-8deg);transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
+.talk .smile-big{display:block;width:clamp(160px,15vw,240px);height:auto;aspect-ratio:1;overflow:visible;margin:0 auto;transform:rotate(-8deg);transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
 .talk:hover .smile-big{transform:rotate(6deg) scale(1.04)}
 .talk h2{margin:24px 0 0;font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(72px,9vw,132px);line-height:.88;color:var(--accent)}
 .talk .sub{margin:20px auto 0;max-width:34ch;font-size:clamp(18px,1.6vw,24px);line-height:1.4;color:var(--ink)}
@@ -326,7 +331,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       <h1 class="name" id="name" aria-label="Utsav Sharma"><span class="box" aria-hidden="true"><span class="ln">Utsav</span><span class="ln">Sharma</span></span></h1>
       <img src="assets/home/varanasi.webp" width="483" height="618" alt="Varanasi postage stamp: मोक्ष की नगरी, death is not the end of life" draggable="false" class="stk st-var">
       <img src="assets/home/lucknow.webp" width="543" height="694" alt="Lucknow postage stamp: नवाबों का शहर, muskuraiye aap Lucknow mein hai" draggable="false" class="stk st-luck">
-      <span class="stk smile" role="button" tabindex="0" aria-label="Want to play a game? Press and hold for 2 seconds, or press Enter"><span class="bob"><img src="assets/home/smiley.webp" width="455" height="455" alt="" draggable="false"></span><svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46"/></svg></span>
+      <span class="stk smile" role="button" tabindex="0" aria-label="Want to play a game? Press and hold for 2 seconds, or press Enter"><span class="bob"><svg class="face" viewBox="0 0 455 455" aria-hidden="true" focusable="false"><circle cx="227.5" cy="227.5" r="224" fill="#FFD858" stroke="#171513" stroke-width="7"/><g class="blink"><rect x="140" y="128" width="44" height="109" rx="22"/><rect x="271" y="128" width="44" height="109" rx="22"/></g><path d="M128 297A109 109 0 0 0 327 297" fill="none" stroke="#171513" stroke-width="20" stroke-linecap="round"/></svg></span><svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46"/></svg></span>
     </div>
   </div>
   <p class="tagline">I notice weird things. Then I try to figure out why they happen. Sometimes that becomes a brand. Sometimes an interface. Sometimes a photograph.</p>
@@ -406,7 +411,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
 
 
   <section class="talk" id="contact" aria-labelledby="talk-h">
-    <img class="smile-big" src="assets/home/smiley.webp" width="455" height="455" alt="" loading="lazy">
+    <svg class="smile-big face" viewBox="0 0 455 455" aria-hidden="true" focusable="false"><circle cx="227.5" cy="227.5" r="224" fill="#FFD858" stroke="#171513" stroke-width="7"/><g class="blink"><rect x="140" y="128" width="44" height="109" rx="22"/><rect x="271" y="128" width="44" height="109" rx="22"/></g><path d="M128 297A109 109 0 0 0 327 297" fill="none" stroke="#171513" stroke-width="20" stroke-linecap="round"/></svg>
     <h2 id="talk-h">Let’s talk</h2>
     <p class="sub">Got a question worth chasing? Write to me.</p>
     <div class="wrap">
@@ -890,11 +895,12 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   }
 
   /* 10. The smiley comes loose after the intro and travels like a bouncing ball: straight lines at a steady
-         speed, bouncing off the edges of the screen (with a little squash) and heading back across, forever.
+         speed, bouncing off the edges of the hero (with a little squash) and heading back across, forever.
+         It lives inside the hero, so it scrolls away with it and never wanders over the rest of the page.
          It rolls as it goes, and stops while the pointer is on it. Hover: "Want to play a game?".
          Press and hold for 2 seconds (a ring fills up) to open the FEEL IT game. Grab and fling it to throw it. */
-  var smile = document.querySelector('.smile');
-  if (smile){
+  var smile = document.querySelector('.smile'), heroEl = document.querySelector('.hero');
+  if (smile && heroEl){
     var bob = smile.querySelector('.bob'), tip = document.getElementById('playTip');
     var tipT = tip.querySelector('.t'), tipS = tip.querySelector('small');
     var S = { on: false, x: 0, y: 0, vx: 0, vy: 0, a: 0, w: 0, hover: false, down: false, drag: false, pid: null, dx0: 0, dy0: 0, gx: 0, gy: 0, lx: 0, ly: 0, lt: 0, last: 0, startAt: 0, hold: 0 };
@@ -902,8 +908,9 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     function size(){ var w = document.documentElement.clientWidth; return 68.5 * (w <= 640 ? w / 1128 : w / 1440); }   /* 68.5 Figma px */
     function cruise(){ return Math.max(110, Math.min(230, document.documentElement.clientWidth * 0.13)); }
     function start(){
-      var r = smile.getBoundingClientRect();
-      S.w = size(); S.x = r.left + r.width / 2; S.y = r.top + r.height / 2;
+      var r = smile.getBoundingClientRect(), h = heroEl.getBoundingClientRect();
+      S.w = size(); S.x = r.left + r.width / 2 - h.left; S.y = r.top + r.height / 2 - h.top;   /* hero coordinates */
+      heroEl.appendChild(smile);
       var ang = (200 + Math.random() * 30) * Math.PI / 180, sp = cruise();   /* set off down-left, like a ball pushed off the name */
       S.vx = Math.cos(ang) * sp; S.vy = -Math.sin(ang) * sp;
       smile.style.width = S.w + 'px';
@@ -944,7 +951,8 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       if (e.button !== 0 || root.classList.contains('intro')) return;
       S.down = true; S.drag = false; S.pid = e.pointerId;
       S.dx0 = e.clientX; S.dy0 = e.clientY;
-      S.gx = e.clientX - S.x; S.gy = e.clientY - S.y; S.lx = e.clientX; S.ly = e.clientY; S.lt = performance.now();
+      var h = heroEl.getBoundingClientRect();
+      S.gx = e.clientX - h.left - S.x; S.gy = e.clientY - h.top - S.y; S.lx = e.clientX; S.ly = e.clientY; S.lt = performance.now();
       try { smile.setPointerCapture(e.pointerId); } catch(err){}
       startHold();
     });
@@ -958,7 +966,8 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       var now = performance.now(), dt = Math.max(8, now - S.lt) / 1000;
       S.vx = (e.clientX - S.lx) / dt; S.vy = (e.clientY - S.ly) / dt;
       S.lx = e.clientX; S.ly = e.clientY; S.lt = now;
-      S.x = e.clientX - S.gx; S.y = e.clientY - S.gy;
+      var h = heroEl.getBoundingClientRect();
+      S.x = e.clientX - h.left - S.gx; S.y = e.clientY - h.top - S.gy;
     });
     function release(e){
       if (!S.down || e.pointerId !== S.pid) return;
@@ -986,7 +995,8 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
         requestAnimationFrame(roam); return;
       }
       var dt = Math.min(0.05, (now - S.last) / 1000); S.last = now;
-      var vw = document.documentElement.clientWidth, vh = innerHeight, half = S.w / 2;
+      var hl = heroEl.offsetLeft, vh = heroEl.offsetHeight, half = S.w / 2;   /* the hero is its box: full width of the window, top of the page to the tagline */
+      var x0 = half - hl, x1 = document.documentElement.clientWidth - hl - half;
       var still = S.hover || S.down;
       if (!S.drag){
         /* keep a steady speed (ease to a stop while you're on it); direction never changes except at the edges */
@@ -997,11 +1007,13 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
         S.vx = S.dirx * nsp; S.vy = S.diry * nsp;
         S.x += S.vx * dt; S.y += S.vy * dt;
         var hit = false;
-        if (S.x < half){ S.x = half; S.vx = Math.abs(S.vx); hit = true; }
-        if (S.x > vw - half){ S.x = vw - half; S.vx = -Math.abs(S.vx); hit = true; }
+        if (S.x < x0){ S.x = x0; S.vx = Math.abs(S.vx); hit = true; }
+        if (S.x > x1){ S.x = x1; S.vx = -Math.abs(S.vx); hit = true; }
         if (S.y < half){ S.y = half; S.vy = Math.abs(S.vy); hit = true; }
         if (S.y > vh - half){ S.y = vh - half; S.vy = -Math.abs(S.vy); hit = true; }
         if (hit && !still) boing();
+      } else {
+        S.x = Math.min(Math.max(S.x, x0), x1); S.y = Math.min(Math.max(S.y, half), vh - half);   /* can't drag it out of the hero */
       }
       S.a += (S.vx * dt) / half;   /* roll: turn by distance travelled / radius */
       smile.style.transform = 'translate3d(' + (S.x - half).toFixed(1) + 'px,' + (S.y - half).toFixed(1) + 'px,0) rotate(' + S.a.toFixed(3) + 'rad)';
