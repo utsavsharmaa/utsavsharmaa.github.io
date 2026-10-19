@@ -7,7 +7,7 @@
 <title>Utsav Sharma Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=DM+Mono&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: landing from Utsav's Figma (Desktop 1 light / Desktop 2 dark): nav pill, meta row, two-line gold name with
    stamps and a smiley stuck on it, mono tagline. Then rounded media cards in a 2-col grid, about panel, gold contact card. */
@@ -150,51 +150,88 @@ a{color:inherit;text-decoration:none}
 .bend.gl-on > .media{opacity:0}
 .card .bar{z-index:1}
 
-/* work section, laid out like giripoonati.design: big heading + count, a 2-column grid with wide cards first and last.
-   Each card: a soft tinted tile with the project's screens floating on it, then meta line, the question, a short
-   description, number chips and a link. The tile bends at the bottom of the screen like the rest of the page. */
-.work{padding-top:clamp(64px,8vw,120px);padding-bottom:clamp(40px,5vw,64px);scroll-margin-top:88px}
-.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap;margin-bottom:40px;color:var(--ink)}
-.sec-head h2{margin:0;font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(56px,7.5vw,112px);line-height:.88;letter-spacing:-.005em;color:var(--accent)}
-.sec-head h2 .count{display:inline-block;vertical-align:top;margin:.45em 0 0 .5em;font:400 14px/1 var(--dmmono);letter-spacing:.06em;color:var(--muted)}
-.sec-head p{margin:0;max-width:40ch;color:var(--muted);font-size:16px;line-height:1.5}
-.work-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,4vw,56px) 28px}
-.work-card{display:block;color:inherit;text-decoration:none;min-width:0}
-.work-card.wide{grid-column:1/-1}
-.work-visual{position:relative;isolation:isolate;border-radius:28px;clip-path:inset(0 round 28px);overflow:visible;aspect-ratio:16/10;background:var(--tile-bg,var(--panel))}
-.work-card.wide .work-visual{aspect-ratio:2.1/1}
-.work-visual > .bg{background:var(--tile-bg,var(--panel))}
-.work-visual img{position:absolute;height:auto;display:block;border-radius:14px;transform:rotate(var(--r,0deg));transition:transform .6s cubic-bezier(.2,.8,.2,1);
-  box-shadow:0 1px 2px rgba(18,18,17,.06),0 12px 32px -12px rgba(18,18,17,.22)}
-.work-visual img.lift{z-index:1;box-shadow:0 2px 4px rgba(18,18,17,.08),0 30px 60px -20px rgba(18,18,17,.4)}
-.work-card:hover .work-visual img.base,.work-card:focus-visible .work-visual img.base{transform:translateY(-8px) rotate(var(--r,0deg))}
-.work-card:hover .work-visual img.lift,.work-card:focus-visible .work-visual img.lift{transform:translateY(-16px) rotate(var(--r,0deg))}
-.work-visual.gl-on img{opacity:0}
-.work-visual .arrow{position:absolute;z-index:2;top:18px;right:18px;width:44px;height:44px;margin:0;border-radius:50%;background:var(--pill);color:var(--pill-fg);display:grid;place-items:center;
-  box-shadow:0 1px 2px rgba(18,18,17,.06),0 12px 32px -12px rgba(18,18,17,.22);transition:transform .3s}
-.work-card:hover .arrow,.work-card:focus-visible .arrow{transform:rotate(-45deg)}
-.work-body{display:grid;grid-template-columns:1fr 1fr;gap:12px 32px;padding-top:24px}
-.work-card:not(.wide) .work-body{grid-template-columns:1fr}
-.work-body .meta{grid-column:1/-1;font:400 12px/1.3 var(--dmmono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.work-body h3{margin:0;font-family:var(--body);font-weight:500;font-size:clamp(26px,2.6vw,38px);line-height:1.06;letter-spacing:-.03em;color:var(--ink);text-wrap:balance}
-.work-body p{margin:0;color:var(--muted);font-size:16.5px;line-height:1.5}
-.metrics{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-.metric{display:inline-flex;align-items:baseline;gap:8px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;font-size:14px;line-height:1.3;color:var(--muted)}
-.metric b{font-weight:600;font-size:18px;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
-.work-link{display:inline-flex;justify-self:start;align-items:center;gap:6px;margin-top:18px;font-weight:500;font-size:15px;color:var(--ink);padding-bottom:2px;
-  background:linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat}
-.work-card:hover .work-link{animation:redraw .7s cubic-bezier(.2,.8,.2,1)}
-@keyframes redraw{0%{background-size:100% 1px;background-position:100% 100%}45%{background-size:0 1px;background-position:100% 100%}46%{background-position:0 100%}100%{background-size:100% 1px;background-position:0 100%}}
-/* the pill that follows the pointer over a card */
-.cursor-pill{position:fixed;left:0;top:0;z-index:60;pointer-events:none;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 16px;border-radius:999px;
-  background:var(--ink);color:var(--bg);font-size:14px;font-weight:500;white-space:nowrap;opacity:0;scale:.6;transform-origin:0 0;
-  transition:opacity .2s,scale .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 10px 30px -10px rgba(0,0,0,.4)}
-.cursor-pill.show{opacity:1;scale:1}
-.dot.hide{opacity:0!important}
-@media (max-width:720px){
-  .work-grid{grid-template-columns:1fr}
-  .work-card.wide .work-visual{aspect-ratio:16/10}
-  .work-body{grid-template-columns:1fr}
+/* work, laid out like the Portfoliofy "Crayon" template: a centred heading with a taped note, then one coloured panel per
+   project. On wide screens the panels stick and stack like folders; each new panel's tab sits further right, so the
+   earlier tabs stay visible. Left: meta, name, question, link, tags. Right: a taped photo. Panels keep the page's bend. */
+.work{padding-bottom:96px;scroll-margin-top:88px}
+.feat-head{max-width:56rem;margin:0 auto;padding:clamp(64px,8vw,120px) 16px clamp(56px,6vw,96px);text-align:center}
+.feat-head .kicker{display:inline-flex;flex-direction:column;align-items:center;gap:6px;font:500 14px/1.3 var(--dmmono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.feat-head .kicker svg{width:118px;height:6px;fill:currentColor}
+.feat-head h2{margin:22px 0 0;font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(72px,10vw,150px);line-height:.88;letter-spacing:-.005em;color:var(--accent)}
+.feat-head .tag-note{display:inline-block;margin-top:28px;padding:8px 16px;transform:rotate(-2deg);background:#EAD9A2;color:#191510;font-size:14px;line-height:1.4;max-width:30ch;box-shadow:0 2px 6px rgba(17,18,18,.14)}
+.stack{display:flex;flex-direction:column;gap:12vh}
+.panel{position:sticky;top:112px;--pc:#2B57D6;--pt:#fff}
+.panel.ink{--pc:#191510;--pt:#fff}
+.panel.sun{--pc:#F7C948;--pt:#191510}
+.panel.pop{--pc:#FF4D8D;--pt:#191510}
+.panel .tabs{display:flex}
+.panel .tab{display:inline-flex;align-items:center;gap:14px;padding:24px 112px 24px 96px;background:var(--pc);color:var(--pt);
+  font:500 16px/1.5 var(--dmmono);letter-spacing:.2em;text-transform:uppercase;clip-path:polygon(76px 0,calc(100% - 76px) 0,100% 100%,0 100%)}
+.panel:first-child .tab{padding-left:36px;clip-path:polygon(0 0,calc(100% - 76px) 0,100% 100%,0 100%)}
+.panel .body{--tc:var(--pc);display:grid;grid-template-columns:1fr 1.1fr;gap:48px;padding:56px;min-height:calc(100vh - 14rem);color:var(--pt);clip-path:inset(0)}
+.panel .body > .bg{left:calc(-1 * var(--ov));right:calc(-1 * var(--ov))}
+.panel .info{display:flex;flex-direction:column;min-width:0}
+.panel .meta{display:inline-flex;align-items:center;gap:12px;font:500 14px/1.4 var(--dmmono);letter-spacing:.2em;text-transform:uppercase}
+.panel .meta i{width:12px;height:12px;border-radius:50%;background:currentColor;flex:none}
+.panel h3{margin:24px 0 0;font:600 clamp(48px,5vw,72px)/1 var(--body);letter-spacing:-.025em}
+.panel .q{margin:20px 0 0;max-width:32rem;font-size:18px;line-height:1.6;opacity:.9}
+.panel .go{margin-top:32px;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;padding-bottom:4px;border-bottom:2px solid currentColor;font:500 14px/1.4 var(--dmmono);letter-spacing:.2em;text-transform:uppercase}
+.panel .go svg{transition:transform .3s}
+.panel .go:hover svg{transform:translate(2px,-2px)}
+.panel .chips{margin-top:auto;padding-top:48px;display:flex;flex-wrap:wrap;gap:10px}
+.panel .chips span{padding:10px 16px 8px;background:#fff;color:#191510;font:500 16px/1.3 var(--dmmono);letter-spacing:.025em;text-transform:uppercase;clip-path:polygon(0 28%,12% 0,100% 0,100% 100%,0 100%)}
+.panel .shot{position:relative;align-self:center;min-width:0}
+.panel .tape{position:absolute;top:-12px;z-index:2;width:96px;height:24px;background:rgba(255,255,255,.55);box-shadow:0 1px 3px rgba(17,18,18,.15)}
+.panel .tape.l{left:-20px;transform:rotate(-9deg)}
+.panel .tape.r{right:-20px;transform:rotate(9deg)}
+.panel .frame{position:relative;overflow:hidden;border:4px solid #fff;background:#fff;height:calc(100vh - 21rem);min-height:320px}
+.panel .frame img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(.2,.9,.25,1)}
+.panel a.shot:hover .frame img{transform:scale(1.03)}
+@media (max-width:1023px){
+  .panel{position:relative;top:auto}
+  .stack{gap:64px}
+  .panel .body{grid-template-columns:1fr;padding:40px;min-height:0;gap:32px}
+  .panel .frame{height:auto;aspect-ratio:1/1;min-height:0}
+  .panel .chips{padding-top:32px}
+}
+@media (max-width:640px){
+  .panel .tab{font-size:12px;padding:14px 56px 14px 56px;gap:8px;clip-path:polygon(44px 0,calc(100% - 44px) 0,100% 100%,0 100%)}
+  .panel:first-child .tab{padding-left:20px;clip-path:polygon(0 0,calc(100% - 44px) 0,100% 100%,0 100%)}
+  .panel .body{padding:24px}
+  .panel .meta,.panel .go{font-size:12px}
+  .panel .chips span{font-size:13px}
+}
+
+/* let's talk, like the template's contact: smiley, big heading, a taped sticky note, and a yellow box with a hard shadow */
+.talk{padding:clamp(64px,8vw,96px) 0 72px;text-align:center;scroll-margin-top:88px}
+.talk .smile-big{display:block;width:clamp(160px,15vw,240px);height:auto;margin:0 auto;transform:rotate(-8deg);transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
+.talk:hover .smile-big{transform:rotate(6deg) scale(1.04)}
+.talk h2{margin:24px 0 0;font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(72px,9vw,132px);line-height:.88;color:var(--accent)}
+.talk .sub{margin:20px auto 0;max-width:34ch;font-size:clamp(18px,1.6vw,24px);line-height:1.4;color:var(--ink)}
+.talk .wrap{position:relative;max-width:56rem;margin:64px auto 0}
+.talk .note{position:absolute;z-index:3;left:-96px;top:-56px;width:320px;display:flex;gap:12px;padding:24px 20px 20px;transform:rotate(-2deg);
+  background:#BCC8F4;color:#191510;text-align:left;box-shadow:2px 6px 18px rgba(17,18,18,.22)}
+.talk .note img{flex:none;width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:50% 4%;background:#fff;border:2px solid #fff}
+.talk .note b{display:block;font-weight:600;font-size:16px}
+.talk .note span{display:block;margin-top:4px;font-size:14px;line-height:1.6;opacity:.75}
+.talk .note .tp{position:absolute;top:-10px;width:56px;height:20px;opacity:.75}
+.talk .note .tp.a{left:-12px;background:#F7C948;transform:rotate(-14deg)}
+.talk .note .tp.b{right:-10px;background:#FF8FB8;transform:rotate(12deg)}
+.talk .box{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:64px 24px;border:3px solid #191510;background:#F7C948;color:#191510;
+  box-shadow:8px 12px 0 #191510;text-decoration:none;transition:transform .3s,box-shadow .3s}
+.talk .box:hover{transform:translate(-3px,-3px);box-shadow:11px 15px 0 #191510}
+.talk .box .tape{position:absolute;top:-12px;z-index:2;width:112px;height:24px;background:rgba(255,255,255,.6);box-shadow:0 1px 3px rgba(17,18,18,.15)}
+.talk .box .tape.l{left:-20px;transform:rotate(-8deg)}
+.talk .box .tape.r{right:-20px;transform:rotate(8deg)}
+.talk .box small{font:500 14px/1.3 var(--dmmono);letter-spacing:.14em;text-transform:uppercase}
+.talk .box strong{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(88px,12vw,176px);line-height:.88}
+.talk .box em{margin-top:14px;font:500 14px/1.4 var(--dmmono);font-style:normal;letter-spacing:.2em;text-transform:uppercase;border-bottom:2px solid currentColor;padding-bottom:4px}
+.talk .details{margin-top:44px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px 36px;color:var(--ink)}
+.talk .details .big{font-size:clamp(18px,1.8vw,24px);line-height:1.2;user-select:all;overflow-wrap:anywhere}
+.talk .details .copy{margin-top:0}
+.talk .socials{display:flex;gap:20px}
+@media (max-width:1023px){
+  .talk .note{position:relative;left:auto;top:auto;margin:0 auto 28px;width:min(320px,100%)}
 }
 
 /* about, from the Figma frame "About": 1344 x 560 panel, 40px padding, statement top left, services bottom right */
@@ -296,51 +333,64 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
 
 <main>
   <section class="work" id="work" aria-labelledby="work-h">
-    <div class="sec-head">
-      <h2 id="work-h">Selected work<span class="count">(4)</span></h2>
-      <p>Questions I couldn’t leave alone. Each card opens the full case study.</p>
+    <div class="feat-head">
+      <span class="kicker">Explore my work<svg viewBox="0 0 275 10" aria-hidden="true"><path d="M21.2339 6.58674C16.3284 4.30983 27.9112 4.2761 31.2865 4.11035C62.8405 2.56112 94.5961 1.90476 126.381 1.47056C154.215 0.986808 181.642 0.310026 209.597 0.0921154C223.632 -0.0335821 237.675 -0.0306377 251.71 0.100948C257.965 0.163841 264.374 0.205791 270.61 0.426939C271.798 0.469106 273.726 0.600562 274.49 0.96797C274.891 1.16094 275.068 1.40679 274.977 1.64926C274.729 2.3522 272.95 2.49667 271.362 2.49841C265.445 2.5049 259.479 2.55344 253.563 2.52864C244.802 2.49191 235.914 2.66602 227.174 2.62937C226.727 2.85893 226.409 3.02296 225.888 3.22928C222.277 3.69569 205.775 3.68441 201.307 3.72941L156.981 4.11021C149.721 4.14817 142.462 4.22008 135.208 4.32599C126.714 4.47497 117.569 4.78303 109.091 5.05667C97.0002 5.43623 84.9208 5.86274 72.8541 6.336C62.275 6.73655 51.7108 7.19087 41.1646 7.69882C33.4978 8.11088 25.8435 8.55464 18.2028 9.03015C12.6827 9.38762 6.99256 9.87643 1.4307 9.99904C0.402106 10.0217 -0.187976 9.63905 0.0540895 9.26249C1.21844 8.62334 28.2707 7.11487 32.6162 6.79305C33.3032 6.82685 39.217 6.46543 40.0544 6.35522C38.9822 6.33198 31.7679 6.56773 30.7266 6.66485C27.3531 6.63152 24.3996 7.05496 21.2339 6.58674Z"/></svg></span>
+      <h2 id="work-h">Selected<br>work</h2>
+      <span class="tag-note">Questions I couldn’t leave alone. Each one opens the full case study.</span>
     </div>
-    <div class="work-grid">
-      <a class="work-card wide" href="work/aadmiwala/" data-cursor="View case study ↗">
-        <div class="work-visual bend" data-r="28" data-tint="orange"><span class="bg"></span><span class="arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <img class="base" src="assets/work/aad-dash.webp" alt="Aadmiwala employer dashboard with demand insights and charts" width="1440" height="1024" loading="lazy" decoding="async" style="left:4%;top:12%;width:58%"><img class="lift" src="assets/work/aad-jobs.webp" alt="Aadmiwala job search with filters" width="1200" height="853" loading="lazy" decoding="async" style="right:5%;top:30%;width:45%;--r:-2deg">
+    <div class="stack">
+      <article class="panel" aria-labelledby="p1">
+        <div class="tabs" style="margin-left:0"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 01</span></div>
+        <div class="body bend" data-r="0"><span class="bg"></span>
+          <div class="info">
+            <span class="meta"><i></i>Client work · Real Glide</span>
+            <h3 id="p1">Aadmiwala</h3>
+            <p class="q">Why is hiring through recruiting firms so hard to track?</p>
+            <a class="go" href="work/aadmiwala/">View case study <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4.5 11.5 11.5 4.5M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <div class="chips"><span>Hiring platform</span><span>UX + UI</span><span>Dashboards</span></div>
+          </div>
+          <a class="shot" href="work/aadmiwala/" tabindex="-1" aria-hidden="true"><span class="tape l"></span><span class="tape r"></span><span class="frame"><img src="work/aadmiwala/hero.jpg" alt="Aadmiwala dashboard and the phone version of the site" loading="lazy" decoding="async" style="object-position:100% 50%"></span></a>
         </div>
-        <div class="work-body">
-          <span class="meta">01 / Aadmiwala · Client work · Real Glide</span>
-          <h3>Why is hiring through recruiting firms so hard to track?</h3>
-          <div><p>Aadmiwala is a B2B talent marketplace. Employers share hiring needs, recruiting firms supply candidates, and job seekers find work. I designed the platform for Real Glide, from the public website to a separate dashboard for each side.</p><div class="metrics"><span class="metric"><b>3</b>sides, one marketplace</span><span class="metric"><b>2</b>versions</span><span class="metric"><b>3</b>screen sizes</span></div><span class="work-link">View case study ↗</span></div>
+      </article>
+      <article class="panel ink" aria-labelledby="p2">
+        <div class="tabs" style="margin-left:min(calc(21% - 72px), calc(100% - 340px))"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 02</span></div>
+        <div class="body bend" data-r="0"><span class="bg"></span>
+          <div class="info">
+            <span class="meta"><i></i>Self-initiated research</span>
+            <h3 id="p2">Sukoon</h3>
+            <p class="q">Why don’t men ask for help, even when they need it?</p>
+            <a class="go" href="work/sukoon/">View case study <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4.5 11.5 11.5 4.5M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <div class="chips"><span>Research</span><span>App</span><span>Campaign</span></div>
+          </div>
+          <a class="shot" href="work/sukoon/" tabindex="-1" aria-hidden="true"><span class="tape l"></span><span class="tape r"></span><span class="frame"><img src="work/sukoon/cover.jpg" alt="Sukoon app screens: how are you feeling this evening?" loading="lazy" decoding="async"></span></a>
         </div>
-      </a>
-      <a class="work-card" href="work/sukoon/" data-cursor="View case study ↗">
-        <div class="work-visual bend" data-r="28" data-tint="lilac"><span class="bg"></span><span class="arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <img class="base" src="assets/work/suk-checkin.webp" alt="Sukoon check-in: how are you feeling this evening?" width="590" height="1278" loading="lazy" decoding="async" style="left:9%;top:12%;width:27%"><img class="lift" src="assets/work/suk-chat.webp" alt="Sukoon anonymous chat list" width="590" height="1278" loading="lazy" decoding="async" style="left:37%;top:22%;width:27%;--r:-2deg"><img class="base" src="assets/work/suk-room.webp" alt="Sukoon support rooms" width="590" height="1278" loading="lazy" decoding="async" style="left:65%;top:10%;width:27%">
+      </article>
+      <article class="panel sun" aria-labelledby="p3">
+        <div class="tabs" style="margin-left:min(calc(42% - 72px), calc(100% - 340px))"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 03</span></div>
+        <div class="body bend" data-r="0"><span class="bg"></span>
+          <div class="info">
+            <span class="meta"><i></i>Design Project 01 · NID</span>
+            <h3 id="p3">KASHIKRITI</h3>
+            <p class="q">Why do people walk past a craft this old?</p>
+            <a class="go" href="work/kashikriti/">View case study <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4.5 11.5 11.5 4.5M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <div class="chips"><span>Branding</span><span>Packaging</span><span>Campaign</span></div>
+          </div>
+          <a class="shot" href="work/kashikriti/" tabindex="-1" aria-hidden="true"><span class="tape l"></span><span class="tape r"></span><span class="frame"><img src="work/kashikriti/cover.jpg" alt="The Kashikriti logo: the letter क carved like a stone jaali" loading="lazy" decoding="async"></span></a>
         </div>
-        <div class="work-body">
-          <span class="meta">02 / Sukoon · Self-initiated research</span>
-          <h3>Why don’t men ask for help, even when they need it?</h3>
-          <p>In India, men are expected to carry their problems alone. Sukoon started as a question about why men don’t ask for help, and became an anonymous app and an awareness campaign built on what people told me.</p><div class="metrics"><span class="metric"><b>35</b>people surveyed</span><span class="metric"><b>26%</b>had ever asked for help</span></div><span class="work-link">View case study ↗</span>
+      </article>
+      <article class="panel pop" aria-labelledby="p4">
+        <div class="tabs" style="margin-left:min(calc(63% - 72px), calc(100% - 340px))"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 04</span></div>
+        <div class="body bend" data-r="0"><span class="bg"></span>
+          <div class="info">
+            <span class="meta"><i></i>Retail tech · Group project</span>
+            <h3 id="p4">Syntra</h3>
+            <p class="q">How do you find a scent you can’t put into words?</p>
+            <a class="go" href="work/syntra/">View case study <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4.5 11.5 11.5 4.5M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+            <div class="chips"><span>Kiosk</span><span>VR + AR</span><span>Retail tech</span></div>
+          </div>
+          <a class="shot" href="work/syntra/" tabindex="-1" aria-hidden="true"><span class="tape l"></span><span class="tape r"></span><span class="frame"><img src="assets/work/syn-kiosk.webp" alt="A visitor in a VR headset at the Syntra kiosk" loading="lazy" decoding="async"></span></a>
         </div>
-      </a>
-      <a class="work-card" href="work/kashikriti/" data-cursor="View case study ↗">
-        <div class="work-visual bend" data-r="28" data-tint="blue"><span class="bg"></span><span class="arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <img class="base" src="assets/work/kash-box.webp" alt="Kashikriti six-sided packaging box and its two halves" width="1440" height="960" loading="lazy" decoding="async" style="left:6%;top:14%;width:64%"><img class="lift" src="assets/work/kash-poster.webp" alt="Kashikriti campaign poster: the logo seen through a stone arch" width="736" height="1052" loading="lazy" decoding="async" style="right:7%;top:9%;width:30%;--r:2deg">
-        </div>
-        <div class="work-body">
-          <span class="meta">03 / KASHIKRITI · Branding &amp; packaging</span>
-          <h3>Why do people walk past a craft this old?</h3>
-          <p>A branding and packaging project centred on the traditional soft-stone jaali craft of Varanasi: how a craft rooted in material, skill and architectural heritage can be told through a contemporary identity, packaging and storytelling.</p><div class="metrics"><span class="metric"><b>6</b>storefronts compared</span><span class="metric"><b>9</b>marks digitised</span></div><span class="work-link">View case study ↗</span>
-        </div>
-      </a>
-      <a class="work-card wide" href="work/syntra/" data-cursor="View case study ↗">
-        <div class="work-visual bend" data-r="28" data-tint="rose"><span class="bg"></span><span class="arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <img class="base" src="assets/work/syn-kiosk.webp" alt="A visitor in a VR headset at the Syntra kiosk" width="1328" height="982" loading="lazy" decoding="async" style="left:4%;top:12%;width:56%"><img class="lift" src="assets/work/syn-screen.webp" alt="Syntra screen showing the matched ZARA scent, Femme, at 99%" width="1200" height="742" loading="lazy" decoding="async" style="right:5%;top:30%;width:45%;--r:-2deg">
-        </div>
-        <div class="work-body">
-          <span class="meta">04 / Syntra · Retail tech · Group project</span>
-          <h3>How do you find a scent you can’t put into words?</h3>
-          <div><p>A kiosk you play like an instrument. Turn a knob and three sliders, and the screen finds your ZARA scent. A double press takes you into its world in VR; hold the button, and a ticket prints that comes alive in AR.</p><div class="metrics"><span class="metric"><b>66</b>tickets printed at the exhibit</span><span class="metric"><b>19</b>bottles to match</span><span class="metric"><b>2</b>weeks</span></div><span class="work-link">View case study ↗</span></div>
-        </div>
-      </a>
+      </article>
     </div>
   </section>
 
@@ -354,20 +404,26 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   </section>
 
 
-  <section class="contact bend" id="contact" aria-label="Contact"><span class="bg"></span>
-    <h2>Got a question worth chasing? Write to me.</h2>
-    <span></span>
-    <div class="row">
-      <ul class="socials mono">
-        <li><a href="#">↳ Behance</a></li>
-        <li><a href="#">↳ LinkedIn</a></li>
-        <li><a href="#">↳ Instagram</a></li>
-      </ul>
-      <div class="direct">
-        <span class="big" id="email">utsavsharma2710@gmail.com</span>
-        <span class="big">+91 82991 45430</span>
-        <button class="copy mono" id="copyBtn" type="button">Copy email</button>
+  <section class="talk" id="contact" aria-labelledby="talk-h">
+    <img class="smile-big" src="assets/home/smiley.webp" width="455" height="455" alt="" loading="lazy">
+    <h2 id="talk-h">Let’s talk</h2>
+    <p class="sub">Got a question worth chasing? Write to me.</p>
+    <div class="wrap">
+      <div class="note"><i class="tp a" aria-hidden="true"></i><i class="tp b" aria-hidden="true"></i>
+        <img src="assets/home/portrait.webp" alt="" loading="lazy">
+        <div><b>Utsav Sharma</b><span>Open to internships, freelance projects and good problems worth chasing.</span></div>
       </div>
+      <a class="box" href="mailto:utsavsharma2710@gmail.com"><span class="tape l" aria-hidden="true"></span><span class="tape r" aria-hidden="true"></span>
+        <small>Let’s make something together</small>
+        <strong>Contact</strong>
+        <em>Drop a line ↗</em>
+      </a>
+    </div>
+    <div class="details">
+      <span class="big" id="email">utsavsharma2710@gmail.com</span>
+      <span class="big">+91 82991 45430</span>
+      <button class="copy mono" id="copyBtn" type="button">Copy email</button>
+      <ul class="socials mono"><li><a href="#">↳ Behance</a></li><li><a href="#">↳ LinkedIn</a></li><li><a href="#">↳ Instagram</a></li></ul>
     </div>
   </section>
 </main>
@@ -436,7 +492,8 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   function shape(el, r, vw, vh, hv){
     var w = r.width, h = r.height;
     var ins = 10 * hv;              /* hover: block shrinks 10px on every side */
-    var R0 = el._r0 || (el._r0 = parseFloat(el.getAttribute('data-r')) || 8);
+    if (el._r0 == null){ var dr = parseFloat(el.getAttribute('data-r')); el._r0 = isNaN(dr) ? 8 : dr; }
+    var R0 = el._r0;
     var R = R0 + 14 * hv;           /* corners: 8px like the original (28px on the work tiles), softening on hover */
     var cx = vw / 2;
     var bottomF = strength(r.bottom, vh);
