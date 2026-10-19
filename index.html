@@ -240,15 +240,139 @@ a{color:inherit;text-decoration:none}
   .talk .note{position:relative;left:auto;top:auto;margin:0 auto 28px;width:min(320px,100%)}
 }
 
-/* about, from the Figma frame "About": 1344 x 560 panel, 40px padding, statement top left, services bottom right */
-.about{scroll-margin-top:88px;margin-block:var(--gap);padding:clamp(24px,2.78vw,40px);display:flex;justify-content:space-between;align-items:stretch;gap:40px;min-height:clamp(380px,38.9vw,560px);color:var(--about-fg)}
-.about-l{min-width:0}
-.statement{margin:0;font-size:clamp(17px,1.46vw,21px);line-height:1.45;color:var(--about-fg);max-width:508px}
-.statement .w{opacity:.22;transition:opacity .25s}
-.statement .w.on{opacity:1}
-.lists{align-self:end;display:flex;gap:24px;color:var(--about-fg);text-align:right}
-.lists h2{margin:0 0 14px;font:400 12px/1.2 var(--dmmono);letter-spacing:.06em;text-transform:uppercase}
-.lists ul{list-style:none;margin:0;padding:0;font-size:clamp(16px,1.39vw,20px);line-height:1.2;letter-spacing:-.01em;text-transform:uppercase}
+/* section titles from the Workdesk template: big title, one word with a hand-drawn line under it (draws in when the section shows) */
+.uh{margin:0;text-align:center;font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(64px,8vw,120px);line-height:.88;color:var(--accent)}
+.uh .u{position:relative;display:inline-block}
+.uh .ul{position:absolute;left:-3%;bottom:-.17em;width:106%;height:.1em;fill:var(--ink);clip-path:inset(0 100% 0 0);transition:clip-path 1.1s cubic-bezier(.6,0,.2,1) .25s}
+.in .uh .ul{clip-path:inset(0 0 0 0)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* about me: hobbies on the left, a stack of polaroids you can drag in the middle, skills on the right */
+.me{padding:clamp(72px,8vw,128px) 0 clamp(56px,6vw,96px);scroll-margin-top:88px;color:var(--ink)}
+.me-grid{margin-top:clamp(56px,7vw,110px);display:grid;grid-template-columns:1fr minmax(260px,29vw) 1fr;gap:clamp(24px,3vw,48px);align-items:start}
+.me-col{position:relative;max-width:425px;font-size:16px;line-height:1.6}
+.me-col.l{padding-bottom:240px}
+.me-col.r{justify-self:end;padding-top:clamp(180px,22vw,316px)}
+.me-col h3{margin:0 0 20px;font:500 14px/1.4 var(--dmmono);letter-spacing:.14em;text-transform:uppercase}
+.me-col p{margin:0 0 20px;color:color-mix(in srgb,var(--ink) 62%,transparent)}
+.me-col p b,.flow p b{font-weight:500;color:var(--ink)}
+.doodle{position:absolute;color:var(--ink);opacity:.75;pointer-events:none}
+.doodle.cloud{width:190px;left:26%;bottom:10px;transform:rotate(18deg)}
+.doodle.squig{width:150px;right:18%;top:0;transform:rotate(18deg)}
+.me-photos{position:relative;width:100%;aspect-ratio:456/522}
+.insta{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;justify-items:center;gap:6px;text-align:center;color:var(--ink);font-size:16px;line-height:1.35}
+.insta span{opacity:.6}
+.insta b{font-weight:500}
+.pola{position:absolute;inset:0;z-index:1;margin:0;padding:3.7% 3.7% 0;background:#F8F8F8;color:#191510;
+  box-shadow:0 1px 3px rgba(17,18,18,.2),0 14px 34px -10px rgba(17,18,18,.3);
+  transform:translate(var(--dx,0px),var(--dy,0px)) rotate(calc(var(--r) + var(--rt,0deg)));
+  transition:transform .55s cubic-bezier(.3,1.3,.5,1),box-shadow .3s;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.pola.drag{cursor:grabbing;transition:box-shadow .3s;box-shadow:0 2px 6px rgba(17,18,18,.2),0 30px 60px -16px rgba(17,18,18,.4)}
+.pola .ph{position:relative;display:block;aspect-ratio:419/435;overflow:hidden;background:#E6E3DA}
+.pola .ph img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.ph-empty{position:absolute;inset:0;display:grid;place-items:center;font:500 12px/1 var(--dmmono);letter-spacing:.14em;text-transform:uppercase;color:#8A8578;
+  background:repeating-linear-gradient(45deg,#E9E6DD 0 10px,#E2DED3 10px 20px)}
+.pola figcaption{display:grid;place-items:center;height:clamp(52px,4.6vw,66px);font:500 clamp(13px,1.1vw,16px)/1 var(--dmmono);letter-spacing:.02em}
+.drag-hint{position:absolute;left:50%;top:calc(100% + 22px);transform:translateX(-50%);white-space:nowrap;color:var(--ink);opacity:.5}
+
+/* my workflow: four sticky notes in a row, slightly overlapping and tilted, with ruled lines and paper creases */
+.flow{padding:clamp(64px,7vw,112px) 0;scroll-margin-top:88px;color:var(--ink);text-align:center}
+.flow-intro,.flow-sum{max-width:500px;margin:clamp(40px,5vw,72px) auto 0;font-size:16px;line-height:1.6;color:color-mix(in srgb,var(--ink) 62%,transparent)}
+.notes{list-style:none;margin:clamp(48px,6vw,80px) 0 0;padding:0;display:flex;justify-content:center}
+.sn{position:relative;flex:0 1 353px;min-width:0;aspect-ratio:353/392;margin-left:-13px;padding:clamp(20px,2.3vw,33px) clamp(20px,2.1vw,30px) clamp(20px,2.1vw,30px) clamp(22px,2.4vw,34px);
+  display:flex;flex-direction:column;overflow:hidden;text-align:left;color:#191510;
+  background:var(--c) repeating-linear-gradient(to bottom,transparent 0 33px,rgba(0,0,0,.05) 33px 46px);
+  box-shadow:0 1px 2px rgba(0,0,0,.14),0 22px 34px -22px rgba(0,0,0,.45);
+  transform:rotate(calc(var(--r) * var(--tilt,1))) translateY(var(--ly,0px));opacity:var(--o,1);
+  transition:transform .5s cubic-bezier(.3,1.35,.5,1),box-shadow .3s,opacity .6s ease}
+.sn:first-child{margin-left:0}
+.sn::before,.sn::after{content:"";position:absolute;left:-30%;width:160%;pointer-events:none}
+.sn::before{top:14%;height:34%;transform:rotate(-7deg);background:linear-gradient(to bottom,transparent,rgba(0,0,0,.045) 46%,rgba(255,255,255,.4) 50%,transparent)}
+.sn::after{top:54%;height:30%;transform:rotate(4deg);background:linear-gradient(to bottom,transparent,rgba(0,0,0,.04) 48%,rgba(255,255,255,.35) 52%,transparent)}
+.sn:nth-child(2)::before{transform:rotate(-2deg)}
+.sn:nth-child(3)::after{transform:rotate(-8deg)}
+.sn:nth-child(4)::before{transform:rotate(1deg)}
+.sn .n{position:relative;display:block;font:900 clamp(56px,6.2vw,90px)/1 var(--display)}
+.sn h3{position:relative;margin:8px 0 0;font:500 clamp(22px,2.2vw,30px)/1.15 var(--body);letter-spacing:-.01em}
+.sn p{position:relative;margin:auto 0 0;font:400 clamp(12px,1.02vw,14.5px)/1.6 var(--dmmono)}
+.sn:hover{--tilt:0;--ly:-10px;z-index:2;box-shadow:0 2px 4px rgba(0,0,0,.14),0 34px 44px -24px rgba(0,0,0,.5)}
+/* they drop onto the table one by one when the section comes into view */
+.flow:not(.in) .sn{--ly:48px;--o:0}
+.flow.in .sn:nth-child(1){transition-delay:0s}
+.flow.in .sn:nth-child(2){transition-delay:.12s}
+.flow.in .sn:nth-child(3){transition-delay:.24s}
+.flow.in .sn:nth-child(4){transition-delay:.36s}
+.flow.in .sn:hover{transition-delay:0s}
+
+/* contact me: a rounded card with CONTACT ME running behind an old pager; its screen shows the time and the email */
+.pg{padding:clamp(24px,3vw,40px) 0 clamp(16px,2vw,24px)}
+.pg-card{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;min-height:clamp(560px,47vw,678px);padding:60px 24px 28px;border:1px solid var(--line);border-radius:24px}
+.pg-marq{position:absolute;left:0;right:0;top:50%;transform:translateY(-58%);pointer-events:none;overflow:hidden}
+.pg-track{display:flex;width:max-content;animation:pgmarq 26s linear infinite}
+.pg-track span{font:900 clamp(140px,17.4vw,250px)/1 var(--display);text-transform:uppercase;white-space:nowrap;color:var(--ink)}
+@keyframes pgmarq{to{transform:translateX(-50%)}}
+.pg-nav{position:relative;z-index:2;display:flex;gap:40px;font-size:16px;font-weight:500}
+.pg-nav a{color:color-mix(in srgb,var(--ink) 60%,transparent);transition:color .2s}
+.pg-nav a:hover{color:var(--ink)}
+.pager{position:relative;z-index:2;width:min(562px,100%);margin-top:clamp(40px,5.6vw,80px);padding:24px;border-radius:40px;background:#1C1C1C;
+  box-shadow:inset 0 0 12px rgba(8,8,8,.5),0 40px 70px -30px rgba(0,0,0,.6)}
+.pg-screen{padding:24px 24px 20px;border-radius:24px;background:#171717;box-shadow:inset 0 0 4px #080808}
+.lcd{display:grid;justify-items:center;padding:6px 16px 18px;border-radius:16px;background:#A3C959;color:#0B0F04;font-family:var(--dmmono);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.15),inset 0 10px 22px -8px rgba(0,0,0,.25)}
+.lcd-top{justify-self:stretch;display:flex;justify-content:space-between;font-size:18px;line-height:1.6}
+.lcd-a{margin-top:6px;font-size:18px;line-height:1.4}
+.lcd-b{font-size:clamp(14px,2vw,26px);font-weight:500;line-height:1.4;letter-spacing:-.03em;white-space:nowrap}
+.lcd-b:hover{text-decoration:underline}
+.pg-brand{margin:18px 0 0;font:500 13px/1.4 var(--dmmono);letter-spacing:.12em;text-transform:uppercase;color:#757575;text-align:left}
+.pg-bottom{display:flex;align-items:center;gap:12px;margin-top:24px}
+.pg-spk{display:flex;padding:0 4px}
+.pg-spk i{width:11px;height:43px;margin-right:2px;border-radius:4px;background:#1C1C1C;box-shadow:inset 0 0 8px rgba(8,8,8,.8);transform:rotate(20deg)}
+.pill{display:grid;place-items:center;height:70px;padding:0 24px;border-radius:35px;background:#171717;color:rgba(255,255,255,.5);font-weight:500;
+  box-shadow:0 1px 4px #080808,inset 0 0 4px #080808;transition:color .2s,transform .15s,box-shadow .15s}
+.pill:hover{color:#fff}
+.pill:active{transform:translateY(2px);box-shadow:0 0 1px #080808,inset 0 0 6px #080808}
+.pill.cta{margin-left:auto;padding:0 40px;border-radius:40px;background:#C48818;color:#000;box-shadow:0 1px 8px #080808,inset 0 0 8px rgba(8,8,8,.55)}
+.pill.cta:hover{background:#D29620}
+.pg-copy{position:relative;z-index:2;margin:auto 0 0;padding-top:40px;font-size:14px;color:var(--muted)}
+
+@media (max-width:1023px){
+  .me-grid{grid-template-columns:1fr;justify-items:center;text-align:left}
+  .me-col{max-width:560px;width:100%}
+  .me-col.l{padding-bottom:0}
+  .me-col.r{justify-self:center;padding-top:0}
+  .doodle.cloud{display:none}
+  .doodle.squig{width:84px;right:0;top:-24px}
+  .me-photos{width:min(340px,80vw);margin:28px 0 72px}
+  .notes{flex-wrap:wrap;max-width:720px;margin-inline:auto;gap:18px 0}
+  .sn{flex:0 0 calc(50% + 6px)}
+  .sn:nth-child(3){margin-left:0}
+}
+@media (max-width:640px){
+  .notes{flex-direction:column;align-items:center;gap:0}
+  .sn{flex:none;width:min(340px,100%);margin:-14px 0 0}
+  .sn:first-child{margin-top:0}
+  .sn .n{font-size:64px}
+  .sn h3{font-size:24px}
+  .sn p{font-size:13px}
+  .uh{font-size:clamp(56px,17vw,72px)}
+  .pg-card{min-height:0;padding:36px 14px 22px}
+  .pg-nav{gap:24px;font-size:14px}
+  /* on a phone the running CONTACT ME sits above the pager instead of behind it */
+  .pg-marq{position:relative;top:auto;left:auto;right:auto;order:1;align-self:stretch;margin:22px -14px 0;transform:none}
+  .pager{order:2;margin-top:18px}
+  .pg-copy{order:3}
+  .pg-track span{font-size:96px}
+  .pager{padding:14px;border-radius:28px}
+  .pg-screen{padding:12px 12px 12px;border-radius:18px}
+  .lcd{padding:4px 10px 14px}
+  .lcd-top,.lcd-a{font-size:14px}
+  .lcd-b{font-size:clamp(13px,4.2vw,17px)}
+  .pg-brand{font-size:11px;margin-top:12px}
+  .pg-bottom{gap:8px;margin-top:14px}
+  .pg-spk{display:none}
+  .pill{height:50px;padding:0 14px;font-size:13px}
+  .pill.cta{padding:0 18px}
+}
 
 /* contact */
 .contact{--tc:var(--accent);margin-block:var(--gap) 0;color:var(--on-accent);padding:clamp(24px,3.5vw,40px);display:grid;grid-template-rows:auto 1fr auto;min-height:clamp(320px,34vw,440px);gap:40px}
@@ -292,13 +416,10 @@ html.lenis,html.lenis body{height:auto}
   .hero{padding-top:84px}
   .hero-meta{width:auto}
   .tagline{max-width:none}
-  .about{flex-direction:column}
-  .lists{text-align:left}
   .direct{justify-items:start;text-align:left}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
-  .statement .w{opacity:1}
   .dot{display:none}
 }
 </style>
@@ -400,15 +521,41 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     </div>
   </section>
 
-  <section class="about bend" id="about" aria-label="About"><span class="bg"></span>
-    <div class="about-l">
-      <p class="statement" id="statement">I’m Utsav — a designer trained in Applied Arts, currently exploring Design for Retail Experience at NID Bengaluru.</p>
-    </div>
-    <div class="lists">
-      <div><h2>Services ↴</h2><ul><li>UI / UX</li><li>Branding</li><li>Campaign Design</li><li>Packaging</li><li>Retail experience</li><li>Photo &amp; film</li></ul></div>
+  <section class="me" id="about" aria-labelledby="me-h">
+    <h2 class="uh" id="me-h">About <span class="u">me<svg class="ul" viewBox="0 0 275 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M21.2339 6.58674C16.3284 4.30983 27.9112 4.2761 31.2865 4.11035C62.8405 2.56112 94.5961 1.90476 126.381 1.47056C154.215 0.986808 181.642 0.310026 209.597 0.0921154C223.632 -0.0335821 237.675 -0.0306377 251.71 0.100948C257.965 0.163841 264.374 0.205791 270.61 0.426939C271.798 0.469106 273.726 0.600562 274.49 0.96797C274.891 1.16094 275.068 1.40679 274.977 1.64926C274.729 2.3522 272.95 2.49667 271.362 2.49841C265.445 2.5049 259.479 2.55344 253.563 2.52864C244.802 2.49191 235.914 2.66602 227.174 2.62937C226.727 2.85893 226.409 3.02296 225.888 3.22928C222.277 3.69569 205.775 3.68441 201.307 3.72941L156.981 4.11021C149.721 4.14817 142.462 4.22008 135.208 4.32599C126.714 4.47497 117.569 4.78303 109.091 5.05667C97.0002 5.43623 84.9208 5.86274 72.8541 6.336C62.275 6.73655 51.7108 7.19087 41.1646 7.69882C33.4978 8.11088 25.8435 8.55464 18.2028 9.03015C12.6827 9.38762 6.99256 9.87643 1.4307 9.99904C0.402106 10.0217 -0.187976 9.63905 0.0540895 9.26249C1.21844 8.62334 28.2707 7.11487 32.6162 6.79305C33.3032 6.82685 39.217 6.46543 40.0544 6.35522C38.9822 6.33198 31.7679 6.56773 30.7266 6.66485C27.3531 6.63152 24.3996 7.05496 21.2339 6.58674Z"/></svg></span></h2>
+    <div class="me-grid">
+      <div class="me-col l">
+        <h3>Life / Hobbies</h3>
+        <p>Away from the desk I’m usually sketching, taking photographs or shooting short films. Four years of Applied Arts in Varanasi taught me to look closely at the things most people walk past.</p>
+        <p>I think good design starts with <b>noticing something odd</b>, and then <b>asking why it happens</b>.</p>
+        <svg class="doodle cloud" viewBox="0 0 210 170" aria-hidden="true" focusable="false"><path d="M52 128c-22 4-40-10-38-30 2-17 18-27 33-23-3-22 16-40 38-36 11-19 41-21 53 0 20-9 43 4 41 26 19 3 29 23 19 40-8 14-26 17-38 9-8 16-32 21-46 9-15 13-41 11-50-6-5 5-9 8-12 11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="me-photos">
+        <a class="insta" href="#"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg><span>More on Instagram</span><b>Say hi ↗</b></a>
+        <figure class="pola p2" style="--r:-3deg"><span class="ph"><span class="ph-empty">Photo coming soon</span></span><figcaption>Behind the camera</figcaption></figure>
+        <figure class="pola p1" style="--r:3deg"><span class="ph"><span class="ph-empty">Photo coming soon</span></span><figcaption>Yep, that’s me</figcaption></figure>
+        <span class="drag-hint mono" aria-hidden="true">Drag the photos ↴</span>
+      </div>
+      <div class="me-col r">
+        <svg class="doodle squig" viewBox="0 0 170 170" aria-hidden="true" focusable="false"><path d="M85 22c4 22 8 36 22 46 13 9 31 10 47 13-17 3-34 5-46 15-12 10-17 26-23 52-5-24-10-41-23-51-12-10-29-12-46-16 17-3 34-6 46-15 13-10 18-24 23-44z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M138 26c6 2 9 7 8 13M150 18c9 5 13 13 12 22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        <h3>Skills / Tools</h3>
+        <p>I work across <b>branding</b>, <b>packaging</b>, <b>campaign design</b>, <b>UI/UX</b> and <b>retail experience</b>, with photo and film along the way. I design in <b>Figma</b>, and I’m learning <b>Framer</b> to bring interactions to life.</p>
+        <p>Whatever the format, I want the result to be clear, useful and a little surprising.</p>
+      </div>
     </div>
   </section>
 
+  <section class="flow" id="workflow" aria-labelledby="flow-h">
+    <h2 class="uh" id="flow-h">My <span class="u">workflow<svg class="ul" viewBox="0 0 275 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M21.2339 6.58674C16.3284 4.30983 27.9112 4.2761 31.2865 4.11035C62.8405 2.56112 94.5961 1.90476 126.381 1.47056C154.215 0.986808 181.642 0.310026 209.597 0.0921154C223.632 -0.0335821 237.675 -0.0306377 251.71 0.100948C257.965 0.163841 264.374 0.205791 270.61 0.426939C271.798 0.469106 273.726 0.600562 274.49 0.96797C274.891 1.16094 275.068 1.40679 274.977 1.64926C274.729 2.3522 272.95 2.49667 271.362 2.49841C265.445 2.5049 259.479 2.55344 253.563 2.52864C244.802 2.49191 235.914 2.66602 227.174 2.62937C226.727 2.85893 226.409 3.02296 225.888 3.22928C222.277 3.69569 205.775 3.68441 201.307 3.72941L156.981 4.11021C149.721 4.14817 142.462 4.22008 135.208 4.32599C126.714 4.47497 117.569 4.78303 109.091 5.05667C97.0002 5.43623 84.9208 5.86274 72.8541 6.336C62.275 6.73655 51.7108 7.19087 41.1646 7.69882C33.4978 8.11088 25.8435 8.55464 18.2028 9.03015C12.6827 9.38762 6.99256 9.87643 1.4307 9.99904C0.402106 10.0217 -0.187976 9.63905 0.0540895 9.26249C1.21844 8.62334 28.2707 7.11487 32.6162 6.79305C33.3032 6.82685 39.217 6.46543 40.0544 6.35522C38.9822 6.33198 31.7679 6.56773 30.7266 6.66485C27.3531 6.63152 24.3996 7.05496 21.2339 6.58674Z"/></svg></span></h2>
+    <p class="flow-intro">A clear process leads to better work. Mine starts with <b>a question</b> and ends with <b>something people can use</b>.</p>
+    <ol class="notes">
+      <li class="sn" style="--c:#EEFF8C;--r:2deg"><b class="n">01.</b><h3>Notice</h3><p>Every project starts with something that doesn’t add up: a craft people walk past, or a hiring process nobody can track. I write the question down before anything else.</p></li>
+      <li class="sn" style="--c:#B3E6F9;--r:-2deg"><b class="n">02.</b><h3>Research</h3><p>Then I go and find out why. Surveys, interviews, field visits and a look at what already exists turn a hunch into a clear problem.</p></li>
+      <li class="sn" style="--c:#FFBAD3;--r:2deg"><b class="n">03.</b><h3>Design</h3><p>Sketches first, then Figma. A brand, a box, a set of screens or a store: I explore wide, then narrow down with feedback.</p></li>
+      <li class="sn" style="--c:#9FDE88;--r:-2deg"><b class="n">04.</b><h3>Make &amp; test</h3><p>Prototypes, mockups and printed samples go in front of real people. I refine until it works in their hands, then hand over files ready to build or print.</p></li>
+    </ol>
+    <p class="flow-sum">I start by <b>noticing</b> what doesn’t work, research until I <b>understand why</b>, design an answer, then <b>test it with real people</b>.</p>
+  </section>
 
   <section class="talk" id="contact" aria-labelledby="talk-h">
     <svg class="smile-big face" viewBox="0 0 455 455" aria-hidden="true" focusable="false"><circle cx="227.5" cy="227.5" r="224" fill="#FFD858" stroke="#171513" stroke-width="7"/><g class="blink"><rect x="140" y="128" width="44" height="109" rx="22"/><rect x="271" y="128" width="44" height="109" rx="22"/></g><path d="M128 297A109 109 0 0 0 327 297" fill="none" stroke="#171513" stroke-width="20" stroke-linecap="round"/></svg>
@@ -432,11 +579,32 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       <ul class="socials mono"><li><a href="#">↳ Behance</a></li><li><a href="#">↳ LinkedIn</a></li><li><a href="#">↳ Instagram</a></li></ul>
     </div>
   </section>
-</main>
 
-<footer class="mono">
-  <span>© 2026 Utsav Sharma</span>
-</footer>
+  <section class="pg" id="contact-me" aria-labelledby="pg-h">
+    <h2 class="vh" id="pg-h">Contact me</h2>
+    <div class="pg-card">
+      <div class="pg-marq" aria-hidden="true"><div class="pg-track"><span>Contact me •&nbsp;</span><span>Contact me •&nbsp;</span><span>Contact me •&nbsp;</span><span>Contact me •&nbsp;</span></div></div>
+      <nav class="pg-nav" aria-label="Footer"><a href="#work">Work</a><a href="#about">About</a><a href="#workflow">Workflow</a></nav>
+      <div class="pager">
+        <div class="pg-screen">
+          <div class="lcd">
+            <div class="lcd-top"><span>4G</span><span id="pgTime">12:00 PM</span></div>
+            <span class="lcd-a">Contact me via email</span>
+            <a class="lcd-b" href="mailto:utsavsharma2710@gmail.com">utsavsharma2710@gmail.com</a>
+          </div>
+          <p class="pg-brand">Hello Utsav Communications</p>
+        </div>
+        <div class="pg-bottom">
+          <span class="pg-spk" aria-hidden="true"><i></i><i></i><i></i></span>
+          <a class="pill" href="#">LinkedIn</a>
+          <a class="pill" href="#">Instagram</a>
+          <a class="pill cta" href="mailto:utsavsharma2710@gmail.com">Contact me</a>
+        </div>
+      </div>
+      <p class="pg-copy">© 2026 Utsav Sharma</p>
+    </div>
+  </section>
+</main>
 
 <div class="edge-blur" aria-hidden="true"><i></i><i></i></div>
 <div class="dot" id="dot" aria-hidden="true"></div>
@@ -462,10 +630,14 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
 
   /* 2. About paragraph: words fill in as you scroll */
   var st = document.getElementById('statement');
-  var words = st.textContent.trim().split(/\s+/);
-  st.innerHTML = words.map(function(w){ return '<span class="w">' + w + '</span>'; }).join(' ');
-  var wordEls = st.querySelectorAll('.w');
+  var wordEls = [];
+  if (st){
+    var words = st.textContent.trim().split(/\s+/);
+    st.innerHTML = words.map(function(w){ return '<span class="w">' + w + '</span>'; }).join(' ');
+    wordEls = st.querySelectorAll('.w');
+  }
   function fillWords(){
+    if (!st) return;
     var vh = innerHeight, sr = st.getBoundingClientRect();
     var prog = reduce ? 1 : clamp((vh * 0.85 - sr.top) / (sr.height + vh * 0.35), 0, 1);
     var n = Math.round(prog * wordEls.length);
@@ -1019,6 +1191,55 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       smile.style.transform = 'translate3d(' + (S.x - half).toFixed(1) + 'px,' + (S.y - half).toFixed(1) + 'px,0) rotate(' + S.a.toFixed(3) + 'rad)';
       requestAnimationFrame(roam);
     })(performance.now());
+  }
+
+  /* 11. About me / Workflow: the line under the title draws in, and the sticky notes drop on, when the section shows */
+  var shows = document.querySelectorAll('.me, .flow');
+  if ('IntersectionObserver' in window && !reduce){
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: 0.2 });
+    shows.forEach(function(el){ io.observe(el); });
+  } else shows.forEach(function(el){ el.classList.add('in'); });
+
+  /* 12. Polaroids: drag them off the pile (they tilt with the throw and stay where you drop them);
+         a tap sends the top photo to the back of the pile */
+  var polas = Array.prototype.slice.call(document.querySelectorAll('.pola')), zTop = 3;
+  polas.forEach(function(p, k){ p.style.zIndex = k + 1; });
+  polas.forEach(function(p){
+    var d = null;
+    p.addEventListener('pointerdown', function(e){
+      if (e.button !== 0) return;
+      d = { x: e.clientX, y: e.clientY, dx: parseFloat(p.style.getPropertyValue('--dx')) || 0, dy: parseFloat(p.style.getPropertyValue('--dy')) || 0, lx: e.clientX, moved: false };
+      p.style.zIndex = ++zTop; p.classList.add('drag');
+      try { p.setPointerCapture(e.pointerId); } catch(err){}
+    });
+    p.addEventListener('pointermove', function(e){
+      if (!d) return;
+      var mx = e.clientX - d.x, my = e.clientY - d.y;
+      if (!d.moved && Math.abs(mx) + Math.abs(my) < 5) return;
+      d.moved = true;
+      p.style.setProperty('--dx', (d.dx + mx).toFixed(1) + 'px');
+      p.style.setProperty('--dy', (d.dy + my).toFixed(1) + 'px');
+      p.style.setProperty('--rt', Math.max(-12, Math.min(12, (e.clientX - d.lx) * 0.6)).toFixed(2) + 'deg');
+      d.lx = e.clientX;
+    });
+    function up(){
+      if (!d) return;
+      p.classList.remove('drag'); p.style.setProperty('--rt', '0deg');
+      if (!d.moved){   /* tap: tuck it under the others */
+        polas.forEach(function(o){ if (o !== p) o.style.zIndex = (+o.style.zIndex || 1) + 1; });
+        p.style.zIndex = 1;
+      }
+      d = null;
+    }
+    p.addEventListener('pointerup', up);
+    p.addEventListener('pointercancel', up);
+  });
+
+  /* 13. Pager clock: the visitor's own time, like a real pager */
+  var pgT = document.getElementById('pgTime');
+  if (pgT){
+    var tick = function(){ pgT.textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }).toUpperCase(); };
+    tick(); setInterval(tick, 10000);
   }
 
   /* 5. Copy email */
