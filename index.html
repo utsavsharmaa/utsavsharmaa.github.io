@@ -1141,7 +1141,8 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
         requestAnimationFrame(roam); return;
       }
       var dt = Math.min(0.05, (now - S.last) / 1000); S.last = now;
-      var hl = heroEl.offsetLeft, vh = Math.max(heroEl.offsetHeight, innerHeight), half = S.w / 2;   /* its box: full width of the window, top of the page to the bottom of the first screen */
+      var band = document.querySelector('.tear-band');
+      var hl = heroEl.offsetLeft, vh = band ? band.offsetTop + band.offsetHeight - heroEl.offsetTop : heroEl.offsetHeight, half = S.w / 2;   /* its box: full width of the window, top of the page to the bottom of the torn paper tagline */
       var x0 = half - hl, x1 = document.documentElement.clientWidth - hl - half;
       var still = S.hover || S.down;
       if (!S.drag){
