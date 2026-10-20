@@ -15,6 +15,7 @@
    Dark = deep brown-black with gold lines at 10% and everything in gold. */
 :root{
   --bg:#FFFFFF; --rule:rgba(233,179,0,.05); --fg:#111111; --ink:#111111; --muted:#6B6457; --hero-fg:#140F00; --hero-wt:400; --kick:#111111;
+  --paper:#FFFFFF; --tag-fg:#140F00; --me-ink:#111111; --me-title:var(--accent); --ph-bg:#E6E3DA; --ph-fg:#8A8578;
   --panel:#EEEFF1; --about-fg:#111216; --line:#DAD9D2; --accent:#E9B300; --on-accent:#140F00;
   --pill:#FFFFFF; --pill-fg:#111111; --pill-soft:rgba(255,255,255,.5);
   --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#E3E3E3,rgba(238,238,238,.6)); --nav-shadow:none;
@@ -30,6 +31,7 @@
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     --bg:#1C1500; --rule:rgba(233,179,0,.05); --fg:#E9B300; --ink:#E9B300; --muted:#A08A50; --hero-fg:#FFFFFF; --hero-wt:500; --kick:#FFFFFF; --hl-fg:#FFFFFF;
+    --paper:#FFC822; --tag-fg:#1C1500; --me-ink:#FFFFFF; --me-title:#FFFFFF; --ph-bg:#1F1F1F; --ph-fg:#ACACAC;
     --panel:#1F1800; --about-fg:#E9B300; --line:rgba(233,179,0,.22); --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
     --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#140F00,#674F00); --nav-shadow:none;
     --btn-top:28px; --btn-right:40; --nav-fg:#D9D5C6; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#FFFFFF,#D7D7D7); --hover:rgba(233,179,0,.12);
@@ -38,6 +40,7 @@
 }
 :root[data-theme="dark"]{
     --bg:#1C1500; --rule:rgba(233,179,0,.05); --fg:#E9B300; --ink:#E9B300; --muted:#A08A50; --hero-fg:#FFFFFF; --hero-wt:500; --kick:#FFFFFF; --hl-fg:#FFFFFF;
+    --paper:#FFC822; --tag-fg:#1C1500; --me-ink:#FFFFFF; --me-title:#FFFFFF; --ph-bg:#1F1F1F; --ph-fg:#ACACAC;
     --panel:#1F1800; --about-fg:#E9B300; --line:rgba(233,179,0,.22); --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
     --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#140F00,#674F00); --nav-shadow:none;
     --btn-top:28px; --btn-right:40; --nav-fg:#D9D5C6; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#FFFFFF,#D7D7D7); --hover:rgba(233,179,0,.12);
@@ -150,11 +153,11 @@ a{color:inherit;text-decoration:none}
 .hl svg{flex:none}
 /* torn paper strips (Figma: two copies of one torn shape, one turned upside down, on white paper with grain and faint rules) */
 .tear{position:relative;margin-inline:calc(-1 * clamp(16px,3.33vw,48px));
-  background:url(assets/home/paper-noise.png),repeating-linear-gradient(to bottom,transparent 0 44px,rgba(0,0,0,.05) 44px 45px),#fff;
+  background:url(assets/home/paper-noise.png),repeating-linear-gradient(to bottom,transparent 0 44px,rgba(0,0,0,.05) 44px 45px),var(--paper);   /* white paper; yellow in dark mode (Figma: Desktop - 21) */
   -webkit-mask:url(assets/home/tear-band.svg) 0 0/100% 100% no-repeat;mask:url(assets/home/tear-band.svg) 0 0/100% 100% no-repeat}
 .tear-band{display:grid;place-items:center;height:max(240px,calc(569 * var(--k)));margin-top:calc(147 * var(--k));margin-bottom:calc(152 * var(--k))}
 /* tagline: 40px DM Sans, title case, 908 wide, centred on the strip */
-.tagline{margin:0;padding:0 16px;max-width:calc(908 * var(--k) + 32px);text-align:center;color:#140F00;font-size:max(17px,calc(40 * var(--k)));letter-spacing:-.02em;line-height:1.4;text-transform:capitalize}
+.tagline{margin:0;padding:0 16px;max-width:calc(908 * var(--k) + 32px);text-align:center;color:var(--tag-fg);font-size:max(17px,calc(40 * var(--k)));letter-spacing:-.02em;line-height:1.4;text-transform:capitalize}
 
 /* bendable blocks: background is drawn wider than the box, and the visible shape is a clip-path set from script */
 .bend{position:relative;isolation:isolate;clip-path:inset(0 round 8px)}
@@ -244,7 +247,7 @@ svg.draw.drawn{clip-path:inset(0 0 0 0)}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* about me: hobbies on the left, a stack of polaroids you can drag in the middle, skills on the right */
-.me{position:relative;isolation:isolate;--ink:#111111;--ul:#111111;padding:clamp(72px,8vw,128px) 0 clamp(56px,6vw,96px);scroll-margin-top:88px;color:var(--ink)}
+.me{position:relative;isolation:isolate;--ink:var(--me-ink);--ul:var(--me-ink);padding:clamp(72px,8vw,128px) 0 clamp(56px,6vw,96px);scroll-margin-top:88px;color:var(--ink)}
 .me > .tear{position:absolute;z-index:-1;top:calc(70 * var(--k));bottom:calc(-48 * var(--k));left:0;right:0;-webkit-mask-image:url(assets/home/tear-about.svg);mask-image:url(assets/home/tear-about.svg)}
 .me-grid{margin-top:clamp(56px,7vw,110px);display:grid;grid-template-columns:1fr minmax(260px,29vw) 1fr;gap:clamp(24px,3vw,48px);align-items:start}
 .me-col{position:relative;max-width:425px;font-size:16px;line-height:1.6}
@@ -265,10 +268,11 @@ svg.draw.drawn{clip-path:inset(0 0 0 0)}
   transform:translate(var(--dx,0px),var(--dy,0px)) rotate(calc(var(--r) + var(--rt,0deg)));
   transition:transform .55s cubic-bezier(.3,1.3,.5,1),box-shadow .3s;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
 .pola.drag{cursor:grabbing;transition:box-shadow .3s;box-shadow:0 2px 6px rgba(17,18,18,.2),0 30px 60px -16px rgba(17,18,18,.4)}
-.pola .ph{position:relative;display:block;aspect-ratio:419/435;overflow:hidden;background:#E6E3DA}
+.pola .ph{position:relative;display:block;aspect-ratio:419/435;overflow:hidden;background:var(--ph-bg)}
+.me .uh{color:var(--me-title)}
 .pola .ph img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
-.ph-empty{position:absolute;inset:0;display:grid;place-items:center;font:500 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:#8A8578;
-  background:repeating-linear-gradient(45deg,#E9E6DD 0 10px,#E2DED3 10px 20px)}
+.ph-empty{position:absolute;inset:0;display:grid;place-items:center;font:500 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--ph-fg);
+  background:repeating-linear-gradient(45deg,rgba(0,0,0,.035) 0 10px,transparent 10px 20px),var(--ph-bg)}
 .pola figcaption{display:grid;place-items:center;height:clamp(52px,4.6vw,66px);font:500 clamp(13px,1.1vw,16px)/1 var(--body);letter-spacing:.02em}
 .drag-hint{position:absolute;left:50%;top:calc(100% + 22px);transform:translateX(-50%);white-space:nowrap;color:var(--ink);opacity:.5}
 
