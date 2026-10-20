@@ -255,7 +255,8 @@ svg.draw.drawn{clip-path:inset(0 0 0 0)}
 .me-col.r{justify-self:end;padding-top:clamp(180px,22vw,316px)}
 .me-col h3{margin:0 0 20px;font:500 14px/1.4 var(--body);letter-spacing:.14em;text-transform:uppercase}
 .me-col p{margin:0 0 20px;color:color-mix(in srgb,var(--ink) var(--me-soft),transparent)}
-.me-col p b,.flow p b{font-weight:500;color:var(--ink)}
+.me-col p b{font-weight:500;color:var(--ink)}
+.flow p b{font-weight:500;color:var(--kick)}
 .doodle{position:absolute;color:var(--ink);opacity:.75;pointer-events:none}
 .doodle.cloud{width:190px;left:26%;bottom:10px;transform:rotate(18deg)}
 .doodle.squig{width:150px;right:18%;top:0;transform:rotate(18deg)}
@@ -278,7 +279,7 @@ svg.draw.drawn{clip-path:inset(0 0 0 0)}
 
 /* my workflow: four flat sticky notes in a row, slightly overlapping and tilted (Figma: Desktop - 19) */
 .flow{padding:clamp(64px,7vw,112px) 0;scroll-margin-top:88px;color:var(--ink);text-align:center}
-.flow-intro,.flow-sum{max-width:500px;margin:clamp(40px,5vw,72px) auto 0;font-size:16px;line-height:1.6;color:color-mix(in srgb,var(--ink) 62%,transparent)}
+.flow-intro,.flow-sum{max-width:500px;margin:clamp(40px,5vw,72px) auto 0;font-size:16px;line-height:1.6;color:color-mix(in srgb,var(--kick) 62%,transparent)}   /* dark text in light mode, white in dark mode */
 .notes{list-style:none;margin:clamp(48px,6vw,80px) 0 0;padding:0;display:flex;justify-content:center}
 .sn{position:relative;flex:0 1 353px;min-width:0;aspect-ratio:353/392;margin-left:-13px;padding:clamp(20px,2.3vw,33px) clamp(20px,2.1vw,30px) clamp(20px,2.1vw,30px) clamp(22px,2.4vw,34px);
   display:flex;flex-direction:column;overflow:hidden;text-align:left;color:#191510;
