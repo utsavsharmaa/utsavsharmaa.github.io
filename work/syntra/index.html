@@ -298,11 +298,11 @@ b{font-weight:500}
   v.preload='metadata';
   function sync(){ b.textContent=v.paused?'Play':'Pause'; }
   function play(){ var p=v.play(); if(p&&p.catch) p.catch(function(){ sync(); }); }
-  b.addEventListener('click',function(){ user=true; if(v.paused) play(); else v.pause(); });
+  b.addEventListener('click',function(){ if(v.paused){ user=false; play(); } else { user=true; v.pause(); } });   /* user = paused on purpose */
   v.addEventListener('play',sync); v.addEventListener('pause',sync);
   if(reduce){ sync(); return; }
   play();
-  if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ if(!user||!v.paused) play(); } else if(!v.paused){ v.pause(); } }); },{threshold:.2}).observe(v); }
+  if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ if(!user) play(); } else if(!v.paused){ v.pause(); } }); },{threshold:.2}).observe(v); }
 })();
 </script>
 
