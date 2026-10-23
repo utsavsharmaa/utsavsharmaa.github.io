@@ -268,6 +268,13 @@ b{font-weight:500}
 }
 @media (min-width:1000px){ .only-narrow{display:none!important} }
 @media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important} .rv{opacity:1;transform:none} }
+
+/* showreel at the very top */
+.reel{position:relative;background:#F4EBDD;line-height:0}
+.reel video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;background:#F4EBDD}
+.reel .rp{position:absolute;right:clamp(12px,2vw,28px);bottom:clamp(12px,2vw,28px);display:flex;align-items:center;gap:6px;height:34px;padding:0 14px;border:0;border-radius:999px;cursor:pointer;
+  background:rgba(255,255,255,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 2px 12px rgba(89,51,20,.16);font:500 13px/1 Manrope,system-ui,sans-serif;color:#593314}
+.reel .rp:hover{background:#fff}
 </style>
 <script data-goatcounter="https://helloutsav.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
@@ -276,6 +283,28 @@ b{font-weight:500}
 <a class="back" href="../../#work" aria-label="Back to Utsav Sharma's work"><span aria-hidden="true">←</span> Utsav Sharma</a>
 
 <main>
+
+<!-- 00 Showreel -->
+<section class="reel" aria-label="Syntra showreel">
+  <video id="reel" poster="img/showreel-poster.jpg" muted loop playsinline preload="none" aria-label="Syntra showreel, 53 seconds, no sound">
+    <source src="img/showreel-1080.mp4" type="video/mp4">
+  </video>
+  <button class="rp" id="reelBtn" type="button" aria-controls="reel">Pause</button>
+</section>
+<script>
+(function(){ var v=document.getElementById('reel'), b=document.getElementById('reelBtn'); if(!v) return;
+  var user=false, reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(matchMedia('(max-width:900px)').matches){ v.src='img/showreel-720.mp4'; }   /* smaller file for phones */
+  v.preload='metadata';
+  function sync(){ b.textContent=v.paused?'Play':'Pause'; }
+  function play(){ var p=v.play(); if(p&&p.catch) p.catch(function(){ sync(); }); }
+  b.addEventListener('click',function(){ user=true; if(v.paused) play(); else v.pause(); });
+  v.addEventListener('play',sync); v.addEventListener('pause',sync);
+  if(reduce){ sync(); return; }
+  if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ if(!user||!v.paused) play(); } else if(!v.paused){ v.pause(); } }); },{threshold:.2}).observe(v); }
+  else play();
+})();
+</script>
 
 <!-- 01 Cover -->
 <section class="s cover" style="--sh:2725" aria-label="Syntra">
