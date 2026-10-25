@@ -310,10 +310,10 @@ svg.draw.drawn{clip-path:inset(0 0 0 0)}
 .me-col p b{font-weight:700;color:var(--ink)}
 .flow p b{font-weight:500;color:var(--kick)}
 /* skill chips: a 4-column grid of glass pills (Figma: 138 / 147 / 120 / 102 wide, 28 tall, 16px text) */
-.chips-s{display:grid;grid-template-columns:calc(138 * var(--k)) calc(147 * var(--k)) calc(120 * var(--k)) calc(102 * var(--k));justify-content:start;gap:4px calc(12 * var(--k));margin:calc(15 * var(--k)) 0 calc(26 * var(--k));padding:0;list-style:none}
-.chips-s li{position:relative;display:grid;place-items:center;min-height:28px;padding:4px 8px;border-radius:40px;font:400 clamp(13px,calc(16 * var(--k)),16px)/1.2 var(--body);white-space:nowrap;color:#140F00;background:rgba(255,255,255,.2);box-shadow:0 1px 3px rgba(20,15,0,.06)}
-.chips-s li::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:.5px;background:linear-gradient(160deg,#E3E3E3,rgba(238,238,238,.6));pointer-events:none;
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.chips-s{display:flex;flex-wrap:wrap;gap:8px 10px;margin:calc(15 * var(--k)) 0 calc(26 * var(--k));padding:0;list-style:none}
+/* skill chips: light pills that hug their text, with a thin crisp outline so they read on the paper */
+.chips-s li{display:inline-flex;align-items:center;height:30px;padding:0 13px;border-radius:40px;border:1px solid color-mix(in srgb,var(--ink) 16%,transparent);
+  background:rgba(255,255,255,.55);color:var(--ink);font:400 15px/1 var(--body);white-space:nowrap}
 /* the video: a 318 x 718 box; the cut-out (with its yellow outline baked in) is drawn on a canvas, with a still of it underneath until it plays */
 .me-vid{position:absolute;left:calc(451.5 * var(--k));top:0;width:calc(318 * var(--k));height:calc(718 * var(--k))}
 .me-vid .st{position:absolute;z-index:0;height:auto;pointer-events:none}
@@ -429,10 +429,7 @@ svg.draw.drawn{clip-path:inset(0 0 0 0)}
   .me-vid{position:relative;left:auto;width:calc(min(560px,118vw) * 318 / 718);height:min(560px,118vw)}
   .me .dk{display:none}
   .me-col.r p{max-width:none}
-  .chips-s{grid-template-columns:repeat(4,auto);gap:6px 10px}
-  .chips-s li{padding:4px 14px}
 }
-@media (max-width:620px){.chips-s{display:flex;flex-wrap:wrap;gap:8px}}
 @media (max-width:1023px){
   .svc-cards{--u:min(.9px,calc(100vw / 330));height:auto;display:flex;flex-wrap:wrap;justify-content:center;gap:28px 0;margin-top:40px}
   .sc{position:relative;left:auto;top:auto;margin:calc(60 * var(--u)) -6px 0}
