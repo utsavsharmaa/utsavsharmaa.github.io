@@ -7,7 +7,7 @@
 <title>Utsav Sharma Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,900&family=DM+Mono:wght@500&display=swap">
 <style>
 /* Layout: landing from Utsav's Figma (Desktop 1 light / Desktop 2 dark): nav pill, meta row, two-line gold name with
    stamps and a smiley stuck on it, mono tagline. Then rounded media cards in a 2-col grid, about panel, gold contact card. */
@@ -160,15 +160,15 @@ a{color:inherit;text-decoration:none}
 /* mountain glimpse (Figma: "image 86" behind the hero): a black-and-white photo of the Himalaya sits behind the hero,
    invisible until you move the mouse over it. A soft ellipse of it follows the cursor, like a torch. Multiply drops the white sky
    into the page colour; in dark mode the photo is inverted and screened so the ridges glow faintly instead. */
-.mtn{position:absolute;left:calc(-1 * clamp(16px,3.33vw,48px));right:calc(-1 * clamp(16px,3.33vw,48px));top:calc(67 * var(--k));height:calc(1033 * var(--k));z-index:-1;pointer-events:none;
-  background:url(assets/home/mountains.webp?v=2) 50% 0/100% 100% no-repeat;mix-blend-mode:multiply;opacity:0;transition:opacity .7s ease-out;
+.mtn{position:absolute;left:calc(-1 * clamp(16px,3.33vw,48px));right:calc(-1 * clamp(16px,3.33vw,48px));top:calc(151 * var(--k));height:calc(752 * var(--k));z-index:-1;pointer-events:none;
+  background:url(assets/home/mountains.webp?v=3) 50% 0/100% 100% no-repeat;mix-blend-mode:multiply;opacity:0;transition:opacity .7s ease-out;
   /* two masks, both must let a pixel through: the soft torch around the cursor, and a long fade at the bottom so the photo
      melts into the page well before it reaches the torn paper (no hard edge anywhere) */
   -webkit-mask-image:radial-gradient(ellipse clamp(220px,30vw,460px) clamp(170px,24vw,360px) at var(--mx,50%) var(--my,60%),#000 0%,#000b 28%,#0003 62%,transparent 100%),
-                     linear-gradient(transparent 0,#000 12%,#000 56%,rgba(0,0,0,.35) 69%,transparent 80%);
+                     linear-gradient(transparent 0,#000 14%,#000 70%,rgba(0,0,0,.35) 86%,transparent 100%);
   -webkit-mask-composite:source-in;
           mask-image:radial-gradient(ellipse clamp(220px,30vw,460px) clamp(170px,24vw,360px) at var(--mx,50%) var(--my,60%),#000 0%,#000b 28%,#0003 62%,transparent 100%),
-                     linear-gradient(transparent 0,#000 12%,#000 56%,rgba(0,0,0,.35) 69%,transparent 80%);
+                     linear-gradient(transparent 0,#000 14%,#000 70%,rgba(0,0,0,.35) 86%,transparent 100%);
           mask-composite:intersect}
 .mtn.on{opacity:.6;transition-duration:.22s}
 .intro .mtn{opacity:0!important}
@@ -178,7 +178,7 @@ a{color:inherit;text-decoration:none}
 /* no mouse (phones, tablets) or reduced motion: no torch, just a faint, still view of the range behind the name */
 @media (hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){
   .mtn,.mtn.on{opacity:.16;transition:none;
-    -webkit-mask-image:linear-gradient(transparent 4%,#000 22%,#000 50%,rgba(0,0,0,.35) 64%,transparent 76%);mask-image:linear-gradient(transparent 4%,#000 22%,#000 50%,rgba(0,0,0,.35) 64%,transparent 76%)}
+    -webkit-mask-image:linear-gradient(transparent 4%,#000 26%,#000 64%,rgba(0,0,0,.35) 82%,transparent 98%);mask-image:linear-gradient(transparent 4%,#000 26%,#000 64%,rgba(0,0,0,.35) 82%,transparent 98%)}
   :root[data-theme="dark"] .mtn,:root[data-theme="dark"] .mtn.on{opacity:.12}
 }
 @media (hover:none) and (prefers-color-scheme:dark),(pointer:coarse) and (prefers-color-scheme:dark),(prefers-reduced-motion:reduce) and (prefers-color-scheme:dark){
@@ -188,9 +188,17 @@ a{color:inherit;text-decoration:none}
 .tear{position:relative;margin-inline:calc(-1 * clamp(16px,3.33vw,48px));
   background:url(assets/home/paper-noise.png),repeating-linear-gradient(to bottom,transparent 0 44px,rgba(0,0,0,.05) 44px 45px),var(--paper);   /* white paper; yellow in dark mode (Figma: Desktop - 21) */
   -webkit-mask:url(assets/home/tear-band.svg?v=3) 0 0/100% 100% no-repeat;mask:url(assets/home/tear-band.svg?v=3) 0 0/100% 100% no-repeat}
-.tear-band{display:grid;place-items:center;height:max(240px,calc(569 * var(--k)));margin-top:calc(147 * var(--k));margin-bottom:calc(152 * var(--k))}
-/* tagline: 40px DM Sans, title case, 908 wide, centred on the strip */
-.tagline{margin:0;padding:0 16px;max-width:calc(908 * var(--k) + 32px);text-align:center;color:var(--tag-fg);font-size:max(17px,calc(40 * var(--k)));letter-spacing:-.02em;line-height:1.4;text-transform:capitalize}
+/* tagline band (Figma: Desktop - 19, y844-1413): torn white paper, four lines of DM Sans Black, stickers slapped on and around it.
+   Everything is placed in Figma px of the 1440 frame (--bk), so the band is the same picture at every width. */
+.tagb{--bk:calc(100vw / 1440);--bx:0;position:relative;height:calc(569 * var(--bk));margin:calc(144 * var(--k)) calc(-1 * clamp(16px,3.33vw,48px)) calc(152 * var(--k))}
+.tagb > .tear{position:absolute;inset:0;margin:0}
+.tagline{position:absolute;left:calc((266 - var(--bx)) * var(--bk));top:calc(76 * var(--bk));margin:0;color:var(--tag-fg);font:900 calc(96 * var(--bk))/1 var(--body);letter-spacing:-.1em;padding-right:.1em}
+.tag-stk{position:absolute;inset:0;pointer-events:none}
+.dk{position:absolute;display:block;left:calc((var(--x) - var(--bx,0)) * var(--bk));top:calc(var(--y) * var(--bk));width:calc(var(--w) * var(--bk));height:auto;max-width:none;
+  transform:scale(var(--s,1)) rotate(var(--sr,0deg));transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
+.tagb:not(.in) .dk{--s:.4;opacity:0}
+.tagb.in .dk{opacity:1;transition:transform .55s cubic-bezier(.3,1.5,.5,1) var(--d,0s),opacity .2s var(--d,0s)}
+.intro .tagb .dk{opacity:0}
 
 /* bendable blocks: background is drawn wider than the box, and the visible shape is a clip-path set from script */
 .bend{position:relative;isolation:isolate;clip-path:inset(0 round 8px)}
@@ -279,36 +287,69 @@ svg.draw.drawn{clip-path:inset(0 0 0 0)}
 .panel .go.draw.drawn{background-size:100% 2px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-/* about me: hobbies on the left, a stack of polaroids you can drag in the middle, skills on the right */
-.me{position:relative;isolation:isolate;--ink:var(--me-ink);--ul:var(--me-ul);padding:clamp(72px,8vw,128px) 0 clamp(56px,6vw,96px);scroll-margin-top:88px;color:var(--ink)}
+/* about me (Figma: Desktop - 19, y5497-6591): life on the left, a cut-out video of me in the middle on yellow stars,
+   skills on the right, stickers around it. On wide screens it is placed in Figma px from the top of the columns (y5786). */
+.me{position:relative;isolation:isolate;--ink:var(--me-ink);--ul:var(--me-ul);padding:clamp(72px,8vw,128px) 0 calc(87 * var(--k));scroll-margin-top:88px;color:var(--ink)}
 .me > .tear{position:absolute;z-index:-1;top:0;bottom:calc(30 * var(--k));left:0;right:0;-webkit-mask-image:url(assets/home/tear-about.svg?v=4);mask-image:url(assets/home/tear-about.svg?v=4)}
-.me-grid{margin-top:clamp(56px,7vw,110px);display:grid;grid-template-columns:1fr minmax(260px,29vw) 1fr;gap:clamp(24px,3vw,48px);align-items:start}
-.me-col{position:relative;max-width:425px;font-size:16px;line-height:1.6}
-.me-col.l{padding-bottom:240px}
-.me-col.r{justify-self:end;padding-top:clamp(180px,22vw,316px)}
-.me-col h3{margin:0 0 20px;font:500 14px/1.4 var(--body);letter-spacing:.14em;text-transform:uppercase}
-.me-col p{margin:0 0 20px;color:color-mix(in srgb,var(--ink) var(--me-soft),transparent)}
-.me-col p b{font-weight:500;color:var(--ink)}
-.flow p b{font-weight:500;color:var(--kick)}
-.doodle{position:absolute;color:var(--ink);opacity:.75;pointer-events:none}
-.doodle.cloud{width:190px;left:26%;bottom:10px;transform:rotate(18deg)}
-.doodle.squig{width:150px;right:18%;top:0;transform:rotate(18deg)}
-.me-photos{position:relative;width:100%;aspect-ratio:456/522}
-.insta{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;justify-items:center;gap:6px;text-align:center;color:var(--ink);font-size:16px;line-height:1.35}
-.insta span{opacity:.6;color:var(--me-note)}
-.insta b{font-weight:500}
-.pola{position:absolute;inset:0;z-index:1;margin:0;padding:3.7% 3.7% 0;background:#F8F8F8;color:#191510;
-  box-shadow:0 1px 3px rgba(17,18,18,.2),0 14px 34px -10px rgba(17,18,18,.3);
-  transform:translate(var(--dx,0px),var(--dy,0px)) rotate(calc(var(--r) + var(--rt,0deg)));
-  transition:transform .55s cubic-bezier(.3,1.3,.5,1),box-shadow .3s;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
-.pola.drag{cursor:grabbing;transition:box-shadow .3s;box-shadow:0 2px 6px rgba(17,18,18,.2),0 30px 60px -16px rgba(17,18,18,.4)}
-.pola .ph{position:relative;display:block;aspect-ratio:419/435;overflow:hidden;background:var(--ph-bg)}
 .me .uh{color:var(--me-title)}
-.pola .ph img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
-.ph-empty{position:absolute;inset:0;display:grid;place-items:center;font:500 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--ph-fg);
-  background:repeating-linear-gradient(45deg,rgba(0,0,0,.035) 0 10px,transparent 10px 20px),var(--ph-bg)}
-.pola figcaption{display:grid;place-items:center;height:clamp(52px,4.6vw,66px);font:500 clamp(13px,1.1vw,16px)/1 var(--body);letter-spacing:.02em}
-.drag-hint{position:absolute;left:50%;top:calc(100% + 22px);transform:translateX(-50%);white-space:nowrap;color:var(--me-note);opacity:.5}
+.me-stage{position:relative;height:calc(718 * var(--k));margin-top:calc(73 * var(--k))}
+.me-col{position:absolute;top:0;left:0;width:calc(420 * var(--k));font-size:clamp(14px,calc(16 * var(--k)),16px);line-height:1.6}
+.me-col.r{left:calc(910 * var(--k));top:calc(316 * var(--k));width:calc(434 * var(--k))}
+.me-col h3{margin:0 0 calc(24 * var(--k));font:500 14px/1.15 var(--body);letter-spacing:.14em;text-transform:uppercase}
+.me-col p{margin:0 0 1.6em;color:color-mix(in srgb,var(--ink) var(--me-soft),transparent)}
+.me-col p b{font-weight:700;color:var(--ink)}
+.flow p b{font-weight:500;color:var(--kick)}
+.chips-s{display:flex;flex-wrap:wrap;gap:8px 10px;margin:0 0 calc(24 * var(--k));padding:0;list-style:none}
+.chips-s li{position:relative;padding:3px 10px;border-radius:40px;font:400 12px/1.5 var(--body);color:var(--ink);background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.chips-s li::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:.5px;background:linear-gradient(160deg,color-mix(in srgb,var(--ink) 22%,transparent),color-mix(in srgb,var(--ink) 6%,transparent));pointer-events:none;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+/* the video: a 318 x 718 box; the cut-out (with its yellow outline baked in) is drawn on a canvas, with a still of it underneath until it plays */
+.me-vid{position:absolute;left:calc(506 * var(--k));top:0;width:calc(318 * var(--k));height:calc(718 * var(--k))}
+.me-vid .st{position:absolute;z-index:0;height:auto;pointer-events:none}
+.me-vid canvas,.me-vid > img.poster{position:absolute;z-index:1;left:50%;top:0;height:100%;width:auto;aspect-ratio:520/1310;transform:translateX(-50%)}
+.me-vid canvas{opacity:0;transition:opacity .4s}
+.me-vid.live canvas{opacity:1}
+.me-vid.live > img.poster{opacity:0;transition:opacity .4s .1s}
+.me .dk{--bk:var(--k);z-index:2}
+.me:not(.in) .dk{--s:.4;opacity:0}
+.me.in .dk{opacity:1;transition:transform .55s cubic-bezier(.3,1.5,.5,1) var(--d,0s),opacity .2s var(--d,0s)}
+
+/* sneak peek of my life: polaroids running sideways across the whole page (Figma: 334 x 363 each, 40 apart, tilted +/-3 degrees) */
+.sh{margin:0;text-align:center;font:900 max(32px,calc(48 * var(--k)))/.88 var(--display);text-transform:uppercase;color:color-mix(in srgb,var(--kick) 80%,transparent)}
+.sh .u{position:relative;display:inline-block}
+.sh .ul{position:absolute;left:-2%;bottom:-.2em;width:104%;height:.13em;fill:currentColor}
+.peek{padding:calc(101 * var(--k)) 0 calc(48 * var(--k))}
+.peek-row,.tools-row{margin:0 calc(-1 * clamp(16px,3.33vw,48px));overflow:hidden}
+.peek-row{--pw:calc(334 * var(--k));padding:calc(30 * var(--k)) 0 max(50px,calc(70 * var(--k)));margin-top:calc(27 * var(--k))}
+.peek-track,.tools-track{display:flex;width:max-content;animation:marq var(--dur,70s) linear infinite}
+.peek-row:hover .peek-track{animation-play-state:paused}
+@keyframes marq{to{transform:translateX(-50%)}}
+.pc{flex:none;width:var(--pw);margin:0 calc(var(--pw) * 40 / 334) 0 0;padding:calc(var(--pw) * 15 / 334) calc(var(--pw) * 15 / 334) 0;background:#F8F8F8;color:#191510;
+  transform:rotate(var(--r));box-shadow:0 1px 3px rgba(0,0,0,.2),0 14px 34px rgba(0,0,0,.3);transition:transform .45s cubic-bezier(.3,1.4,.5,1)}
+.pc:hover{transform:rotate(0deg) scale(1.04)}
+.pc img{display:block;width:100%;height:auto;aspect-ratio:304/301;object-fit:cover;background:var(--ph-bg)}
+.pc figcaption{display:grid;place-items:center;height:calc(var(--pw) * 47 / 334);font:500 max(11px,calc(var(--pw) * 16 / 334))/1 "DM Mono",ui-monospace,monospace;letter-spacing:.02em}
+
+/* tools I use: a row of app stickers that keeps running to the left */
+.tools{padding:calc(101 * var(--k)) 0 calc(62 * var(--k))}
+.tools-row{margin-top:calc(70 * var(--k))}
+.tools-track{--dur:45s}
+.tools-track img{display:block;flex:none;width:calc(1860.7 * var(--k));height:calc(242 * var(--k));max-width:none}
+
+/* call me if you need: five service cards fanned out, each with a sticker on top (Figma: 300 x 440, 18px corners) */
+.svc{padding:calc(110 * var(--k)) 0 calc(100 * var(--k))}
+.svc-intro{max-width:500px;margin:calc(68 * var(--k)) auto 0;text-align:center;font-size:16px;line-height:1.6;color:var(--kick);opacity:.9}
+.svc-cards{--u:var(--k);position:relative;height:calc(600 * var(--k));margin:0;padding:0;list-style:none}
+.sc{position:absolute;left:calc(var(--x) * var(--u));top:calc(var(--y) * var(--u));width:calc(300 * var(--u));height:calc(440 * var(--u));padding:calc(120 * var(--u)) calc(30 * var(--u)) 0;
+  border-radius:calc(18 * var(--u));background:var(--c);color:var(--t);box-shadow:0 8px 18px rgba(20,15,0,.16);transform:rotate(var(--r));transition:transform .45s cubic-bezier(.3,1.4,.5,1),box-shadow .3s}
+.sc:hover{transform:rotate(0deg) translateY(calc(-12 * var(--u)));z-index:3;box-shadow:0 18px 34px rgba(20,15,0,.22)}
+.sc h3{margin:0;font:900 calc(40 * var(--u))/1.15 var(--body);letter-spacing:-.02em}
+.sc hr{width:calc(240 * var(--u));height:2px;margin:calc(16 * var(--u)) 0 calc(22 * var(--u));border:0;color:inherit;background:currentColor}
+.sc ul{display:grid;gap:calc(10 * var(--u));margin:0;padding:0;list-style:none;font:500 calc(19 * var(--u))/1.3 var(--body)}
+.sc li::before{content:"\2726";display:inline-block;width:1.2em;font-size:.8em}
+.sc .st{position:absolute;left:50%;top:50%;width:calc(var(--w) * var(--u));height:auto;max-width:none;pointer-events:none;
+  transform:rotate(calc(-1 * var(--r))) translate(calc(var(--dx) * var(--u)),calc(var(--dy) * var(--u))) translate(-50%,-50%)}
+.sc:hover .st{transform:translate(calc(var(--dx) * var(--u)),calc(var(--dy) * var(--u))) translate(-50%,-50%)}
 
 /* my workflow: four flat sticky notes in a row, slightly overlapping and tilted (Figma: Desktop - 19) */
 .flow{padding:clamp(64px,7vw,112px) 0;scroll-margin-top:88px;color:var(--ink);text-align:center}
@@ -368,14 +409,18 @@ svg.draw.drawn{clip-path:inset(0 0 0 0)}
 .pill.cta:hover{background:#D29620}
 .pg-copy{position:relative;z-index:2;margin:auto 0 0;padding-top:40px;font-size:14px;color:var(--muted)}
 
+/* about me: below laptop width the columns stack (text, video, skills) and the loose stickers go */
+@media (max-width:1279px){
+  .me{padding-bottom:64px}
+  .me-stage{height:auto;margin-top:48px;display:flex;flex-direction:column;align-items:center;gap:40px}
+  .me-col,.me-col.r{position:relative;left:auto;top:auto;width:100%;max-width:560px;font-size:16px}
+  .me-col h3{margin-bottom:20px}
+  .me-vid{position:relative;left:auto;width:calc(min(560px,118vw) * 318 / 718);height:min(560px,118vw)}
+  .me .dk{display:none}
+}
 @media (max-width:1023px){
-  .me-grid{grid-template-columns:1fr;justify-items:center;text-align:left}
-  .me-col{max-width:560px;width:100%}
-  .me-col.l{padding-bottom:0}
-  .me-col.r{justify-self:center;padding-top:0}
-  .doodle.cloud{display:none}
-  .doodle.squig{width:84px;right:0;top:-24px}
-  .me-photos{width:min(340px,80vw);margin:28px 0 72px}
+  .svc-cards{--u:min(.9px,calc(100vw / 330));height:auto;display:flex;flex-wrap:wrap;justify-content:center;gap:28px 0;margin-top:40px}
+  .sc{position:relative;left:auto;top:auto;margin:calc(60 * var(--u)) -6px 0}
   .notes{flex-wrap:wrap;max-width:720px;margin-inline:auto;gap:18px 0}
   .sn{flex:0 0 calc(50% + 6px)}
   .sn:nth-child(3){margin-left:0}
@@ -449,6 +494,18 @@ html.lenis,html.lenis body{height:auto}
   .hero{padding-top:84px}
   .hero-meta{width:max(calc(560 * var(--k)),min(100%,340px))}
   .direct{justify-items:start;text-align:left}
+  .tagb{--bk:calc(100vw / 1270);--bx:150;margin-top:56px;margin-bottom:56px}
+  /* the service cards become a row you swipe through */
+  .svc-cards{--u:.82px;flex-wrap:nowrap;justify-content:flex-start;gap:0 14px;overflow-x:auto;scroll-snap-type:x mandatory;margin:24px calc(-1 * clamp(16px,3.33vw,48px)) 0;padding:20px 24px 40px;scrollbar-width:none}
+  .svc-cards::-webkit-scrollbar{display:none}
+  .sc{flex:none;margin:calc(70 * var(--u)) 0 0;scroll-snap-align:center}
+  .peek-row{--pw:210px;margin-top:20px}
+  .peek{padding:72px 0 56px}
+  .tools{padding:56px 0 40px}
+  .tools-row{margin-top:28px}
+  .tools-track img{width:1116px;height:145px}
+  .svc{padding:72px 0 56px}
+  .svc-intro{margin-top:32px}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
@@ -496,8 +553,23 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   </div>
 </header>
 
-<!-- the tagline on a strip of torn paper (Figma: Desktop - 19, "Group 12") -->
-<div class="tear tear-band"><p class="tagline">I notice weird things. Then I try to figure out why they happen. Sometimes that becomes a brand. Sometimes an interface. Sometimes a photograph.</p></div>
+<!-- the tagline on a strip of torn paper, with stickers (Figma: Desktop - 19, y844-1413) -->
+<div class="tagb tear-band">
+  <div class="tear" aria-hidden="true"></div>
+  <p class="tagline">Curious<br>Designer,<br>imagemaker,<br>storyteller</p>
+  <div class="tag-stk" aria-hidden="true">
+    <img class="dk" src="assets/home/stk/t-namaste.svg?v=1" alt="" width="165" height="166" style="--x:557.5;--y:-17.3;--w:164.9;--d:0.00s">
+    <img class="dk" src="assets/home/stk/t-sparkle.svg?v=1" alt="" width="107" height="107" style="--x:178.3;--y:66.3;--w:107.3;--d:0.07s">
+    <img class="dk" src="assets/home/stk/t-uiux.svg?v=1" alt="" width="171" height="97" style="--x:660.2;--y:165.7;--w:170.6;--d:0.14s">
+    <img class="dk" src="assets/home/stk/t-curious.svg?v=1" alt="" width="216" height="216" style="--x:857;--y:54;--w:216;--d:0.21s">
+    <img class="dk" src="assets/home/stk/t-starburst.svg?v=1" alt="" width="117" height="117" style="--x:1003.6;--y:-16.6;--w:116.8;--d:0.28s">
+    <img class="dk" src="assets/home/stk/t-dnd.svg?v=1" alt="" width="314" height="183" style="--x:1081.5;--y:84.2;--w:314.2;--d:0.35s">
+    <img class="dk" src="assets/home/stk/t-heart.svg?v=1" alt="" width="129" height="125" style="--x:180.2;--y:351.4;--w:129.2;--d:0.42s">
+    <img class="dk" src="assets/home/stk/t-flower.svg?v=1" alt="" width="152" height="152" style="--x:829;--y:282;--w:152;--d:0.49s">
+    <img class="dk" src="assets/home/stk/t-dfp.svg?v=1" alt="" width="247" height="206" style="--x:1069.9;--y:284.9;--w:247.2;--d:0.56s">
+    <img class="dk" src="assets/home/stk/t-greenstar.svg?v=1" alt="" width="117" height="117" style="--x:1271.6;--y:233.6;--w:116.8;--d:0.63s">
+  </div>
+</div>
 
 <main>
   <section class="work" id="work" aria-labelledby="work-h">
@@ -565,24 +637,53 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   <section class="me" id="about" aria-labelledby="me-h">
     <div class="tear" aria-hidden="true"></div>
     <h2 class="uh" id="me-h">About <span class="u">me<svg class="ul" viewBox="0 0 275 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M21.2339 6.58674C16.3284 4.30983 27.9112 4.2761 31.2865 4.11035C62.8405 2.56112 94.5961 1.90476 126.381 1.47056C154.215 0.986808 181.642 0.310026 209.597 0.0921154C223.632 -0.0335821 237.675 -0.0306377 251.71 0.100948C257.965 0.163841 264.374 0.205791 270.61 0.426939C271.798 0.469106 273.726 0.600562 274.49 0.96797C274.891 1.16094 275.068 1.40679 274.977 1.64926C274.729 2.3522 272.95 2.49667 271.362 2.49841C265.445 2.5049 259.479 2.55344 253.563 2.52864C244.802 2.49191 235.914 2.66602 227.174 2.62937C226.727 2.85893 226.409 3.02296 225.888 3.22928C222.277 3.69569 205.775 3.68441 201.307 3.72941L156.981 4.11021C149.721 4.14817 142.462 4.22008 135.208 4.32599C126.714 4.47497 117.569 4.78303 109.091 5.05667C97.0002 5.43623 84.9208 5.86274 72.8541 6.336C62.275 6.73655 51.7108 7.19087 41.1646 7.69882C33.4978 8.11088 25.8435 8.55464 18.2028 9.03015C12.6827 9.38762 6.99256 9.87643 1.4307 9.99904C0.402106 10.0217 -0.187976 9.63905 0.0540895 9.26249C1.21844 8.62334 28.2707 7.11487 32.6162 6.79305C33.3032 6.82685 39.217 6.46543 40.0544 6.35522C38.9822 6.33198 31.7679 6.56773 30.7266 6.66485C27.3531 6.63152 24.3996 7.05496 21.2339 6.58674Z"/></svg></span></h2>
-    <div class="me-grid">
+    <div class="me-stage">
       <div class="me-col l">
         <h3>Life / Hobbies</h3>
-        <p>Away from the desk I’m usually sketching, taking photographs or shooting short films. Four years of Applied Arts in Varanasi taught me to look closely at the things most people walk past.</p>
-        <p>I think good design starts with <b>noticing something odd</b>, and then <b>asking why it happens</b>.</p>
-        <svg class="doodle cloud" viewBox="0 0 210 170" aria-hidden="true" focusable="false"><path d="M52 128c-22 4-40-10-38-30 2-17 18-27 33-23-3-22 16-40 38-36 11-19 41-21 53 0 20-9 43 4 41 26 19 3 29 23 19 40-8 14-26 17-38 9-8 16-32 21-46 9-15 13-41 11-50-6-5 5-9 8-12 11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <p>I’m Utsav — a multidisciplinary designer, visual storyteller, and curious mind. From graphic design to product experiences, I enjoy turning ideas into things that look good, work well, and mean something.</p>
+        <p>When I’m not designing, I’m probably travelling, taking photographs, watching films, or exploring something new. <b>I believe the best ideas often come from simply paying attention to the world around us.</b></p>
       </div>
-      <div class="me-photos">
-        <a class="insta" href="#"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg><span>More on Instagram</span><b>Say hi ↗</b></a>
-        <figure class="pola p2" style="--r:-3deg"><span class="ph"><span class="ph-empty">Photo coming soon</span></span><figcaption>Behind the camera</figcaption></figure>
-        <figure class="pola p1" style="--r:3deg"><span class="ph"><img src="assets/home/me-1.jpg" width="762" height="762" alt="Utsav smiling, arms folded on a film clapperboard" loading="lazy" decoding="async" draggable="false"></span><figcaption>Yep, that’s me</figcaption></figure>
-        <span class="drag-hint mono" aria-hidden="true">Drag the photos ↴</span>
+      <div class="me-vid" id="meVid">
+        <img class="st" src="assets/home/stk/a-star-b.svg?v=1" alt="" style="left:-4.1%;top:16.8%;width:30.2%">
+        <img class="st" src="assets/home/stk/a-star-c.svg?v=1" alt="" style="left:81.0%;top:8.2%;width:18.4%">
+        <img class="st" src="assets/home/stk/a-star-a.svg?v=1" alt="" style="left:68.3%;top:59.8%;width:48.3%">
+        <img class="poster" src="assets/home/me-poster.webp" width="358" height="900" alt="Utsav standing with his hands in his pockets, smiling" decoding="async" loading="lazy">
+        <canvas width="440" height="1108" aria-hidden="true"></canvas>
       </div>
       <div class="me-col r">
-        <svg class="doodle squig" viewBox="0 0 170 170" aria-hidden="true" focusable="false"><path d="M85 22c4 22 8 36 22 46 13 9 31 10 47 13-17 3-34 5-46 15-12 10-17 26-23 52-5-24-10-41-23-51-12-10-29-12-46-16 17-3 34-6 46-15 13-10 18-24 23-44z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M138 26c6 2 9 7 8 13M150 18c9 5 13 13 12 22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-        <h3>Skills / Tools</h3>
-        <p>I work across <b>branding</b>, <b>packaging</b>, <b>campaign design</b>, <b>UI/UX</b> and <b>retail experience</b>, with photo and film along the way. I design in <b>Figma</b>, and I’m learning <b>Framer</b> to bring interactions to life.</p>
-        <p>Whatever the format, I want the result to be clear, useful and a little surprising.</p>
+        <h3>Skills</h3>
+        <ul class="chips-s"><li>Product Design</li><li>UI/UX Design</li><li>Vibe Coding</li><li>Prototyping</li><li>Design Research</li><li>Visual Storytelling</li><li>Brand Identity</li></ul>
+        <p>I work across product design and UI/UX, turning complex problems into intuitive digital experiences. I use Figma, AI tools, and code to bring ideas to life, with my background in branding and visual storytelling adding another layer to how I design.</p>
+        <p>I like making things that are thoughtful, useful, and a little unexpected.</p>
+      </div>
+      <div aria-hidden="true">
+        <img class="dk" src="assets/home/stk/a-heart.svg?v=1" alt="" width="129" height="125" style="--x:1025.8;--y:18.1;--w:129.2;--d:0.15s">
+        <img class="dk" src="assets/home/stk/a-starburst.svg?v=1" alt="" width="117" height="117" style="--x:884.6;--y:145.4;--w:116.8;--d:0.23s">
+        <img class="dk" src="assets/home/stk/a-green-star.svg?v=1" alt="" width="117" height="117" style="--x:1196.6;--y:189.6;--w:116.8;--d:0.31s">
+        <img class="dk" src="assets/home/stk/a-design-for-people.svg?v=1" alt="" width="256" height="221" style="--x:66.7;--y:263.7;--w:255.9;--d:0.39s">
+        <img class="dk" src="assets/home/stk/a-dnd.svg?v=1" alt="" width="312" height="212" style="--x:231.5;--y:414.8;--w:312;--d:0.47s">
+      </div>
+    </div>
+  </section>
+
+  <section class="peek" aria-labelledby="peek-h">
+    <h2 class="sh" id="peek-h">Sneak peak <span class="u">of my life<svg class="ul" viewBox="0 0 275 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M21.2339 6.58674C16.3284 4.30983 27.9112 4.2761 31.2865 4.11035C62.8405 2.56112 94.5961 1.90476 126.381 1.47056C154.215 0.986808 181.642 0.310026 209.597 0.0921154C223.632 -0.0335821 237.675 -0.0306377 251.71 0.100948C257.965 0.163841 264.374 0.205791 270.61 0.426939C271.798 0.469106 273.726 0.600562 274.49 0.96797C274.891 1.16094 275.068 1.40679 274.977 1.64926C274.729 2.3522 272.95 2.49667 271.362 2.49841C265.445 2.5049 259.479 2.55344 253.563 2.52864C244.802 2.49191 235.914 2.66602 227.174 2.62937C226.727 2.85893 226.409 3.02296 225.888 3.22928C222.277 3.69569 205.775 3.68441 201.307 3.72941L156.981 4.11021C149.721 4.14817 142.462 4.22008 135.208 4.32599C126.714 4.47497 117.569 4.78303 109.091 5.05667C97.0002 5.43623 84.9208 5.86274 72.8541 6.336C62.275 6.73655 51.7108 7.19087 41.1646 7.69882C33.4978 8.11088 25.8435 8.55464 18.2028 9.03015C12.6827 9.38762 6.99256 9.87643 1.4307 9.99904C0.402106 10.0217 -0.187976 9.63905 0.0540895 9.26249C1.21844 8.62334 28.2707 7.11487 32.6162 6.79305C33.3032 6.82685 39.217 6.46543 40.0544 6.35522C38.9822 6.33198 31.7679 6.56773 30.7266 6.66485C27.3531 6.63152 24.3996 7.05496 21.2339 6.58674Z"/></svg></span></h2>
+    <div class="peek-row">
+      <div class="peek-track">
+        <figure class="pc" style="--r:3deg"><img src="assets/home/peek/p1.webp" width="600" height="600" alt="Utsav behind a camera with a long lens" loading="lazy" decoding="async"><figcaption>Behind the camera</figcaption></figure>
+        <figure class="pc" style="--r:-3deg"><img src="assets/home/peek/p2.webp" width="600" height="600" alt="Utsav with a camera by the river" loading="lazy" decoding="async"><figcaption>Behind the camera</figcaption></figure>
+        <figure class="pc" style="--r:3deg"><img src="assets/home/peek/p3.webp" width="600" height="600" alt="Utsav looking up at falling snow" loading="lazy" decoding="async"><figcaption>Yep, that’s me</figcaption></figure>
+        <figure class="pc" style="--r:-3deg"><img src="assets/home/peek/p4.webp" width="600" height="600" alt="Utsav holding an orange cat at his desk" loading="lazy" decoding="async"><figcaption>Behind the camera</figcaption></figure>
+        <figure class="pc" style="--r:3deg"><img src="assets/home/peek/p5.webp" width="600" height="600" alt="Utsav wearing a giant yellow octopus toy as a hat" loading="lazy" decoding="async"><figcaption>Behind the camera</figcaption></figure>
+        <figure class="pc" style="--r:-3deg"><img src="assets/home/peek/p6.webp" width="600" height="600" alt="Utsav in a workshop, holding up a tool" loading="lazy" decoding="async"><figcaption>Behind the camera</figcaption></figure>
+        <figure class="pc" style="--r:3deg"><img src="assets/home/peek/p7.webp" width="600" height="600" alt="Utsav sitting on the grass with a golden dog" loading="lazy" decoding="async"><figcaption>Yep, that’s me</figcaption></figure>
+        <figure class="pc" style="--r:3deg" aria-hidden="true"><img src="assets/home/peek/p1.webp" width="600" height="600" alt="" loading="lazy" decoding="async"><figcaption>Behind the camera</figcaption></figure>
+        <figure class="pc" style="--r:-3deg" aria-hidden="true"><img src="assets/home/peek/p2.webp" width="600" height="600" alt="" loading="lazy" decoding="async"><figcaption>Behind the camera</figcaption></figure>
+        <figure class="pc" style="--r:3deg" aria-hidden="true"><img src="assets/home/peek/p3.webp" width="600" height="600" alt="" loading="lazy" decoding="async"><figcaption>Yep, that’s me</figcaption></figure>
+        <figure class="pc" style="--r:-3deg" aria-hidden="true"><img src="assets/home/peek/p4.webp" width="600" height="600" alt="" loading="lazy" decoding="async"><figcaption>Behind the camera</figcaption></figure>
+        <figure class="pc" style="--r:3deg" aria-hidden="true"><img src="assets/home/peek/p5.webp" width="600" height="600" alt="" loading="lazy" decoding="async"><figcaption>Behind the camera</figcaption></figure>
+        <figure class="pc" style="--r:-3deg" aria-hidden="true"><img src="assets/home/peek/p6.webp" width="600" height="600" alt="" loading="lazy" decoding="async"><figcaption>Behind the camera</figcaption></figure>
+        <figure class="pc" style="--r:3deg" aria-hidden="true"><img src="assets/home/peek/p7.webp" width="600" height="600" alt="" loading="lazy" decoding="async"><figcaption>Yep, that’s me</figcaption></figure>
       </div>
     </div>
   </section>
@@ -599,6 +700,40 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     <p class="flow-sum">I start by <b>noticing</b> what doesn’t work, research until I <b>understand why</b>, design an answer, then <b>test it with real people</b>.</p>
   </section>
 
+  <section class="tools" aria-labelledby="tools-h">
+    <h2 class="sh" id="tools-h"><span class="u">Tool I use!<svg class="ul" viewBox="0 0 275 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M21.2339 6.58674C16.3284 4.30983 27.9112 4.2761 31.2865 4.11035C62.8405 2.56112 94.5961 1.90476 126.381 1.47056C154.215 0.986808 181.642 0.310026 209.597 0.0921154C223.632 -0.0335821 237.675 -0.0306377 251.71 0.100948C257.965 0.163841 264.374 0.205791 270.61 0.426939C271.798 0.469106 273.726 0.600562 274.49 0.96797C274.891 1.16094 275.068 1.40679 274.977 1.64926C274.729 2.3522 272.95 2.49667 271.362 2.49841C265.445 2.5049 259.479 2.55344 253.563 2.52864C244.802 2.49191 235.914 2.66602 227.174 2.62937C226.727 2.85893 226.409 3.02296 225.888 3.22928C222.277 3.69569 205.775 3.68441 201.307 3.72941L156.981 4.11021C149.721 4.14817 142.462 4.22008 135.208 4.32599C126.714 4.47497 117.569 4.78303 109.091 5.05667C97.0002 5.43623 84.9208 5.86274 72.8541 6.336C62.275 6.73655 51.7108 7.19087 41.1646 7.69882C33.4978 8.11088 25.8435 8.55464 18.2028 9.03015C12.6827 9.38762 6.99256 9.87643 1.4307 9.99904C0.402106 10.0217 -0.187976 9.63905 0.0540895 9.26249C1.21844 8.62334 28.2707 7.11487 32.6162 6.79305C33.3032 6.82685 39.217 6.46543 40.0544 6.35522C38.9822 6.33198 31.7679 6.56773 30.7266 6.66485C27.3531 6.63152 24.3996 7.05496 21.2339 6.58674Z"/></svg></span></h2>
+    <p class="vh">Figma, FigJam, Framer, Illustrator, Photoshop, InDesign, After Effects, Miro, Notion, Claude</p>
+    <div class="tools-row" aria-hidden="true">
+      <div class="tools-track"><img src="assets/home/tools-strip.webp?v=2" width="2791" height="363" alt="" loading="lazy" decoding="async"><img src="assets/home/tools-strip.webp?v=2" width="2791" height="363" alt="" loading="lazy" decoding="async"></div>
+    </div>
+  </section>
+
+  <section class="svc" id="services" aria-labelledby="svc-h">
+    <h2 class="uh" id="svc-h">Call me if you <span class="u">need:<svg class="ul" viewBox="0 0 275 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M21.2339 6.58674C16.3284 4.30983 27.9112 4.2761 31.2865 4.11035C62.8405 2.56112 94.5961 1.90476 126.381 1.47056C154.215 0.986808 181.642 0.310026 209.597 0.0921154C223.632 -0.0335821 237.675 -0.0306377 251.71 0.100948C257.965 0.163841 264.374 0.205791 270.61 0.426939C271.798 0.469106 273.726 0.600562 274.49 0.96797C274.891 1.16094 275.068 1.40679 274.977 1.64926C274.729 2.3522 272.95 2.49667 271.362 2.49841C265.445 2.5049 259.479 2.55344 253.563 2.52864C244.802 2.49191 235.914 2.66602 227.174 2.62937C226.727 2.85893 226.409 3.02296 225.888 3.22928C222.277 3.69569 205.775 3.68441 201.307 3.72941L156.981 4.11021C149.721 4.14817 142.462 4.22008 135.208 4.32599C126.714 4.47497 117.569 4.78303 109.091 5.05667C97.0002 5.43623 84.9208 5.86274 72.8541 6.336C62.275 6.73655 51.7108 7.19087 41.1646 7.69882C33.4978 8.11088 25.8435 8.55464 18.2028 9.03015C12.6827 9.38762 6.99256 9.87643 1.4307 9.99904C0.402106 10.0217 -0.187976 9.63905 0.0540895 9.26249C1.21844 8.62334 28.2707 7.11487 32.6162 6.79305C33.3032 6.82685 39.217 6.46543 40.0544 6.35522C38.9822 6.33198 31.7679 6.56773 30.7266 6.66485C27.3531 6.63152 24.3996 7.05496 21.2339 6.58674Z"/></svg></span></h2>
+    <p class="svc-intro">From a logo to a full website, a poster to a photo shoot. If it has to look good and make sense, I can help.</p>
+    <ul class="svc-cards">
+      <li class="sc" style="--x:15.7;--y:60.1;--r:-4deg;--c:#3F7A5C;--t:#FFFFFF">
+        <img class="st" src="assets/home/stk/s-seal.svg?v=1" alt="" width="158" height="156" style="--w:157.9;--dx:54.4;--dy:-201.8">
+        <h3>branding</h3><hr><ul><li>Brand identity</li><li>Logo design</li><li>Brand strategy</li><li>Packaging</li><li>Visual systems</li></ul>
+      </li>
+      <li class="sc" style="--x:250.7;--y:128.2;--r:3deg;--c:#8A9AF2;--t:#141414">
+        <img class="st" src="assets/home/stk/s-cursor.svg?v=1" alt="" width="152" height="152" style="--w:152;--dx:86.3;--dy:-215.9">
+        <h3>ui / ux</h3><hr><ul><li>Websites</li><li>App design</li><li>Dashboards</li><li>UX research</li><li>Prototypes</li></ul>
+      </li>
+      <li class="sc" style="--x:531.8;--y:34.9;--r:-2deg;--c:#EA7540;--t:#141414">
+        <img class="st" src="assets/home/stk/s-pencil.svg?v=1" alt="" width="177" height="134" style="--w:177;--dx:65.3;--dy:-190.9">
+        <h3>illustration</h3><hr><ul><li>Illustration</li><li>Posters &amp; print</li><li>Social creatives</li><li>Editorial layouts</li><li>Sketching</li></ul>
+      </li>
+      <li class="sc" style="--x:771;--y:106;--r:4deg;--c:#8F3357;--t:#FFFFFF">
+        <img class="st" src="assets/home/stk/s-camera.svg?v=1" alt="" width="166" height="140" style="--w:166.5;--dx:86;--dy:-212.8">
+        <h3>photo &amp; film</h3><hr><ul><li>Photography</li><li>Filmmaking</li><li>Cinematography</li><li>Video editing</li><li>Product shoots</li></ul>
+      </li>
+      <li class="sc" style="--x:1055.7;--y:102.5;--r:-3deg;--c:#E4C0F4;--t:#141414">
+        <img class="st" src="assets/home/stk/s-smiley.svg?v=1" alt="" width="156" height="156" style="--w:156;--dx:68.3;--dy:-202.2">
+        <h3>experiences</h3><hr><ul><li>Retail design</li><li>Experience design</li><li>Exhibitions</li><li>Design research</li><li>Brand activations</li></ul>
+      </li>
+    </ul>
+  </section>
 
   <section class="pg" id="contact-me" aria-labelledby="pg-h">
     <h2 class="vh" id="pg-h">Contact me</h2>
@@ -1229,46 +1364,11 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   } else draws.forEach(function(el){ el.classList.add('drawn'); });
 
   /* 11. About me / Workflow: the line under the title draws in, and the sticky notes drop on, when the section shows */
-  var shows = document.querySelectorAll('.me, .flow');
+  var shows = document.querySelectorAll('.me, .flow, .tagb');
   if ('IntersectionObserver' in window && !reduce){
     var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: 0.2 });
     shows.forEach(function(el){ io.observe(el); });
   } else shows.forEach(function(el){ el.classList.add('in'); });
-
-  /* 12. Polaroids: drag them off the pile (they tilt with the throw and stay where you drop them);
-         a tap sends the top photo to the back of the pile */
-  var polas = Array.prototype.slice.call(document.querySelectorAll('.pola')), zTop = 3;
-  polas.forEach(function(p, k){ p.style.zIndex = k + 1; });
-  polas.forEach(function(p){
-    var d = null;
-    p.addEventListener('pointerdown', function(e){
-      if (e.button !== 0) return;
-      d = { x: e.clientX, y: e.clientY, dx: parseFloat(p.style.getPropertyValue('--dx')) || 0, dy: parseFloat(p.style.getPropertyValue('--dy')) || 0, lx: e.clientX, moved: false };
-      p.style.zIndex = ++zTop; p.classList.add('drag');
-      try { p.setPointerCapture(e.pointerId); } catch(err){}
-    });
-    p.addEventListener('pointermove', function(e){
-      if (!d) return;
-      var mx = e.clientX - d.x, my = e.clientY - d.y;
-      if (!d.moved && Math.abs(mx) + Math.abs(my) < 5) return;
-      d.moved = true;
-      p.style.setProperty('--dx', (d.dx + mx).toFixed(1) + 'px');
-      p.style.setProperty('--dy', (d.dy + my).toFixed(1) + 'px');
-      p.style.setProperty('--rt', Math.max(-12, Math.min(12, (e.clientX - d.lx) * 0.6)).toFixed(2) + 'deg');
-      d.lx = e.clientX;
-    });
-    function up(){
-      if (!d) return;
-      p.classList.remove('drag'); p.style.setProperty('--rt', '0deg');
-      if (!d.moved){   /* tap: tuck it under the others */
-        polas.forEach(function(o){ if (o !== p) o.style.zIndex = (+o.style.zIndex || 1) + 1; });
-        p.style.zIndex = 1;
-      }
-      d = null;
-    }
-    p.addEventListener('pointerup', up);
-    p.addEventListener('pointercancel', up);
-  });
 
   /* 13. Pager clock: the visitor's own time, like a real pager */
   var pgT = document.getElementById('pgTime');
@@ -1301,6 +1401,57 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   document.documentElement.addEventListener('pointerleave', off);
   addEventListener('blur', off);
   addEventListener('scroll', function(){ if (m.classList.contains('on')) move({ clientX: x, clientY: y }); }, { passive: true });   /* keep the torch under the cursor while the page scrolls */
+})();
+</script>
+<script>
+/* about me video: the clip is stored as one tall video, colour on top and its cut-out mask below (plain MP4 has no transparency).
+   WebGL puts the two halves back together on a canvas, so only Utsav and his yellow outline show. Until the first frame is drawn,
+   or if WebGL / autoplay isn't available, or with reduced motion, the still image underneath stays. */
+(function(){
+  var box = document.getElementById('meVid'); if (!box) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var cv = box.querySelector('canvas'), gl;
+  try { gl = cv.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false }); } catch(e){}
+  if (!gl) return;
+  function sh(type, src){ var o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); return o; }
+  var pr = gl.createProgram();
+  gl.attachShader(pr, sh(gl.VERTEX_SHADER, 'attribute vec2 p;varying vec2 uv;void main(){uv=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}'));
+  gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, 'precision mediump float;varying vec2 uv;uniform sampler2D t;void main(){vec3 c=texture2D(t,vec2(uv.x,uv.y*.5)).rgb;float a=texture2D(t,vec2(uv.x,.5+uv.y*.5)).g;a=clamp((a-.03)/.94,0.,1.);gl_FragColor=vec4(c*a,a);}'));
+  gl.linkProgram(pr); if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return;
+  gl.useProgram(pr);
+  var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  var loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  var tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.clearColor(0, 0, 0, 0);
+
+  var v = document.createElement('video');
+  v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
+  v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true');
+  var small = Math.min(innerWidth, innerHeight * 1.2) < 900;
+  var started = false, visible = false, rvfc = 'requestVideoFrameCallback' in v;
+  function draw(){
+    if (v.readyState < 2) return;
+    if (cv.width !== v.videoWidth || cv.height !== v.videoHeight / 2){ cv.width = v.videoWidth; cv.height = v.videoHeight / 2; gl.viewport(0, 0, cv.width, cv.height); }
+    try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, v); } catch(e){ return; }
+    gl.clear(gl.COLOR_BUFFER_BIT); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    if (!box.classList.contains('live')) box.classList.add('live');
+  }
+  function loop(){ draw(); if (!v.paused) { if (rvfc) v.requestVideoFrameCallback(loop); else requestAnimationFrame(loop); } }
+  v.addEventListener('playing', loop);
+  function go(){
+    if (!started){ started = true; v.src = small ? 'assets/home/me-900.mp4?v=2' : 'assets/home/me-1108.mp4?v=2'; }
+    var pl = v.play(); if (pl && pl.catch) pl.catch(function(){});
+  }
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      visible = es[0].isIntersecting;
+      if (visible) go(); else if (started) v.pause();
+    }, { rootMargin: '300px 0px' }).observe(box);
+  } else go();
+  document.addEventListener('visibilitychange', function(){ if (document.hidden) v.pause(); else if (visible) go(); });
 })();
 </script>
 </body>
