@@ -155,10 +155,16 @@ a{color:inherit;text-decoration:none}
 /* mountain glimpse (Figma: "image 86" behind the hero): a black-and-white photo of the Himalaya sits behind the hero,
    invisible until you move the mouse over it. A soft ellipse of it follows the cursor, like a torch. Multiply drops the white sky
    into the page colour; in dark mode the photo is inverted and screened so the ridges glow faintly instead. */
-.mtn{position:absolute;left:calc(-1 * clamp(16px,3.33vw,48px));right:calc(-1 * clamp(16px,3.33vw,48px));top:0;height:calc(100% + 170 * var(--k));z-index:-1;pointer-events:none;
-  background:url(assets/home/mountains.webp) 50% 100%/cover no-repeat;mix-blend-mode:multiply;opacity:0;transition:opacity .7s ease-out;
-  -webkit-mask-image:radial-gradient(ellipse clamp(220px,30vw,460px) clamp(170px,24vw,360px) at var(--mx,50%) var(--my,60%),#000 0%,#000b 28%,#0003 62%,transparent 100%);
-          mask-image:radial-gradient(ellipse clamp(220px,30vw,460px) clamp(170px,24vw,360px) at var(--mx,50%) var(--my,60%),#000 0%,#000b 28%,#0003 62%,transparent 100%)}
+.mtn{position:absolute;left:calc(-1 * clamp(16px,3.33vw,48px));right:calc(-1 * clamp(16px,3.33vw,48px));top:calc(67 * var(--k));height:calc(1033 * var(--k));z-index:-1;pointer-events:none;
+  background:url(assets/home/mountains.webp?v=2) 50% 0/100% 100% no-repeat;mix-blend-mode:multiply;opacity:0;transition:opacity .7s ease-out;
+  /* two masks, both must let a pixel through: the soft torch around the cursor, and a long fade at the bottom so the photo
+     melts into the page well before it reaches the torn paper (no hard edge anywhere) */
+  -webkit-mask-image:radial-gradient(ellipse clamp(220px,30vw,460px) clamp(170px,24vw,360px) at var(--mx,50%) var(--my,60%),#000 0%,#000b 28%,#0003 62%,transparent 100%),
+                     linear-gradient(transparent 0,#000 12%,#000 56%,rgba(0,0,0,.35) 69%,transparent 80%);
+  -webkit-mask-composite:source-in;
+          mask-image:radial-gradient(ellipse clamp(220px,30vw,460px) clamp(170px,24vw,360px) at var(--mx,50%) var(--my,60%),#000 0%,#000b 28%,#0003 62%,transparent 100%),
+                     linear-gradient(transparent 0,#000 12%,#000 56%,rgba(0,0,0,.35) 69%,transparent 80%);
+          mask-composite:intersect}
 .mtn.on{opacity:.6;transition-duration:.22s}
 .intro .mtn{opacity:0!important}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mtn{filter:invert(1);mix-blend-mode:screen}:root:not([data-theme="light"]) .mtn.on{opacity:.45}}
@@ -167,7 +173,7 @@ a{color:inherit;text-decoration:none}
 /* no mouse (phones, tablets) or reduced motion: no torch, just a faint, still view of the range behind the name */
 @media (hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){
   .mtn,.mtn.on{opacity:.16;transition:none;
-    -webkit-mask-image:linear-gradient(transparent 12%,#000 45%,#000 88%,transparent);mask-image:linear-gradient(transparent 12%,#000 45%,#000 88%,transparent)}
+    -webkit-mask-image:linear-gradient(transparent 4%,#000 22%,#000 50%,rgba(0,0,0,.35) 64%,transparent 76%);mask-image:linear-gradient(transparent 4%,#000 22%,#000 50%,rgba(0,0,0,.35) 64%,transparent 76%)}
   :root[data-theme="dark"] .mtn,:root[data-theme="dark"] .mtn.on{opacity:.12}
 }
 @media (hover:none) and (prefers-color-scheme:dark),(pointer:coarse) and (prefers-color-scheme:dark),(prefers-reduced-motion:reduce) and (prefers-color-scheme:dark){
