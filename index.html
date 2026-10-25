@@ -34,7 +34,7 @@
     --paper:#FFC822; --tag-fg:#1C1500; --me-ink:#1C1500; --me-title:#FFFFFF; --me-ul:#FFFFFF; --me-soft:100%; --me-note:#FFFFFF; --ph-bg:#202020; --ph-fg:#ACACAC;
     --panel:#1F1800; --about-fg:#E9B300; --line:rgba(233,179,0,.22); --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
     --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#140F00,#674F00); --nav-shadow:none;
-    --btn-top:31px; --btn-right:120; --nav-fg:#D9D5C6; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#FFFFFF,#D7D7D7); --hover:rgba(233,179,0,.12);
+    --btn-top:24px; --btn-right:120; --nav-fg:#D9D5C6; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#FFFFFF,#D7D7D7); --hover:rgba(233,179,0,.12);
     color-scheme:dark;
   }
 }
@@ -43,7 +43,7 @@
     --paper:#FFC822; --tag-fg:#1C1500; --me-ink:#1C1500; --me-title:#FFFFFF; --me-ul:#FFFFFF; --me-soft:100%; --me-note:#FFFFFF; --ph-bg:#202020; --ph-fg:#ACACAC;
     --panel:#1F1800; --about-fg:#E9B300; --line:rgba(233,179,0,.22); --pill:#E9B300; --pill-fg:#140F00; --pill-soft:rgba(20,15,0,.5);
     --nav-bg:rgba(255,255,255,.2); --nav-edge:linear-gradient(180deg,#140F00,#674F00); --nav-shadow:none;
-    --btn-top:31px; --btn-right:120; --nav-fg:#D9D5C6; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#FFFFFF,#D7D7D7); --hover:rgba(233,179,0,.12);
+    --btn-top:24px; --btn-right:120; --nav-fg:#D9D5C6; --icon:#E9B300; --btn-edge:linear-gradient(180deg,#FFFFFF,#D7D7D7); --hover:rgba(233,179,0,.12);
   color-scheme:dark;
 }
 
@@ -65,7 +65,7 @@ a{color:inherit;text-decoration:none}
 .hero{position:relative;padding-top:calc(156 * var(--k))}
 /* nav pill: 600 x 40 at the top, 14px DM Sans with -1% tracking, 24px apart; glass fill with a 0.5px gradient edge.
    It's fixed, so it travels down the page with you. */
-.nav{position:fixed;top:31px;left:50%;transform:translateX(-50%);z-index:47;display:flex;align-items:center;height:40px;gap:24px;
+.nav{position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:47;display:flex;align-items:center;height:40px;gap:24px;
   padding:4px 16px;border-radius:40px;background:var(--nav-bg);box-shadow:var(--nav-shadow);
   backdrop-filter:blur(8px) saturate(1.2);-webkit-backdrop-filter:blur(8px) saturate(1.2);
   color:var(--nav-fg);font-size:14px;line-height:1.2;letter-spacing:-.01em;white-space:nowrap}
@@ -76,13 +76,13 @@ a{color:inherit;text-decoration:none}
 /* pages that aren't built yet say so instead of going nowhere */
 [data-soon]::after{content:"Coming soon";position:absolute;left:50%;top:calc(100% + 12px);transform:translate(-50%,-4px);padding:6px 10px;border-radius:999px;background:var(--pill);color:var(--pill-fg);font-size:11px;letter-spacing:.04em;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
 [data-soon]:hover::after,[data-soon]:focus-visible::after,a.soon::after{opacity:1;transform:translate(-50%,0)}
-/* logo (Figma: "Logo White", 53 x 53, 120px in from the left, in line with the nav pill); fixed like the nav, takes you back to the top */
-.logo{position:fixed;z-index:47;top:24px;left:calc(120 * var(--k));width:53px;height:53px;display:block;border-radius:2px;transition:transform .5s cubic-bezier(.3,1.4,.5,1),opacity .9s ease}
+/* logo (Figma: "Logo White", 40 x 40, 120px in from the left, in line with the nav pill); fixed like the nav, takes you back to the top */
+.logo{position:fixed;z-index:47;top:24px;left:calc(120 * var(--k));width:40px;height:40px;display:block;border-radius:2px;transition:transform .5s cubic-bezier(.3,1.4,.5,1),opacity .9s ease}
 .logo svg{display:block;width:100%;height:100%}
 .logo:hover{transform:rotate(-6deg) scale(1.06)}
 .intro .logo{opacity:0}
 /* light / dark switch: 40px glass circle near the top right corner (Figma: light 24px down / 34px in, dark 28px down / 40px in) */
-.theme-btn{position:fixed;z-index:47;top:var(--btn-top,31px);right:calc(var(--btn-right,120) * var(--k));display:grid;place-items:center;width:40px;height:40px;padding:0;border:0;border-radius:50%;
+.theme-btn{position:fixed;z-index:47;top:var(--btn-top,24px);right:calc(var(--btn-right,120) * var(--k));display:grid;place-items:center;width:40px;height:40px;padding:0;border:0;border-radius:50%;
   background:var(--nav-bg);box-shadow:var(--nav-shadow);backdrop-filter:blur(8px) saturate(1.2);-webkit-backdrop-filter:blur(8px) saturate(1.2);
   color:var(--icon);cursor:pointer;transition:background-color .25s,opacity .9s ease,top .6s ease,right .6s ease}
 .theme-btn::before{background:var(--btn-edge)}
