@@ -152,9 +152,11 @@ a{color:inherit;text-decoration:none}
 .hero-desc{width:max(calc(560 * var(--k)),min(100%,340px));margin:calc(20 * var(--k)) auto 0;text-align:center;color:var(--hero-fg);font-size:max(13px,calc(16 * var(--k)));letter-spacing:-.02em;line-height:1.4}
 .hero-links{display:flex;flex-wrap:wrap;gap:12px 24px;width:max(calc(560 * var(--k)),min(100%,340px));margin:calc(20 * var(--k)) auto 0}
 .hl{position:relative;display:inline-flex;align-items:center;gap:8px;height:40px;padding:4px 16px;border-radius:40px;border:.5px solid #E3E3E3;background:rgba(255,255,255,.2);
-  font-size:14px;line-height:1.3;color:var(--hl-fg,#6B6457);transition:background-color .25s,opacity .25s}
+  font-size:14px;line-height:1.3;color:var(--hl-fg,#6B6457);transition:background-color .25s,color .25s,border-color .25s,opacity .25s}
 .hl.hl-work{color:var(--accent);opacity:.8}
 .hl:hover{background:var(--hover);opacity:1}
+/* See Selected Work fills with see-through gold on hover, dark text (Figma) */
+.hl.hl-work:hover,.hl.hl-work:focus-visible{background:rgba(233,179,0,.74);border-color:rgba(255,255,255,.55);color:#3A3A3A;opacity:1}
 .hl svg{flex:none}
 /* torn paper strips (Figma: two copies of one torn shape, one turned upside down, on white paper with grain and faint rules) */
 /* mountain glimpse (Figma: "image 86" behind the hero): a black-and-white photo of the Himalaya sits behind the hero,
