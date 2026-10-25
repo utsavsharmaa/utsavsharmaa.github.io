@@ -303,17 +303,19 @@ svg.draw.drawn{clip-path:inset(0 0 0 0)}
 .me .uh{color:var(--me-title)}
 .me-stage{position:relative;height:calc(718 * var(--k));margin-top:calc(73 * var(--k))}
 .me-col{position:absolute;top:0;left:0;width:calc(420 * var(--k));font-size:clamp(14px,calc(16 * var(--k)),16px);line-height:1.6}
-.me-col.r{left:calc(910 * var(--k));top:calc(316 * var(--k));width:calc(434 * var(--k))}
+.me-col.r{left:calc(801 * var(--k));top:calc(278 * var(--k));width:calc(543 * var(--k))}
+.me-col.r p{max-width:calc(418 * var(--k))}
 .me-col h3{margin:0 0 calc(24 * var(--k));font:500 14px/1.15 var(--body);letter-spacing:.14em;text-transform:uppercase}
 .me-col p{margin:0 0 1.6em;color:color-mix(in srgb,var(--ink) var(--me-soft),transparent)}
 .me-col p b{font-weight:700;color:var(--ink)}
 .flow p b{font-weight:500;color:var(--kick)}
-.chips-s{display:flex;flex-wrap:wrap;gap:8px 10px;margin:0 0 calc(24 * var(--k));padding:0;list-style:none}
-.chips-s li{position:relative;padding:3px 10px;border-radius:40px;font:400 12px/1.5 var(--body);color:var(--ink);background:color-mix(in srgb,var(--ink) 4%,transparent)}
-.chips-s li::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:.5px;background:linear-gradient(160deg,color-mix(in srgb,var(--ink) 22%,transparent),color-mix(in srgb,var(--ink) 6%,transparent));pointer-events:none;
+/* skill chips: a 4-column grid of glass pills (Figma: 138 / 147 / 120 / 102 wide, 28 tall, 16px text) */
+.chips-s{display:grid;grid-template-columns:calc(138 * var(--k)) calc(147 * var(--k)) calc(120 * var(--k)) calc(102 * var(--k));justify-content:start;gap:4px calc(12 * var(--k));margin:calc(15 * var(--k)) 0 calc(26 * var(--k));padding:0;list-style:none}
+.chips-s li{position:relative;display:grid;place-items:center;min-height:28px;padding:4px 8px;border-radius:40px;font:400 clamp(13px,calc(16 * var(--k)),16px)/1.2 var(--body);white-space:nowrap;color:#140F00;background:rgba(255,255,255,.2);box-shadow:0 1px 3px rgba(20,15,0,.06)}
+.chips-s li::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:.5px;background:linear-gradient(160deg,#E3E3E3,rgba(238,238,238,.6));pointer-events:none;
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
 /* the video: a 318 x 718 box; the cut-out (with its yellow outline baked in) is drawn on a canvas, with a still of it underneath until it plays */
-.me-vid{position:absolute;left:calc(506 * var(--k));top:0;width:calc(318 * var(--k));height:calc(718 * var(--k))}
+.me-vid{position:absolute;left:calc(451.5 * var(--k));top:0;width:calc(318 * var(--k));height:calc(718 * var(--k))}
 .me-vid .st{position:absolute;z-index:0;height:auto;pointer-events:none}
 .me-vid canvas,.me-vid > img.poster{position:absolute;z-index:1;left:50%;top:0;height:100%;width:auto;aspect-ratio:520/1310;transform:translateX(-50%)}
 .me-vid canvas{opacity:0;transition:opacity .4s}
@@ -426,7 +428,11 @@ svg.draw.drawn{clip-path:inset(0 0 0 0)}
   .me-col h3{margin-bottom:20px}
   .me-vid{position:relative;left:auto;width:calc(min(560px,118vw) * 318 / 718);height:min(560px,118vw)}
   .me .dk{display:none}
+  .me-col.r p{max-width:none}
+  .chips-s{grid-template-columns:repeat(4,auto);gap:6px 10px}
+  .chips-s li{padding:4px 14px}
 }
+@media (max-width:620px){.chips-s{display:flex;flex-wrap:wrap;gap:8px}}
 @media (max-width:1023px){
   .svc-cards{--u:min(.9px,calc(100vw / 330));height:auto;display:flex;flex-wrap:wrap;justify-content:center;gap:28px 0;margin-top:40px}
   .sc{position:relative;left:auto;top:auto;margin:calc(60 * var(--u)) -6px 0}
@@ -649,13 +655,13 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     <div class="me-stage">
       <div class="me-col l">
         <h3>Life / Hobbies</h3>
-        <p>I’m Utsav — a multidisciplinary designer, visual storyteller, and curious mind. From graphic design to product experiences, I enjoy turning ideas into things that look good, work well, and mean something.</p>
+        <p>I’m Utsav — <b>a multidisciplinary designer, visual storyteller, and curious mind.</b> From graphic design to product experiences, I enjoy turning ideas into things that look good, work well, and mean something.</p>
         <p>When I’m not designing, I’m probably travelling, taking photographs, watching films, or exploring something new. <b>I believe the best ideas often come from simply paying attention to the world around us.</b></p>
       </div>
       <div class="me-vid" id="meVid">
-        <img class="st" src="assets/home/stk/a-star-b.svg?v=1" alt="" style="left:-4.1%;top:16.8%;width:30.2%">
-        <img class="st" src="assets/home/stk/a-star-c.svg?v=1" alt="" style="left:81.0%;top:8.2%;width:18.4%">
-        <img class="st" src="assets/home/stk/a-star-a.svg?v=1" alt="" style="left:68.3%;top:59.8%;width:48.3%">
+        <img class="st" src="assets/home/stk/a-star-c.svg?v=2" alt="" style="left:15.8%;top:0.8%;width:18.4%">
+        <img class="st" src="assets/home/stk/a-star-b.svg?v=2" alt="" style="left:75.3%;top:12.6%;width:30.2%">
+        <img class="st" src="assets/home/stk/a-star-a.svg?v=2" alt="" style="left:-14.8%;top:44.8%;width:60.6%">
         <img class="poster" src="assets/home/me-poster.webp" width="358" height="900" alt="Utsav standing with his hands in his pockets, smiling" decoding="async" loading="lazy">
         <canvas width="440" height="1108" aria-hidden="true"></canvas>
       </div>
@@ -666,11 +672,12 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
         <p>I like making things that are thoughtful, useful, and a little unexpected.</p>
       </div>
       <div aria-hidden="true">
-        <img class="dk" src="assets/home/stk/a-heart.svg?v=1" alt="" width="129" height="125" style="--x:1025.8;--y:18.1;--w:129.2;--d:0.15s">
-        <img class="dk" src="assets/home/stk/a-starburst.svg?v=1" alt="" width="117" height="117" style="--x:884.6;--y:145.4;--w:116.8;--d:0.23s">
-        <img class="dk" src="assets/home/stk/a-green-star.svg?v=1" alt="" width="117" height="117" style="--x:1196.6;--y:189.6;--w:116.8;--d:0.31s">
-        <img class="dk" src="assets/home/stk/a-design-for-people.svg?v=1" alt="" width="256" height="221" style="--x:66.7;--y:263.7;--w:255.9;--d:0.39s">
-        <img class="dk" src="assets/home/stk/a-dnd.svg?v=1" alt="" width="312" height="212" style="--x:231.5;--y:414.8;--w:312;--d:0.47s">
+        <img class="dk" src="assets/home/stk/a-heart.svg?v=2" alt="" width="129" height="125" style="--x:916.8;--y:17.8;--w:129.2;--d:0.15s">
+        <img class="dk" src="assets/home/stk/a-design-for-people.svg?v=2" alt="" width="256" height="221" style="--x:1056.6;--y:6.3;--w:255.9;--d:0.23s">
+        <img class="dk" src="assets/home/stk/a-starburst.svg?v=2" alt="" width="117" height="117" style="--x:848.6;--y:159.1;--w:116.8;--d:0.31s">
+        <img class="dk" src="assets/home/stk/a-starburst-s.svg?v=2" alt="" width="94" height="95" style="--x:325;--y:276.5;--w:94.4;--d:0.39s">
+        <img class="dk" src="assets/home/stk/a-green-star.svg?v=2" alt="" width="117" height="117" style="--x:33.6;--y:320.3;--w:116.8;--d:0.47s">
+        <img class="dk" src="assets/home/stk/a-dnd.svg?v=2" alt="" width="314" height="178" style="--x:56;--y:416.2;--w:314.1;--d:0.55s">
       </div>
     </div>
   </section>

@@ -1,9 +1,9 @@
-<svg width="154" height="155" viewBox="0 0 154 155" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="193" height="184" viewBox="0 0 193 184" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g filter="url(#filter0_n_603_24181)">
-<path d="M96.4156 -0.000224262L95.5231 59.1267L153.668 79.9366L94.9716 95.6691L94.0792 154.796L58.6955 105.392L-0.000388093 121.125L36.8272 74.8592L1.44359 25.4556L59.5879 46.2654L96.4156 -0.000224262Z" fill="#FFF574"/>
+<path d="M106.266 -0.00010853L119.061 70.0795L192.644 81.0513L126.968 113.391L139.763 183.471L86.3782 133.378L20.702 165.718L53.3845 102.419L-0.000496586 52.3266L73.5833 63.2985L106.266 -0.00010853Z" fill="#FFF574"/>
 </g>
 <defs>
-<filter id="filter0_n_603_24181" x="0" y="0" width="153.668" height="154.796" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter0_n_603_24181" x="0" y="0" width="192.645" height="183.471" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
 <feTurbulence type="fractalNoise" baseFrequency="1.1111111640930176 1.1111111640930176" stitchTiles="stitch" numOctaves="3" result="noise" seed="4030" />
