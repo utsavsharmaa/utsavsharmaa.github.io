@@ -192,13 +192,22 @@ a{color:inherit;text-decoration:none}
    Everything is placed in Figma px of the 1440 frame (--bk), so the band is the same picture at every width. */
 .tagb{--bk:calc(100vw / 1440);--bx:0;position:relative;height:calc(569 * var(--bk));margin:calc(144 * var(--k)) calc(-1 * clamp(16px,3.33vw,48px)) calc(152 * var(--k))}
 .tagb > .tear{position:absolute;inset:0;margin:0}
-.tagline{position:absolute;left:calc((266 - var(--bx)) * var(--bk));top:calc(76 * var(--bk));margin:0;color:var(--tag-fg);font:900 calc(96 * var(--bk))/1 var(--body);letter-spacing:-.1em;padding-right:.1em}
+.tagline{position:absolute;left:calc((266 - var(--bx)) * var(--bk));top:calc(76 * var(--bk));margin:0;color:var(--tag-fg);font:900 calc(96 * var(--bk))/1 var(--body);letter-spacing:-.1em;padding-right:.1em;
+  font-optical-sizing:none;font-variation-settings:"opsz" 14}   /* Figma draws DM Sans at optical size 14; the browser would pick the tighter display cut at this size */
 .tag-stk{position:absolute;inset:0;pointer-events:none}
+/* stickers: hover lifts and tilts one; with a mouse you can peel it off and drop it anywhere (double-click puts it back); a tap wiggles it */
 .dk{position:absolute;display:block;left:calc((var(--x) - var(--bx,0)) * var(--bk));top:calc(var(--y) * var(--bk));width:calc(var(--w) * var(--bk));height:auto;max-width:none;
-  transform:scale(var(--s,1)) rotate(var(--sr,0deg));transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
+  pointer-events:auto;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;
+  transform:translate(var(--dx,0px),var(--dy,0px)) scale(var(--s,1)) rotate(calc(var(--sr,0deg) + var(--rt,0deg)));transition:transform .5s cubic-bezier(.3,1.5,.5,1),filter .3s}
+@media (hover:hover) and (pointer:fine){.dk:hover{--s:1.08;--sr:-5deg;filter:drop-shadow(0 10px 14px rgba(20,15,0,.18))}}
+.dk.drag{--s:1.12;cursor:grabbing;z-index:5;filter:drop-shadow(0 22px 26px rgba(20,15,0,.25));transition:filter .3s}
+.dk.wig{animation:wig .6s cubic-bezier(.3,1.5,.5,1)}
+@keyframes wig{0%,100%{rotate:0deg}20%{rotate:-12deg}45%{rotate:9deg}70%{rotate:-5deg}}
 .tagb:not(.in) .dk{--s:.4;opacity:0}
 .tagb.in .dk{opacity:1;transition:transform .55s cubic-bezier(.3,1.5,.5,1) var(--d,0s),opacity .2s var(--d,0s)}
 .intro .tagb .dk{opacity:0}
+.tagb.in .dk:hover,.me.in .dk:hover,.tagb.in .dk.wig,.me.in .dk.wig,.tagb.in .dk.back,.me.in .dk.back{transition-delay:0s}
+.tagb.in .dk.drag,.me.in .dk.drag{transition:filter .3s}
 
 /* bendable blocks: background is drawn wider than the box, and the visible shape is a clip-path set from script */
 .bend{position:relative;isolation:isolate;clip-path:inset(0 round 8px)}
@@ -556,7 +565,7 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
 <!-- the tagline on a strip of torn paper, with stickers (Figma: Desktop - 19, y844-1413) -->
 <div class="tagb tear-band">
   <div class="tear" aria-hidden="true"></div>
-  <p class="tagline">Curious<br>Designer,<br>imagemaker,<br>storyteller</p>
+  <p class="tagline">Curious<br>Designer,<br>Imagemaker,<br>Storyteller</p>
   <div class="tag-stk" aria-hidden="true">
     <img class="dk" src="assets/home/stk/t-namaste.svg?v=1" alt="" width="165" height="166" style="--x:557.5;--y:-17.3;--w:164.9;--d:0.00s">
     <img class="dk" src="assets/home/stk/t-sparkle.svg?v=1" alt="" width="107" height="107" style="--x:178.3;--y:66.3;--w:107.3;--d:0.07s">
@@ -1452,6 +1461,47 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     }, { rootMargin: '300px 0px' }).observe(box);
   } else go();
   document.addEventListener('visibilitychange', function(){ if (document.hidden) v.pause(); else if (visible) go(); });
+})();
+</script>
+<script>
+/* stickers you can play with: hover lifts one, drag peels it off and drops it where you let go (it tilts with the throw),
+   double-click sends it back, a tap just wiggles it. Touch screens only get the wiggle, so swiping still scrolls the page. */
+(function(){
+  var fine = matchMedia('(hover: hover) and (pointer: fine)'), z = 6;
+  document.querySelectorAll('.dk').forEach(function(el){
+    var d = null;
+    el.addEventListener('dragstart', function(e){ e.preventDefault(); });
+    function wiggle(){ el.classList.remove('wig'); void el.offsetWidth; el.classList.add('wig'); }
+    el.addEventListener('animationend', function(){ el.classList.remove('wig'); });
+    el.addEventListener('pointerdown', function(e){
+      if (e.button !== 0) return;
+      if (e.pointerType !== 'mouse' || !fine.matches){ wiggle(); return; }
+      e.preventDefault();
+      d = { x: e.clientX, y: e.clientY, dx: parseFloat(el.style.getPropertyValue('--dx')) || 0, dy: parseFloat(el.style.getPropertyValue('--dy')) || 0, lx: e.clientX, moved: false };
+      try { el.setPointerCapture(e.pointerId); } catch(err){}
+    });
+    el.addEventListener('pointermove', function(e){
+      if (!d) return;
+      var mx = e.clientX - d.x, my = e.clientY - d.y;
+      if (!d.moved){ if (Math.abs(mx) + Math.abs(my) < 4) return; d.moved = true; el.classList.add('drag'); el.style.zIndex = ++z; }
+      el.style.setProperty('--dx', (d.dx + mx).toFixed(1) + 'px');
+      el.style.setProperty('--dy', (d.dy + my).toFixed(1) + 'px');
+      el.style.setProperty('--rt', Math.max(-18, Math.min(18, (e.clientX - d.lx) * 0.8)).toFixed(1) + 'deg');
+      d.lx = e.clientX;
+    });
+    function up(){
+      if (!d) return;
+      var moved = d.moved; d = null;
+      el.classList.remove('drag'); el.style.setProperty('--rt', '0deg');
+      if (!moved) wiggle();
+    }
+    el.addEventListener('pointerup', up);
+    el.addEventListener('pointercancel', up);
+    el.addEventListener('dblclick', function(){
+      el.classList.add('back'); el.style.setProperty('--dx', '0px'); el.style.setProperty('--dy', '0px');
+      setTimeout(function(){ el.classList.remove('back'); }, 600);
+    });
+  });
 })();
 </script>
 </body>
