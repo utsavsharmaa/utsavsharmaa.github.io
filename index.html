@@ -81,6 +81,17 @@ a{color:inherit;text-decoration:none}
 .logo svg{display:block;width:100%;height:100%}
 .logo:hover{transform:rotate(-6deg) scale(1.06)}
 .intro .logo{opacity:0}
+/* menu button (phones only): a 40px glass circle with three lines that turn into an X */
+.menu-btn{display:none;position:fixed;z-index:48;top:14px;right:16px;width:40px;height:40px;padding:0;border:0;border-radius:50%;place-content:center;gap:5px;cursor:pointer;
+  background:color-mix(in srgb,var(--bg) 72%,transparent);box-shadow:0 4px 14px -6px rgba(20,15,0,.3);backdrop-filter:blur(8px) saturate(1.2);-webkit-backdrop-filter:blur(8px) saturate(1.2);color:var(--nav-fg);transition:opacity .9s ease,background-color .25s}
+.menu-btn::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:.5px;background:var(--nav-edge);pointer-events:none;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.menu-btn i{display:block;width:18px;height:2px;border-radius:2px;background:currentColor;transition:transform .35s cubic-bezier(.3,1.3,.5,1),opacity .2s}
+.nav-open .menu-btn i:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-open .menu-btn i:nth-child(2){opacity:0}
+.nav-open .menu-btn i:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.intro .menu-btn{opacity:0}
+@keyframes navin{from{opacity:0;transform:translateY(-8px)}}
 /* light / dark switch: 40px glass circle near the top right corner (Figma: light 24px down / 34px in, dark 28px down / 40px in) */
 .theme-btn{position:fixed;z-index:47;top:var(--btn-top,24px);right:calc(var(--btn-right,120) * var(--k));display:grid;place-items:center;width:40px;height:40px;padding:0;border:0;border-radius:50%;
   background:var(--nav-bg);box-shadow:var(--nav-shadow);backdrop-filter:blur(8px) saturate(1.2);-webkit-backdrop-filter:blur(8px) saturate(1.2);
@@ -503,10 +514,20 @@ html.lenis,html.lenis body{height:auto}
 
 @media (max-width:640px){
   :root{--k:calc(100vw / 1128)}
-  .nav{top:14px;gap:0;padding:4px 6px;font-size:9.5px;letter-spacing:.02em}
+  /* phones: the nav pill folds into a menu button at the top right; tapping it drops a glass panel with big links */
+  .menu-btn{display:grid}
   .logo{top:14px;left:calc(12px - clamp(16px,3.33vw,48px));width:40px;height:40px}
-  .nav a{padding:6px 5px}
-  .nav a[data-soon]::after{font-size:9px}
+  .nav{top:66px;left:16px;right:16px;transform:translateY(-10px);flex-direction:column;align-items:stretch;height:auto;gap:2px;padding:10px;border-radius:24px;
+    font:900 34px/1 var(--display);letter-spacing:0;text-transform:uppercase;background:color-mix(in srgb,var(--bg) 94%,transparent);
+    backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);box-shadow:0 18px 40px -18px rgba(20,15,0,.35);
+    opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s ease,transform .45s cubic-bezier(.3,1.3,.5,1),visibility 0s .3s}
+  .nav-open .nav{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity .25s ease,transform .45s cubic-bezier(.3,1.3,.5,1),visibility 0s}
+  .nav a{padding:14px 14px 12px;border-radius:16px;color:var(--nav-fg);font-family:var(--display)}
+  .nav a + a{border-top:1px solid color-mix(in srgb,var(--nav-fg) 10%,transparent)}
+  .nav a[data-soon]::after{left:auto;right:12px;top:50%;transform:translateY(-50%);font:500 11px/1 var(--body);text-transform:none}
+  .nav a[data-soon]:hover::after,.nav a[data-soon]:focus-visible::after,.nav a.soon::after{transform:translateY(-50%)}
+  .nav-open .nav a{animation:navin .5s cubic-bezier(.3,1.3,.5,1) both}
+  .nav-open .nav a:nth-child(2){animation-delay:.04s}.nav-open .nav a:nth-child(3){animation-delay:.08s}.nav-open .nav a:nth-child(4){animation-delay:.12s}
   .theme-btn{top:auto;bottom:16px;right:16px}
   .hero{padding-top:84px}
   .hero-meta{width:max(calc(560 * var(--k)),min(100%,340px))}
@@ -547,7 +568,8 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
 <header class="hero" id="top">
   <a class="logo" href="#top" aria-label="Utsav Sharma, back to the top"><svg viewBox="0 0 53 53" aria-hidden="true" focusable="false"><rect width="53" height="53" fill="#fff"/><g fill="#FFC813"><path d="M42.7157 28.7032C39.6048 31.9056 37.1069 34.9617 35.4874 37.4733C38.3695 40.3006 40.1675 42.2861 39.4035 44.4545C38.7264 46.376 36.4527 46.8289 34.5495 47.0119L34.2979 47.0348L34.0508 46.989C31.2098 46.4766 29.6224 44.5735 29.7962 41.9063C29.874 40.7535 30.2857 39.4679 30.9262 38.1275C29.8374 37.0524 28.7028 35.8949 27.6369 34.6597C22.2934 40.5293 16.6937 45.1957 12.8097 45.2003C12.6312 45.2003 12.462 45.1911 12.2927 45.1728C10.4719 44.9624 9.53405 43.9559 9.07199 43.1461C7.09107 39.6875 9.75365 33.0265 14.0495 23.25C15.8337 19.1829 18.4779 13.1715 18.4322 11.2363C17.659 11.305 15.152 12.0598 9.12689 17.751C5.70945 20.9763 1.48684 25.4917 0 27.0974V53.0004H53V19.7639C50.7629 21.237 46.7919 24.5081 42.7157 28.7032Z"/><path d="M6.69763 15.0102C13.3861 8.706 17.6133 6.54666 20.404 7.99689C23.9404 9.836 21.3372 15.7559 17.3983 24.7181C15.0193 30.1393 11.0346 39.2067 12.2424 41.3203C12.279 41.389 12.3385 41.4896 12.709 41.5308C13.1116 41.5765 15.4219 41.5308 21.2915 35.9128C22.5953 34.6685 23.9632 33.2457 25.354 31.7039C23.3502 28.7257 22.083 25.3952 22.7509 21.7993C23.7802 16.2408 29.1969 11.4281 39.3028 7.08649C41.4347 6.17152 42.6196 6.7571 43.2326 7.41588C44.7332 9.00794 43.6489 11.7895 42.3909 14.3011C40.4328 18.1989 35.5651 25.4043 30.0798 31.8732C30.9536 32.9117 31.8961 33.909 32.8293 34.8514C35.1717 31.3562 38.3878 27.8702 40.6798 25.5507C41.0458 25.1801 48.782 17.3937 53 15.6232V0H0V21.7444C1.95347 19.6903 4.46508 17.1101 6.69763 15.0102Z"/><path d="M34.4663 43.3376C35.0473 43.2735 35.4408 43.1866 35.697 43.118C35.3264 42.5553 34.5578 41.7272 33.7252 40.8809C33.5331 41.4436 33.437 41.9377 33.4416 42.3494C33.4461 42.7062 33.4553 43.1043 34.4663 43.3376Z"/><path d="M26.3506 22.472C25.9526 24.6084 26.648 26.7632 27.8695 28.8219C30.1249 26.141 32.3575 23.2406 34.3704 20.3584C37.8061 15.4404 39.3433 12.4118 39.9518 10.7969C31.6758 14.4659 27.1009 18.3912 26.3461 22.472H26.3506Z"/></g></svg></a>
   <div class="mtn" aria-hidden="true"></div>
-  <nav class="nav mono" aria-label="Main">
+  <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav"><i></i><i></i><i></i></button>
+  <nav class="nav mono" id="mainNav" aria-label="Main">
     <a href="#work">Work</a>
     <a href="#about">About me</a>
     <a href="#" data-soon>Playground</a>
@@ -1511,6 +1533,23 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
       setTimeout(function(){ el.classList.remove('back'); }, 600);
     });
   });
+})();
+</script>
+<script>
+/* phone menu: the button opens and closes the nav panel; a link, Escape, or a tap outside closes it */
+(function(){
+  var b = document.querySelector('.menu-btn'), nav = document.getElementById('mainNav'), root = document.documentElement;
+  if (!b || !nav) return;
+  function set(open){
+    root.classList.toggle('nav-open', open);
+    b.setAttribute('aria-expanded', open ? 'true' : 'false');
+    b.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  }
+  b.addEventListener('click', function(){ set(!root.classList.contains('nav-open')); });
+  nav.addEventListener('click', function(e){ var a = e.target.closest('a'); if (a && !a.hasAttribute('data-soon')) set(false); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && root.classList.contains('nav-open')){ set(false); b.focus(); } });
+  document.addEventListener('pointerdown', function(e){ if (root.classList.contains('nav-open') && !nav.contains(e.target) && !b.contains(e.target)) set(false); });
+  matchMedia('(min-width: 641px)').addEventListener('change', function(m){ if (m.matches) set(false); });
 })();
 </script>
 </body>
