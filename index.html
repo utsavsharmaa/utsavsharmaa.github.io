@@ -232,70 +232,54 @@ a{color:inherit;text-decoration:none}
 .bend.gl-on > .media{opacity:0}
 .card .bar{z-index:1}
 
-/* work, laid out like the Portfoliofy "Crayon" template: a centred heading with a taped note, then one coloured panel per
-   project. On wide screens the panels stick and stack like folders; each new panel's tab sits further right, so the
-   earlier tabs stay visible. Left: meta, name, question, link, tags. Right: a taped photo. Panels keep the page's bend. */
-.work{padding-bottom:96px;scroll-margin-top:88px}
-.feat-head{max-width:56rem;margin:0 auto;padding:clamp(64px,8vw,120px) 16px clamp(56px,6vw,96px);text-align:center}
-.feat-head .kicker{display:inline-flex;flex-direction:column;align-items:center;gap:6px;font:500 14px/1.3 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--kick)}
-.feat-head .kicker svg{width:118px;height:6px;fill:currentColor}
-.feat-head h2{margin:22px 0 0;font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(72px,10vw,150px);line-height:.88;letter-spacing:-.005em;color:var(--accent)}
-.feat-head .tag-note{display:inline-block;margin-top:28px;padding:8px 16px;transform:rotate(-2deg);background:#EAD9A2;color:#191510;font-size:14px;line-height:1.4;max-width:30ch;box-shadow:0 2px 6px rgba(17,18,18,.14)}
-.stack{display:flex;flex-direction:column;gap:12vh}
-.panel{position:sticky;top:112px;--pc:#DB9130;--pg:linear-gradient(to bottom,#DB9130 50.96%,#754D1A);--pt:#fff;--pf:var(--body)}
-/* folder colours (Figma: Desktop - 19): solid tab, the folder fades darker toward the bottom */
-.panel.violet{--pc:#AE7BE4;--pg:linear-gradient(to bottom,#AE7BE4,#253AC9)}
-.panel.slate{--pc:#7E909C;--pg:linear-gradient(to bottom,#7E909C,#5F6D76 28.8%,#48525A 68.8%,#40474C)}
-.panel.amber{--pc:#E39A1B;--pg:linear-gradient(to bottom,#E39A1B,#975C1C)}
-.panel .body > .bg{background:var(--pg)}
-.panel .tabs{display:flex;margin-left:calc(var(--i,0) * min(322px, (100% - 306px) / 3) - 72px * min(var(--i,0), 1))}
-.panel .tab{display:inline-flex;align-items:center;gap:14px;white-space:nowrap;padding:24px 112px 24px 108px;background:var(--pc);color:var(--pt);
-  width:378px;font:500 16px/1.5 var(--pf);letter-spacing:.2em;text-transform:uppercase;clip-path:polygon(76px 0,calc(100% - 76px) 0,100% 100%,0 100%)}
-.panel:first-child .tab{width:306px;padding-left:36px;clip-path:polygon(0 0,calc(100% - 76px) 0,100% 100%,0 100%)}
-.panel .body{--tc:var(--pc);display:grid;grid-template-columns:1fr 1.1fr;gap:48px;padding:56px;min-height:calc(100vh - 14rem);color:var(--pt);clip-path:inset(0)}
-.panel .body > .bg{left:calc(-1 * var(--ov));right:calc(-1 * var(--ov))}
-.panel .info{display:flex;flex-direction:column;min-width:0}
-.panel .meta{display:inline-flex;align-items:center;gap:12px;font:500 14px/1.4 var(--pf);letter-spacing:.2em;text-transform:uppercase}
-.panel .meta i{width:12px;height:12px;border-radius:50%;background:currentColor;flex:none}
-/* the question is the title now (Figma: 64-72px DM Sans SemiBold), then a short description of the project */
-.panel h3{margin:23px 0 0;max-width:calc(var(--tw) * 1px);font:600 calc(var(--ts) * 1px)/var(--tl) var(--body);letter-spacing:-.025em}
-.panel .q{margin:20px 0 0;max-width:512px;font-size:18px;line-height:1.4;letter-spacing:-.02em;opacity:.9}
-.panel .q.d-m{font-size:16px;font-weight:500}
-.panel .q.d-r16{line-height:1.6;letter-spacing:0}
-.panel .go{margin-top:32px;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;padding-bottom:4px;background:linear-gradient(currentColor,currentColor) 0 100%/100% 2px no-repeat;font:500 14px/1.4 var(--pf);letter-spacing:.2em;text-transform:uppercase}
-.panel .go svg{transition:transform .3s}
-.panel .go:hover svg{transform:translate(2px,-2px)}
-.panel .chips{margin-top:auto;padding-top:48px;display:flex;flex-wrap:wrap;gap:10px}
-/* chips: glass pills, 40px tall, white 20% with a thin light edge */
-.panel .chips span{position:relative;display:inline-flex;align-items:center;height:40px;padding:4px 16px;border-radius:40px;background:rgba(255,255,255,.2);color:#fff;font:500 16px/1.3 var(--body);letter-spacing:.025em;text-transform:uppercase}
-.panel .chips span::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:.5px;background:linear-gradient(160deg,#E3E3E3,rgba(238,238,238,.6));pointer-events:none;
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
-.panel .shot{position:relative;display:block;align-self:center;min-width:0}
-.panel .tape{display:block;position:absolute;top:-12px;z-index:2;width:96px;height:24px;background:rgba(255,255,255,.55);box-shadow:0 1px 3px rgba(17,18,18,.15)}
-.panel .tape.l{left:-20px;transform:rotate(-9deg)}
-.panel .tape.r{right:-20px;transform:rotate(9deg)}
-.panel .frame{position:relative;display:block;overflow:hidden;border:4px solid #fff;background:#fff;height:calc(100vh - 21rem);min-height:320px}
-.panel .frame img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(.2,.9,.25,1)}
-.panel a.shot:hover .frame img{transform:scale(1.03)}
-@media (max-width:1023px){
-  .panel{position:relative;top:auto}
-  .stack{gap:64px}
-  .panel .body{grid-template-columns:1fr;padding:40px;min-height:0;gap:32px}
-  .panel .frame{height:auto;aspect-ratio:1/1;min-height:0}
-  .panel h3{font-size:clamp(30px,6vw,52px);line-height:1.02;max-width:none}
-  .panel .chips{padding-top:32px}
+/* Selected work: Figma Desktop - 22, node 637:29737. */
+.work{max-width:1200px;margin-inline:auto;padding-block:80px;scroll-margin-top:88px;font-optical-sizing:none;font-variation-settings:"opsz" 14}
+.work-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:48px}
+.work-heading h2{margin:0;font:900 clamp(64px,7.5vw,108px)/.88 var(--display);letter-spacing:-.005em;text-transform:uppercase;color:var(--accent)}
+.work-heading p{width:340px;max-width:34%;margin:0;color:var(--muted);font-size:16px;line-height:1.5;letter-spacing:.01em}
+.work-projects{display:flex;flex-direction:column;gap:80px}
+.work-project{min-width:0}
+.work-tile{display:block;position:relative;aspect-ratio:1200/450;overflow:hidden;border-radius:28px}
+.work-tile img{position:absolute;display:block;object-fit:cover;border-radius:14px;transform:rotate(var(--r));box-shadow:0 12px 32px -12px rgba(18,18,17,.22),0 1px 2px rgba(18,18,17,.06)}
+.work-tile img[style*="--r:-2"],.work-tile img[style*="--r:2"]{box-shadow:0 30px 60px -20px rgba(18,18,17,.4),0 2px 4px rgba(18,18,17,.08)}
+.work-copy{padding-top:24px}
+.work-meta{margin:0 0 12px;color:var(--muted);font-size:12px;line-height:1.3;letter-spacing:.06em;text-transform:uppercase}
+.work-row{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.work-project h3{margin:0;font:500 37.44px/1.06 var(--body);letter-spacing:-.03em;color:var(--fg)}
+.work-details{display:flex;flex-direction:column;align-items:flex-start;gap:24px;min-width:0}
+.work-details p{margin:0;color:var(--muted);font-size:16.5px;line-height:1.5}
+.work-tags{display:flex;flex-wrap:wrap;gap:8px 10px}
+.work-tags span{display:inline-flex;align-items:center;min-height:40px;padding:4px 16px;border:.5px solid #e3e3e3;border-radius:40px;background:rgba(255,255,255,.2);font-size:16px;font-weight:500;line-height:1.3;letter-spacing:.025em;text-transform:uppercase}
+.work-link{font-size:15px;font-weight:500;line-height:1.4;text-decoration:underline;text-underline-offset:3px}
+.work-link:hover{color:var(--accent)}
+.work-pair{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.work-pair .work-tile{aspect-ratio:586/400}
+.work-pair .work-row{display:flex;flex-direction:column;gap:12px}
+@media (min-width:1280px) and (max-width:1439px){.work{max-width:calc(100vw * 1200 / 1440)}}
+@media (max-width:900px){
+  .work-heading{align-items:flex-start;flex-direction:column;gap:24px}
+  .work-heading p{max-width:100%}
+  .work-project h3{font-size:30px}
+  .work-row{gap:24px}
+  .work-tags span{font-size:13px;padding-inline:12px;min-height:34px}
 }
 @media (max-width:640px){
-  .panel .tabs{margin-left:calc(var(--i,0) * (100% - 244px) / 3)}   /* staggered, and the last tab still fits */
-  .panel .tab{width:240px;font-size:12px;padding:14px 56px 14px 64px;gap:8px;clip-path:polygon(44px 0,calc(100% - 44px) 0,100% 100%,0 100%)}
-  .panel:first-child .tab{width:196px;padding-left:20px;clip-path:polygon(0 0,calc(100% - 44px) 0,100% 100%,0 100%)}
-  .panel .body{padding:24px}
-  .panel .meta,.panel .go{font-size:12px}
-  .panel .chips span{font-size:13px;height:34px;padding:4px 13px}
-  .panel h3{font-size:30px;line-height:1.02}
-  .panel .q,.panel .q.d-m{font-size:15px}
+  .work{padding-block:56px}
+  .work-heading{margin-bottom:32px}
+  .work-heading h2{font-size:clamp(44px,12vw,76px)}
+  .work-projects{gap:48px}
+  .work-row,.work-pair{grid-template-columns:1fr}
+  .work-pair{gap:48px}
+  .work-row{gap:16px}
+  .work-tile{border-radius:18px}
+  .work-tile img{border-radius:6px}
+  .work-meta{font-size:11px}
+  .work-details{gap:20px}
 }
-
+.work-aadmiwala .work-tile{background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(72 0 0 24.75 1056 67.5)'><stop stop-color='rgba(245,185,120,1)' offset='0'/><stop stop-color='rgba(245,185,120,0)' offset='0.62'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(66 0 0 24.75 144 90)'><stop stop-color='rgba(255,225,184,1)' offset='0'/><stop stop-color='rgba(255,225,184,0)' offset='0.6'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(72 0 0 27 360 405)'><stop stop-color='rgba(201,123,61,1)' offset='0'/><stop stop-color='rgba(201,123,61,0)' offset='0.65'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(60 0 0 22.5 1080 382.5)'><stop stop-color='rgba(252,228,200,1)' offset='0'/><stop stop-color='rgba(252,228,200,0)' offset='0.58'/></radialGradient></defs></svg>"), linear-gradient(90deg, rgb(247, 226, 207) 0%, rgb(247, 226, 207) 100%)}
+.work-syntra .work-tile{background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(72 0 0 24.75 1080 54)'><stop stop-color='rgba(243,185,174,1)' offset='0'/><stop stop-color='rgba(243,185,174,0)' offset='0.62'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(66 0 0 24.75 120 90)'><stop stop-color='rgba(251,224,200,1)' offset='0'/><stop stop-color='rgba(251,224,200,0)' offset='0.6'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(72 0 0 27 300 405)'><stop stop-color='rgba(231,147,160,1)' offset='0'/><stop stop-color='rgba(231,147,160,0)' offset='0.65'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(60 0 0 22.5 1056 396)'><stop stop-color='rgba(250,216,210,1)' offset='0'/><stop stop-color='rgba(250,216,210,0)' offset='0.58'/></radialGradient></defs></svg>"), linear-gradient(90deg, rgb(242, 226, 224) 0%, rgb(242, 226, 224) 100%)}
+.work-sukoon .work-tile{background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 586 400' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(35.16 0 0 22 498.1 60)'><stop stop-color='rgba(185,168,224,1)' offset='0'/><stop stop-color='rgba(185,168,224,0)' offset='0.62'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 586 400' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(32.23 0 0 22 70.32 72)'><stop stop-color='rgba(224,212,245,1)' offset='0'/><stop stop-color='rgba(224,212,245,0)' offset='0.6'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 586 400' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(35.16 0 0 24 175.8 360)'><stop stop-color='rgba(124,95,176,1)' offset='0'/><stop stop-color='rgba(124,95,176,0)' offset='0.65'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 586 400' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(29.3 0 0 20 527.4 340)'><stop stop-color='rgba(214,200,237,1)' offset='0'/><stop stop-color='rgba(214,200,237,0)' offset='0.58'/></radialGradient></defs></svg>"), linear-gradient(90deg, rgb(230, 226, 244) 0%, rgb(230, 226, 244) 100%)}
+.work-kashikriti .work-tile{background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 586 400' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(35.16 0 0 22 498.1 60)'><stop stop-color='rgba(169,192,240,1)' offset='0'/><stop stop-color='rgba(169,192,240,0)' offset='0.62'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 586 400' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(32.23 0 0 22 70.32 72)'><stop stop-color='rgba(227,217,245,1)' offset='0'/><stop stop-color='rgba(227,217,245,0)' offset='0.6'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 586 400' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(35.16 0 0 24 175.8 360)'><stop stop-color='rgba(124,147,217,1)' offset='0'/><stop stop-color='rgba(124,147,217,0)' offset='0.65'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 586 400' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(29.3 0 0 20 527.4 340)'><stop stop-color='rgba(207,224,247,1)' offset='0'/><stop stop-color='rgba(207,224,247,0)' offset='0.58'/></radialGradient></defs></svg>"), linear-gradient(90deg, rgb(221, 228, 244) 0%, rgb(221, 228, 244) 100%)}
 
 /* section titles from the Workdesk template: big title, one word with a hand-drawn line under it (draws in when the section shows) */
 .uh{margin:0;text-align:center;font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(64px,8vw,120px);line-height:.88;color:var(--accent)}
@@ -305,8 +289,6 @@ a{color:inherit;text-decoration:none}
 /* every other underline draws itself in the same way, left to right, once it comes into view */
 svg.draw{clip-path:inset(0 100% 0 0);transition:clip-path 1.1s cubic-bezier(.6,0,.2,1) .25s}
 svg.draw.drawn{clip-path:inset(0 0 0 0)}
-.panel .go.draw{background-size:0 2px;transition:background-size 1.1s cubic-bezier(.6,0,.2,1) .25s}
-.panel .go.draw.drawn{background-size:100% 2px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* about me (Figma: Desktop - 19, y5497-6591): life on the left, a cut-out video of me in the middle on yellow stars,
@@ -613,64 +595,82 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
 
 <main>
   <section class="work" id="work" aria-labelledby="work-h">
-    <div class="feat-head">
-      <span class="kicker">Explore my work<svg class="draw" viewBox="0 0 275 10" aria-hidden="true"><path d="M21.2339 6.58674C16.3284 4.30983 27.9112 4.2761 31.2865 4.11035C62.8405 2.56112 94.5961 1.90476 126.381 1.47056C154.215 0.986808 181.642 0.310026 209.597 0.0921154C223.632 -0.0335821 237.675 -0.0306377 251.71 0.100948C257.965 0.163841 264.374 0.205791 270.61 0.426939C271.798 0.469106 273.726 0.600562 274.49 0.96797C274.891 1.16094 275.068 1.40679 274.977 1.64926C274.729 2.3522 272.95 2.49667 271.362 2.49841C265.445 2.5049 259.479 2.55344 253.563 2.52864C244.802 2.49191 235.914 2.66602 227.174 2.62937C226.727 2.85893 226.409 3.02296 225.888 3.22928C222.277 3.69569 205.775 3.68441 201.307 3.72941L156.981 4.11021C149.721 4.14817 142.462 4.22008 135.208 4.32599C126.714 4.47497 117.569 4.78303 109.091 5.05667C97.0002 5.43623 84.9208 5.86274 72.8541 6.336C62.275 6.73655 51.7108 7.19087 41.1646 7.69882C33.4978 8.11088 25.8435 8.55464 18.2028 9.03015C12.6827 9.38762 6.99256 9.87643 1.4307 9.99904C0.402106 10.0217 -0.187976 9.63905 0.0540895 9.26249C1.21844 8.62334 28.2707 7.11487 32.6162 6.79305C33.3032 6.82685 39.217 6.46543 40.0544 6.35522C38.9822 6.33198 31.7679 6.56773 30.7266 6.66485C27.3531 6.63152 24.3996 7.05496 21.2339 6.58674Z"/></svg></span>
-      <h2 id="work-h">Selected<br>work</h2>
-      <span class="tag-note">Questions I couldn’t leave alone. Each one opens the full case study.</span>
+    <div class="work-heading">
+      <h2 id="work-h">Selected work</h2>
+      <p>Questions I couldn’t leave alone. Each card opens the full case study.</p>
     </div>
-    <div class="stack">
-      <article class="panel sans" aria-labelledby="p1" style="--ts:64;--tl:0.96;--tw:554">
-        <div class="tabs" style="--i:0"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 01</span></div>
-        <div class="body bend" data-r="0"><span class="bg"></span>
-          <div class="info">
-            <span class="meta"><i></i>Freelance work Aadmiwala</span>
-            <h3 id="p1">Why is hiring through recruiting firms so hard to track?</h3>
-            <p class="q d-m">Aadmiwala is a B2B talent marketplace. Employers share hiring needs, recruiting firms supply candidates, and job seekers find work. I designed the platform for Real Glide, from the public website to a separate dashboard for each side.</p>
-            <a class="go draw" href="work/aadmiwala/">View case study <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4.5 11.5 11.5 4.5M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            <div class="chips"><span>Hiring platform</span><span>UX + UI</span><span>Dashboards</span></div>
+    <div class="work-projects">
+      <article class="work-project work-aadmiwala" aria-labelledby="work-aadmiwala-title">
+        <a class="work-tile" href="work/aadmiwala/" aria-label="View Aadmiwala case study">
+          <img src="assets/home/selected-work/imgAadDash.png" alt="" loading="lazy" decoding="async" style="left:4.480000%;top:17.066667%;width:64.960000%;height:123.183333%;--r:0deg" data-figma-layer="imgAadDash">
+          <img src="assets/home/selected-work/imgAadJobs.png" alt="" loading="lazy" decoding="async" style="left:55.999917%;top:42.667111%;width:50.400000%;height:95.536000%;--r:-2deg" data-figma-layer="imgAadJobs">
+        </a>
+        <div class="work-copy">
+          <p class="work-meta">01 / Aadmiwala · Client work · Real Glide</p>
+          <div class="work-row">
+            <h3 id="work-aadmiwala-title">Why is hiring through recruiting firms so hard to track?</h3>
+            <div class="work-details">
+              <p>Aadmiwala is a B2B talent marketplace. Employers share hiring needs, recruiting firms supply candidates, and job seekers find work. I designed the platform for Real Glide, from the public website to a separate dashboard for each side.</p>
+              <div class="work-tags"><span>Hiring platform</span><span>UX + UI</span><span>Dashboards</span></div>
+              <a class="work-link" href="work/aadmiwala/">View case study ↗</a>
+            </div>
           </div>
-          <a class="shot" href="work/aadmiwala/" tabindex="-1" aria-hidden="true"><span class="tape l"></span><span class="tape r"></span><span class="frame"><img src="work/aadmiwala/hero.jpg" alt="Aadmiwala dashboard and the phone version of the site" loading="lazy" decoding="async" style="object-position:100% 50%"></span></a>
         </div>
       </article>
-      <article class="panel violet sans" aria-labelledby="p2" style="--ts:72;--tl:0.96;--tw:542">
-        <div class="tabs" style="--i:1"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 02</span></div>
-        <div class="body bend" data-r="0"><span class="bg"></span>
-          <div class="info">
-            <span class="meta"><i></i>Self-initiated research</span>
-            <h3 id="p2">Why don’t men ask for help, even when they need it?</h3>
-            <p class="q d-r14">In India, men are expected to carry their problems alone. Sukoon started as a question about why men don’t ask for help, and became an anonymous app and an awareness campaign built on what people told me.</p>
-            <a class="go draw" href="work/sukoon/">View case study <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4.5 11.5 11.5 4.5M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            <div class="chips"><span>Campaign</span><span>App Design</span><span>Research</span></div>
+      <article class="work-project work-syntra" aria-labelledby="work-syntra-title">
+        <a class="work-tile" href="work/syntra/" aria-label="View Syntra case study">
+          <img src="assets/home/selected-work/imgSynKiosk.png" alt="" loading="lazy" decoding="async" style="left:2.833333%;top:9.722222%;width:62.720000%;height:123.676889%;--r:0deg" data-figma-layer="imgSynKiosk">
+          <img src="assets/home/selected-work/imgSynScreen.png" alt="" loading="lazy" decoding="async" style="left:45.028458%;top:37.375444%;width:50.400000%;height:83.104000%;--r:-2deg" data-figma-layer="imgSynScreen">
+        </a>
+        <div class="work-copy">
+          <p class="work-meta">04 / Syntra · Retail tech · Group project</p>
+          <div class="work-row">
+            <h3 id="work-syntra-title">How do you find a scent you can’t put into words?</h3>
+            <div class="work-details">
+              <p>A kiosk you play like an instrument. Turn a knob and three sliders, and the screen finds your ZARA scent. A double press takes you into its world in VR; hold the button, and a ticket prints that comes alive in AR.</p>
+              <div class="work-tags"><span>Retail tech</span><span>VR + AR</span><span>Kiosk</span></div>
+              <a class="work-link" href="work/syntra/">View case study ↗</a>
+            </div>
           </div>
-          <a class="shot" href="work/sukoon/" tabindex="-1" aria-hidden="true"><span class="tape l"></span><span class="tape r"></span><span class="frame"><img src="work/sukoon/cover.jpg" alt="Sukoon app screens: how are you feeling this evening?" loading="lazy" decoding="async"></span></a>
         </div>
       </article>
-      <article class="panel slate" aria-labelledby="p3" style="--ts:72;--tl:1;--tw:577">
-        <div class="tabs" style="--i:2"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 03</span></div>
-        <div class="body bend" data-r="0"><span class="bg"></span>
-          <div class="info">
-            <span class="meta"><i></i>Design Project 01 · NID</span>
-            <h3 id="p3">Why do people walk past a craft this old?</h3>
-            <p class="q d-r16">A branding and packaging project centred on the traditional soft-stone jaali craft of Varanasi: how a craft rooted in material, skill and architectural heritage can be told through a contemporary identity, packaging and storytelling.</p>
-            <a class="go draw" href="work/kashikriti/">View case study <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4.5 11.5 11.5 4.5M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            <div class="chips"><span>Campaign</span><span>Packaging</span><span>Branding</span></div>
+      <div class="work-pair">
+      <article class="work-project work-sukoon" aria-labelledby="work-sukoon-title">
+        <a class="work-tile" href="work/sukoon/" aria-label="View Sukoon case study">
+          <img src="assets/home/selected-work/imgSukCheckin.png" alt="" loading="lazy" decoding="async" style="left:5.460751%;top:12.000000%;width:30.317406%;height:96.207500%;--r:0deg" data-figma-layer="imgSukCheckin">
+          <img src="assets/home/selected-work/imgSukChat.png" alt="" loading="lazy" decoding="async" style="left:34.413140%;top:23.245625%;width:30.317406%;height:96.207500%;--r:-2deg" data-figma-layer="imgSukChat">
+          <img src="assets/home/selected-work/imgSukRoom.png" alt="" loading="lazy" decoding="async" style="left:63.651877%;top:11.000000%;width:30.317406%;height:96.207500%;--r:0deg" data-figma-layer="imgSukRoom">
+        </a>
+        <div class="work-copy">
+          <p class="work-meta">02 / Sukoon · Self-initiated research</p>
+          <div class="work-row">
+            <h3 id="work-sukoon-title">Why don’t men ask for help, even when they need it?</h3>
+            <div class="work-details">
+              <p>In India, men are expected to carry their problems alone. Sukoon started as a question about why men don’t ask for help, and became an anonymous app and an awareness campaign built on what people told me.</p>
+              <div class="work-tags"><span>Campaign</span><span>App Design</span><span>Research</span></div>
+              <a class="work-link" href="work/sukoon/">View case study ↗</a>
+            </div>
           </div>
-          <a class="shot" href="work/kashikriti/" tabindex="-1" aria-hidden="true"><span class="tape l"></span><span class="tape r"></span><span class="frame"><img src="work/kashikriti/cover.jpg" alt="The Kashikriti logo: the letter क carved like a stone jaali" loading="lazy" decoding="async"></span></a>
         </div>
       </article>
-      <article class="panel amber" aria-labelledby="p4" style="--ts:72;--tl:1;--tw:549">
-        <div class="tabs" style="--i:3"><span class="tab"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0c.5 4.2 3.8 7.5 8 8-4.2.5-7.5 3.8-8 8-.5-4.2-3.8-7.5-8-8 4.2-.5 7.5-3.8 8-8Z" fill="currentColor"/></svg>Project 04</span></div>
-        <div class="body bend" data-r="0"><span class="bg"></span>
-          <div class="info">
-            <span class="meta"><i></i>Retail tech · Group project</span>
-            <h3 id="p4">How do you find a scent you can’t put into words?</h3>
-            <p class="q d-r16">A kiosk you play like an instrument. Turn a knob and three sliders, and the screen finds your ZARA scent. A double press takes you into its world in VR; hold the button, and a ticket prints that comes alive in AR.</p>
-            <a class="go draw" href="work/syntra/">View case study <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4.5 11.5 11.5 4.5M5.5 4.5h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-            <div class="chips"><span>Retail tech</span><span>VR + AR</span><span>Kiosk</span></div>
+      <article class="work-project work-kashikriti" aria-labelledby="work-kashikriti-title">
+        <a class="work-tile" href="work/kashikriti/" aria-label="View Kashikriti case study">
+          <img src="assets/home/selected-work/imgKashBox.png" alt="" loading="lazy" decoding="async" style="left:2.559727%;top:16.500000%;width:71.863481%;height:70.186750%;--r:0deg" data-figma-layer="imgKashBox">
+          <img src="assets/home/selected-work/imgKashPoster.png" alt="" loading="lazy" decoding="async" style="left:59.533020%;top:15.339750%;width:33.686007%;height:70.538250%;--r:2deg" data-figma-layer="imgKashPoster">
+        </a>
+        <div class="work-copy">
+          <p class="work-meta">03 / KASHIKRITI · Branding &amp; packaging</p>
+          <div class="work-row">
+            <h3 id="work-kashikriti-title">Why do people walk past a craft this old?</h3>
+            <div class="work-details">
+              <p>A branding and packaging project centred on the traditional soft-stone jaali craft of Varanasi: how a craft rooted in material, skill and architectural heritage can be told through a contemporary identity, packaging and storytelling.</p>
+              <div class="work-tags"><span>Branding</span><span>Campaign</span><span>Packaging</span></div>
+              <a class="work-link" href="work/kashikriti/">View case study ↗</a>
+            </div>
           </div>
-          <a class="shot" href="work/syntra/" tabindex="-1" aria-hidden="true"><span class="tape l"></span><span class="tape r"></span><span class="frame"><img src="assets/work/syn-kiosk.webp" alt="A visitor in a VR headset at the Syntra kiosk" loading="lazy" decoding="async"></span></a>
         </div>
       </article>
+      </div>
     </div>
   </section>
 
