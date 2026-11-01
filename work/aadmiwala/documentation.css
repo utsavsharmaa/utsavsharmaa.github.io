@@ -2186,3 +2186,31 @@
 .flow-node.d1678{font-size:18px!important;line-height:1.55!important;letter-spacing:normal!important}
 .flow-node.d1679{font-size:15.0px!important;line-height:1.55!important;letter-spacing:normal!important}
 }
+
+/* Quiet reading feedback and inspectable screen previews. */
+.case-reading-progress{position:fixed;inset:0 0 auto;height:2px;z-index:80;background:#e38e27;transform:scaleX(var(--reading-progress,0));transform-origin:0 50%;pointer-events:none}
+.documentation img.case-zoom{pointer-events:auto;cursor:zoom-in;transition:filter 180ms ease}
+.documentation img.case-zoom:focus-visible{outline:3px solid #e38e27;outline-offset:-4px}
+.back,.reel .rp{transition:background-color 180ms ease,box-shadow 180ms ease,translate 180ms ease}
+.end a{transition:color 150ms ease;text-underline-offset:4px}
+.end a:hover,.end a:focus-visible{color:#99540d}
+@media(hover:hover) and (pointer:fine){
+ .documentation img.case-zoom:hover{filter:brightness(1.035)}
+ .back:hover,.reel .rp:hover{translate:0 -2px;box-shadow:0 5px 18px rgba(51,47,42,.18)}
+ .back:active,.reel .rp:active{translate:0 0}
+}
+.case-phase-arrive{animation:case-phase-arrive 620ms cubic-bezier(.16,1,.3,1) both}
+@keyframes case-phase-arrive{from{opacity:.94;clip-path:inset(2% 0 0);translate:0 10px}to{opacity:1;clip-path:inset(0);translate:0 0}}
+.case-preview{width:min(1120px,calc(100vw - 32px));max-width:none;max-height:90dvh;margin:auto;padding:0;background:#fffcf8;color:#332f2a;border:1px solid #e8e4df;border-radius:16px;box-shadow:0 24px 80px rgba(31,26,21,.24);overflow:auto;overscroll-behavior:contain}
+.case-preview::backdrop{background:rgba(31,26,21,.7)}
+.case-preview-header{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;background:#fffcf8;border-bottom:1px solid #e8e4df;font:500 14px/1.4 "Plus Jakarta Sans",sans-serif}
+.case-preview-header h2{font:inherit;margin:0}
+.case-preview-close{flex:none;min-height:40px;padding:8px 16px;border:1px solid #d6cfc4;border-radius:999px;background:#fff;color:#332f2a;cursor:pointer}
+.case-preview-close:hover{background:#f9ecd8}
+.case-preview-image{width:100%;height:auto;display:block;border-radius:0}
+html.case-preview-open{overflow:hidden}
+@media(prefers-reduced-motion:reduce){
+ .case-phase-arrive{animation:none}
+ .documentation img.case-zoom,.back,.reel .rp{transition:background-color 150ms ease,filter 150ms ease}
+ .back:hover,.reel .rp:hover{translate:none}
+}
