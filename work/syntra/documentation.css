@@ -1114,3 +1114,18 @@ h1,h2,h3,p{font-size:inherit;font-weight:inherit}.documentation{isolation:isolat
 /* Blend the decorative bottles without rotated rectangular fade overlays. */
 .hero-art [data-node-id="829:15158"]{mask-image:linear-gradient(to right,#000 0%,#000 72%,transparent 100%),linear-gradient(to bottom,transparent 0%,#000 18%,#000 70%,transparent 100%);mask-composite:intersect;-webkit-mask-image:linear-gradient(to right,#000 0%,#000 72%,transparent 100%),linear-gradient(to bottom,transparent 0%,#000 18%,#000 70%,transparent 100%);-webkit-mask-composite:source-in}
 .hero-art [data-node-id="829:15159"],.hero-art [data-node-id="829:15160"],.hero-art [data-node-id="829:15161"]{display:none}
+
+/* Current Syntra Figma frame: page-level light, transparent sections and native controls. */
+.documentation{position:relative}.refresh-glows{position:absolute;inset:0;pointer-events:none;z-index:0}.doc-section{z-index:1}.refresh-glow{position:absolute;left:calc(var(--gx)*var(--k));top:calc(var(--gy)*var(--k));width:calc(var(--gw)*var(--k));height:calc(var(--gh)*var(--k))}.refresh-glow img{display:block;width:100%;height:100%}.controls-figure{display:contents}.native-control .readout{bottom:-22px}
+@media(max-width:999px){.refresh-glows{display:none}.controls-figure{display:block;position:relative;overflow-x:auto;overflow-y:hidden;width:100%;height:470px}.controls-figure .native-control{position:relative!important;left:0;top:0;--x:0;--y:0}.doc-section::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-repeat:no-repeat;background-size:110% auto;background-position:center;opacity:.8}
+#chapter-09::before{background-image:url("documentation/2fbccd9d-dee5-4b25-9fb3-e72cec95e455.svg")}
+#chapter-10::before{background-image:url("documentation/a2ce88a5-9610-4311-81c2-762ddbe4c163.svg")}
+#chapter-11::before{background-image:url("documentation/e49e271d-56c1-4f0d-ad10-fd9e9e8bab27.svg")}
+#chapter-11::before{background-image:url("documentation/6cd378eb-37b0-4fc0-b7b0-2b50435c9924.svg")}
+#chapter-04::before{background-image:url("documentation/8739d11b-cb97-4430-85fe-c492898e88f7.svg")}
+#chapter-05::before{background-image:url("documentation/1a4650ab-3dbf-477d-bb80-aa226911504c.svg")}
+#chapter-06::before{background-image:url("documentation/27d5e31e-54f5-473d-8480-994f4a39e239.svg")}
+#chapter-07::before{background-image:url("documentation/ac057fb9-048b-421c-aef8-2e9fe0aad7b6.svg")}
+#chapter-09::before{background-image:url("documentation/0b804fb3-0041-41da-be0f-2b9aff29c6e6.svg")}
+#chapter-09::before{background-image:url("documentation/4e551cda-ba15-4375-a5d0-90829dcf7ac2.svg")}
+}
