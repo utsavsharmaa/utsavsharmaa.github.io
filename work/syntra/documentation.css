@@ -1107,3 +1107,10 @@ h1,h2,h3,p{font-size:inherit;font-weight:inherit}.documentation{isolation:isolat
 .flow.d735{font-size:30px!important}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Keep the playable controls aligned with the case-study headings. */
+.demo-controls>h3,.demo-controls>p{text-align:center}
+.control-stage{margin-inline:auto}
+/* Blend the decorative bottles without rotated rectangular fade overlays. */
+.hero-art [data-node-id="829:15158"]{mask-image:linear-gradient(to right,#000 0%,#000 72%,transparent 100%),linear-gradient(to bottom,transparent 0%,#000 18%,#000 70%,transparent 100%);mask-composite:intersect;-webkit-mask-image:linear-gradient(to right,#000 0%,#000 72%,transparent 100%),linear-gradient(to bottom,transparent 0%,#000 18%,#000 70%,transparent 100%);-webkit-mask-composite:source-in}
+.hero-art [data-node-id="829:15159"],.hero-art [data-node-id="829:15160"],.hero-art [data-node-id="829:15161"]{display:none}
