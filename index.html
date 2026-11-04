@@ -326,21 +326,26 @@ svg.draw.drawn{clip-path:inset(0 0 0 0)}
 .me:not(.in) .dk{--s:.4;opacity:0}
 .me.in .dk{opacity:1;transition:transform .55s cubic-bezier(.3,1.5,.5,1) var(--d,0s),opacity .2s var(--d,0s)}
 
-/* sneak peek of my life: polaroids running sideways across the whole page (Figma: 334 x 363 each, 40 apart, tilted +/-3 degrees) */
+/* sneak peek of my life: polaroids running sideways across the whole page (Figma 240:2472: 280 x 304 each, 250px photo, 40 apart, tilted +/-3 degrees).
+   The loop is moved by script (section 14) so visitors can drag it with a mouse or a finger; the CSS animation is only the no-script fallback. */
 .sh{margin:0;text-align:center;font:900 max(32px,calc(48 * var(--k)))/.88 var(--display);text-transform:uppercase;color:color-mix(in srgb,var(--kick) 80%,transparent)}
 .sh .u{position:relative;display:inline-block}
 .sh .ul{position:absolute;left:-2%;bottom:-.2em;width:104%;height:.13em;fill:currentColor}
 .peek{padding:calc(101 * var(--k)) 0 calc(48 * var(--k))}
 .peek-row,.tools-row{margin:0 calc(-1 * clamp(16px,3.33vw,48px));overflow:hidden}
-.peek-row{--pw:calc(334 * var(--k));padding:calc(30 * var(--k)) 0 max(50px,calc(70 * var(--k)));margin-top:calc(27 * var(--k))}
+.peek-row{--pw:calc(280 * var(--k));padding:calc(30 * var(--k)) 0 max(50px,calc(70 * var(--k)));margin-top:calc(27 * var(--k))}
 .peek-track,.tools-track{display:flex;width:max-content;animation:marq var(--dur,70s) linear infinite}
-.peek-row:hover .peek-track{animation-play-state:paused}
+.peek-row.drag{cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.peek-row.drag .peek-track{animation:none;will-change:transform}
+.peek-row.grabbing{cursor:grabbing}
+.peek-row.grabbing .pc{pointer-events:none}
+.peek-row img{-webkit-user-drag:none}
 @keyframes marq{to{transform:translateX(-50%)}}
-.pc{flex:none;width:var(--pw);margin:0 calc(var(--pw) * 40 / 334) 0 0;padding:calc(var(--pw) * 15 / 334) calc(var(--pw) * 15 / 334) 0;background:#F8F8F8;color:#191510;
+.pc{flex:none;width:var(--pw);margin:0 calc(var(--pw) * 40 / 280) 0 0;padding:calc(var(--pw) * 15 / 280) calc(var(--pw) * 15 / 280) 0;background:#F8F8F8;color:#191510;
   transform:rotate(var(--r));box-shadow:0 1px 3px rgba(0,0,0,.2),0 14px 34px rgba(0,0,0,.3);transition:transform .45s cubic-bezier(.3,1.4,.5,1)}
 .pc:hover{transform:rotate(0deg) scale(1.04)}
-.pc img{display:block;width:100%;height:auto;aspect-ratio:304/301;object-fit:cover;background:var(--ph-bg)}
-.pc figcaption{display:grid;place-items:center;height:calc(var(--pw) * 47 / 334);font:500 max(11px,calc(var(--pw) * 16 / 334))/1 "DM Mono",ui-monospace,monospace;letter-spacing:.02em}
+.pc img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;background:var(--ph-bg)}
+.pc figcaption{display:grid;place-items:center;height:calc(var(--pw) * 38 / 280);font:500 max(11px,calc(var(--pw) * 16 / 280))/1 "DM Mono",ui-monospace,monospace;letter-spacing:.02em}
 
 /* tools I use: a row of app stickers that keeps running to the left */
 .tools{padding:calc(101 * var(--k)) 0 calc(62 * var(--k))}
@@ -1446,6 +1451,54 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   if (pgT){
     var tick = function(){ pgT.textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }).toUpperCase(); };
     tick(); setInterval(tick, 10000);
+  }
+
+  /* 14. Sneak peek loop: it runs left on its own, and can be dragged both ways with a mouse or a finger, then glides back into its own pace */
+  var pRow = document.querySelector('.peek-row'), pTrack = pRow && pRow.querySelector('.peek-track');
+  if (pTrack){
+    pRow.classList.add('drag');
+    pTrack.querySelectorAll('img').forEach(function(im){ im.draggable = false; });
+    var pHalf = 0, pX = 0, pV = 0, pAuto = reduce ? 0 : -1, pDown = null, pLast = 0, pPrev = 0, pMoved = false;
+    var pMeasure = function(){ pHalf = pTrack.scrollWidth / 2; };
+    pMeasure(); addEventListener('resize', pMeasure);
+    var pSpeed = function(){ return pHalf / 70; };   /* px per second: one lap in 70s, like before */
+    var pWrap = function(){ if (pHalf){ pX = pX % pHalf; if (pX > 0) pX -= pHalf; } };
+    var pDraw = function(){ pTrack.style.transform = 'translate3d(' + pX.toFixed(2) + 'px,0,0)'; };
+    var pT = 0;
+    var pStep = function(t){
+      var dt = pT ? Math.min((t - pT) / 1000, 0.05) : 0; pT = t;
+      if (!pDown){
+        pV += (pAuto * pSpeed() - pV) * Math.min(1, dt * 2.2);   /* after a throw, ease back to the steady drift */
+        pX += pV * dt; pWrap(); pDraw();
+      }
+      requestAnimationFrame(pStep);
+    };
+    requestAnimationFrame(pStep);
+    pRow.addEventListener('pointerdown', function(e){
+      if (e.button !== 0) return;
+      pDown = { id: e.pointerId, x: e.clientX, y: e.clientY, sx: pX }; pLast = e.clientX; pPrev = performance.now(); pMoved = false; pV = 0;
+    });
+    pRow.addEventListener('pointermove', function(e){
+      if (!pDown || e.pointerId !== pDown.id) return;
+      var dx = e.clientX - pDown.x;
+      if (!pMoved){
+        if (Math.abs(dx) < 4) return;
+        if (e.pointerType !== 'mouse' && Math.abs(e.clientY - pDown.y) > Math.abs(dx)){ pDown = null; return; }   /* a finger going up or down is a page scroll */
+        pMoved = true; pRow.classList.add('grabbing');
+        try { pRow.setPointerCapture(e.pointerId); } catch(err){}
+      }
+      var now = performance.now(), ddt = Math.max(now - pPrev, 1) / 1000;
+      pV = pV * 0.6 + ((e.clientX - pLast) / ddt) * 0.4; pLast = e.clientX; pPrev = now;
+      pX = pDown.sx + dx; pWrap(); pDraw();
+      e.preventDefault();
+    });
+    var pUp = function(e){
+      if (!pDown || e.pointerId !== pDown.id) return;
+      if (performance.now() - pPrev > 80) pV = 0;   /* held still before letting go: no throw */
+      pV = Math.max(-4000, Math.min(4000, pV));
+      pDown = null; pRow.classList.remove('grabbing');
+    };
+    pRow.addEventListener('pointerup', pUp); pRow.addEventListener('pointercancel', pUp);
   }
 
 })();
