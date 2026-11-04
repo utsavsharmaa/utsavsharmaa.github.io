@@ -1,0 +1,26 @@
+/* Syntra sections rebuilt from the Figma frame "Final" (Wires, foam and light; Putting out for people to try; What we carry forward). */
+.v2{position:relative;width:100%;height:100%}
+.v2>*,.v2fig>*,.v2row>*,.v2pair>*{position:absolute;margin:0}
+.v2fig,.v2row,.v2pair{margin:0}
+.v2t{font-family:SLato,Lato,sans-serif;font-style:normal;word-break:break-word;padding:0}
+.v2i{overflow:hidden}
+.v2i img{display:block;width:100%;height:100%;object-fit:cover}
+.v2notes{overflow:visible}
+.v2notes img{filter:drop-shadow(0 4px 4px rgba(0,0,0,.15))}
+.v2-parts{list-style:none}
+.v2-parts li{margin:0 0 4px}
+.v2cta img{display:block;width:100%;height:auto}
+@media(max-width:999px){
+  .section-design .v2{gap:24px!important}
+  .section-design .v2 .p30{font-size:30px!important}
+  .section-design .v2 .p21{font-size:21px!important}
+  .section-design .v2 .p18{font-size:18px!important}
+  .section-design .v2 .p14{font-size:14px!important}
+  .section-design .v2 h3.flow,.section-design .v2 figcaption.flow,.section-design .v2 .v2-parts{display:block!important;line-height:1.4!important}
+  .section-design .v2 .v2-parts li{margin-bottom:6px}
+  .section-design .v2 .v2row,.section-design .v2 .v2pair{gap:6px!important}
+  .section-design .v2 .v2arrow{display:none!important}
+  .section-design .v2 .v2fig{gap:8px!important}
+  .section-design .v2 .v2notes img{filter:none}
+  .section-design .v2 .v2cta{display:block!important}
+}
