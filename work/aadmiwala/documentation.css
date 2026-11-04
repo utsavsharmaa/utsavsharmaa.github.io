@@ -2292,3 +2292,100 @@ html.case-preview-open{overflow:hidden}
 .flow-node.u54{font-size:14.286px!important;line-height:1.55!important;letter-spacing:normal!important}
 .section-design [data-node-id="855:15448"]>.flow-node{padding:24px!important;flex:none!important}
 }
+/* Closing line (Figma "Header" 180:32464) */
+.doc-thanks-text{margin:0 auto;width:960px;font-family:"Plus Jakarta Sans",sans-serif;font-size:32px;font-weight:700;line-height:40px;text-align:center;color:#332f2a}
+@media(max-width:820px){.doc-thanks{background:none}.doc-thanks-text{width:auto;font-size:24px;line-height:32px}}
+/* Visual language · design system (from Figma "Slide body · Design system" 188:19631) */
+.vl{position:relative;flex-shrink:0;width:1200px;display:flex;flex-direction:column;gap:56px;font-family:"Plus Jakarta Sans",sans-serif;color:#332f2a;text-align:left;line-height:normal}
+.vl ul,.vl dl,.vl figure,.vl dd,.vl p{margin:0;padding:0;list-style:none}
+.vl i{font-style:normal}
+.vl img{display:block;max-width:100%;height:auto}
+.vl-block{display:flex;flex-direction:column;gap:16px;min-width:0}
+.vl-label{font-size:13px;font-weight:700;text-transform:uppercase;color:#99540d}
+.vl-sub{font-size:13px;font-weight:600;color:#736e69}
+.vl-card{background:#fff;border:1px solid #e8e4df;border-radius:20px}
+.vl-colours{display:flex;gap:40px}
+.vl-group{display:flex;flex-direction:column;gap:12px}
+.vl-group--brand{width:584px}
+.vl-swatches{display:flex;gap:16px}
+.vl-swatches--sm{gap:12px}
+.vl-swatches li{display:flex;flex-direction:column;width:104px}
+.vl-swatches--sm li{width:80px}
+.vl-sw{display:block;width:100%;aspect-ratio:1;border-radius:16px;background:var(--c);border:1px solid #e8e4df;box-sizing:border-box;margin-bottom:10px}
+.vl-swatches--sm .vl-sw{border-radius:12px}
+.vl-swatches b{display:block;font-size:14px;font-weight:700;color:#332f2a}
+.vl-swatches i{display:block;margin-top:2px;font-size:12px;color:#736e69}
+.vl-tones{display:flex;gap:24px}
+.vl-tones li{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.vl-tones i{font-size:12px;color:#736e69;white-space:nowrap}
+.vl-tone{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:var(--t);color:var(--c);font-size:12px;font-weight:600;line-height:1.4}
+.vl-tone::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c)}
+.vl-row{display:flex;gap:40px;align-items:flex-start}
+.vl-type{width:660px;flex:none}
+.vl .vl-scale{display:flex;flex-direction:column;background:#fff;border:1px solid #e8e4df;border-radius:20px;padding:8px 28px}
+.vl-scale>div{display:flex;gap:20px;align-items:center;padding:16px 0;border-bottom:1px solid #f0ebe5}
+.vl-scale>div:last-child{border-bottom:0}
+.vl-scale dt{flex:none;width:150px;font-size:12px;font-weight:600;color:#736e69}
+.vl-scale dd{flex:1;color:#1f1a15;min-width:0}
+.vl-scale .t48{font-size:48px;line-height:60px;font-weight:800;letter-spacing:-.02em}
+.vl-scale .t32{font-size:32px;line-height:40px;font-weight:700;letter-spacing:-.01em}
+.vl-scale .t24{font-size:24px;line-height:30px;font-weight:700}
+.vl-scale .t18{font-size:18px;line-height:23px;font-weight:600}
+.vl-scale .t15{font-size:15px;line-height:19px;font-weight:400}
+.vl-scale .t13{font-size:13px;line-height:16px;font-weight:500;color:#6e665d}
+.vl-scale .t11{font-size:11px;line-height:14px;font-weight:700;letter-spacing:.08em;color:#a39a8f}
+.vl-side{width:500px;flex:none;display:flex;flex-direction:column;gap:32px}
+.vl-card--icons{background:none;border:0;border-radius:0}
+.vl-card--icons img{width:500px}
+.vl-radii{display:flex;gap:12px}
+.vl-radii li{display:flex;flex-direction:column;align-items:center;gap:8px;width:64px;font-size:12px;font-weight:600;color:#736e69}
+.vl-radii span{display:block;width:64px;height:64px;box-sizing:border-box;background:#fcefdd;border:1.5px solid #e38e27;border-radius:var(--r)}
+.vl-comps{display:grid;grid-template-columns:692px 492px;gap:16px}
+.vl-comps>.vl-c-nav,.vl-comps>.vl-c-input,.vl-comps>.vl-c-kpi{grid-column:auto}
+.vl-comps3{grid-column:1/-1;display:grid;grid-template-columns:389px 389px 390px;gap:16px}
+.vl-comps figure{display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:20px;min-width:0}
+.vl-comps figcaption,.vl-sidebars figcaption{font-size:12px;font-weight:600;color:#736e69}
+.vl-c-buttons img,.vl-c-pills img{width:650px}
+.vl-c-logo img,.vl-c-avatars img{width:450px}
+.vl-c-nav img,.vl-c-input img{width:347px}
+.vl-c-kpi img{width:348px}
+.vl-shell{padding:24px;background:#faf7f3;display:flex;flex-direction:column;gap:24px}
+.vl-topbar{width:1100px}
+.vl-sidebars{display:flex;gap:24px;align-items:center}
+.vl-sidebars figure{flex:none;width:260px;display:flex;flex-direction:column;gap:12px}
+.vl-sidebars figcaption{display:flex;align-items:center;gap:8px}
+.vl-sidebars figcaption span{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.vl-note{width:300px;font-size:16px;line-height:1.55;color:#332f2a}
+.vl-public{overflow:hidden;display:flex;flex-direction:column}
+.vl-public img{width:100%}
+@media(max-width:820px){
+.vl{width:100%;gap:40px}
+.vl-colours,.vl-row{flex-direction:column;gap:28px}
+.vl-group--brand,.vl-type,.vl-side{width:100%}
+.vl-swatches,.vl-swatches--sm{gap:8px}
+.vl-swatches li,.vl-swatches--sm li{width:auto;flex:1;min-width:0}
+.vl-sw{border-radius:10px}
+.vl-swatches b{font-size:12px}
+.vl-swatches--sm b{font-size:10px}
+.vl-swatches i{font-size:9px}
+.vl-tones{flex-wrap:wrap;gap:12px 16px}
+.vl-tones i{font-size:10px}
+.vl .vl-scale{padding:4px 16px}
+.vl-scale>div{flex-direction:column;align-items:flex-start;gap:4px;padding:12px 0}
+.vl-scale dt{width:auto}
+.vl-scale .t48{font-size:32px;line-height:40px}
+.vl-scale .t32{font-size:26px;line-height:32px}
+.vl-card--icons img{width:100%}
+.vl-radii{gap:8px}
+.vl-radii li{width:auto;flex:1}
+.vl-radii span{width:100%;height:auto;aspect-ratio:1}
+.vl-comps,.vl-comps3{grid-template-columns:1fr;gap:12px}
+.vl-comps img{width:auto!important;max-width:100%}
+.vl-shell{padding:12px;gap:12px}
+.vl-topbar{width:100%}
+.vl-sidebars{flex-wrap:wrap;gap:10px;align-items:flex-start}
+.vl-sidebars figure{width:calc((100% - 20px)/3)}
+.vl-sidebars figcaption{font-size:11px;gap:6px}
+.vl-note{width:100%;font-size:15px}
+.vl-public{border-radius:14px}
+}
