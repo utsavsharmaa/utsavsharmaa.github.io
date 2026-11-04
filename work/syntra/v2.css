@@ -33,3 +33,5 @@
 .doc-section{display:flow-root}
 /* the bottles photo under the opening fades out on its own, not only under the white overlay */
 .d737{-webkit-mask-image:linear-gradient(to bottom,#000 70%,transparent 99%);mask-image:linear-gradient(to bottom,#000 70%,transparent 99%)}
+/* journey-map captions: let the gradient text grow so a third line is not cut off */
+.section-design .d134,.section-design .d136,.section-design .d137,.section-design .d138,.section-design .d139{height:auto!important;min-height:52px;overflow:visible}
