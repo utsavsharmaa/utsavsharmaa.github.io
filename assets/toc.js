@@ -53,7 +53,7 @@
       if(first===null)first=top;
       if(top<=line)idx=i;
     }
-    nav.classList.toggle('on',first!==null&&first<vh*0.6);
+    nav.classList.add('on');
     if(idx<0)idx=0;
     if(idx!==cur){
       cur=idx;
