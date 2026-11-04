@@ -24,3 +24,8 @@
   .section-design .v2 .v2notes img{filter:none}
   .section-design .v2 .v2cta{display:block!important}
 }
+/* Figma progressive blur: the photo fades into blurred copies toward its edge, and the blur spills past the edge */
+.pbx{overflow:visible!important}
+.pbl{position:absolute;inset:calc(var(--e) * -1);pointer-events:none}
+.pbb{position:absolute;inset:var(--e);overflow:hidden}
+.pbb>img:not([class]){position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;max-width:none}

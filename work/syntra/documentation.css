@@ -92,7 +92,7 @@ h1,h2,h3,p{font-size:inherit;font-weight:inherit}.documentation{isolation:isolat
 .d89{word-break:break-word;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:300;line-height:0;font-style:normal;position:relative;flex-shrink:0;font-size:0px;color:transparent;width:100%;white-space:pre-wrap}
 .d90{font-family:SLato,sans-serif;font-weight:500;line-height:1.3;margin-bottom:0.0px;font-size:32px}
 .d91{margin-bottom:0.0px;font-size:20px}
-.d92{word-break:break-word;font-family:SLato,sans-serif;font-weight:400;font-style:italic;font-style:italic;line-height:1.3}
+.d92{word-break:break-word;font-family:SLato,sans-serif;font-weight:300;font-style:italic;line-height:1.3}
 .d93{word-break:break-word;font-family:SLato,sans-serif;font-weight:400;line-height:1.3;font-style:normal}
 .d94{font-family:SLato,sans-serif;font-weight:400;line-height:1.3;font-size:20px}
 .d95{aspect-ratio:1024/1107;mix-blend-mode:luminosity;position:relative;flex-shrink:0;width:100%}
@@ -311,17 +311,17 @@ h1,h2,h3,p{font-size:inherit;font-weight:inherit}.documentation{isolation:isolat
 .d308{position:absolute;filter:blur(28px);height:640px;left:120px;top:360px;width:560px}
 .d309{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:200;line-height:normal;left:740px;font-style:normal;font-size:96px;color:transparent;top:400px;white-space:nowrap}
 .d310{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:500;line-height:normal;left:740px;font-style:normal;color:#bd680f;font-size:32px;top:530px;width:520px}
-.d311{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:400;font-style:italic;font-style:italic;line-height:normal;left:740px;color:#bd680f;font-size:22px;top:590px;width:520px}
+.d311{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:300;font-style:italic;line-height:normal;left:740px;color:#bd680f;font-size:22px;top:590px;width:520px}
 .d312{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:300;line-height:1.4;left:740px;font-style:normal;font-size:18px;color:transparent;top:650px;width:500px}
 .d313{position:absolute;height:640px;left:760px;top:1120px;width:560px}
 .d314{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:200;line-height:normal;left:184px;font-style:normal;font-size:96px;color:transparent;top:1160px;white-space:nowrap}
 .d315{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:500;line-height:normal;left:184px;font-style:normal;color:#bd680f;font-size:32px;top:1290px;width:520px}
-.d316{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:400;font-style:italic;font-style:italic;line-height:normal;left:184px;color:#bd680f;font-size:22px;top:1350px;width:520px}
+.d316{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:300;font-style:italic;line-height:normal;left:184px;color:#bd680f;font-size:22px;top:1350px;width:520px}
 .d317{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:300;line-height:1.4;left:184px;font-style:normal;font-size:18px;color:transparent;top:1410px;width:500px}
 .d318{position:absolute;filter:blur(28px);height:640px;left:120px;top:1880px;width:560px}
 .d319{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:200;line-height:normal;left:740px;font-style:normal;font-size:96px;color:transparent;top:1920px;white-space:nowrap}
 .d320{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:500;line-height:normal;left:740px;font-style:normal;color:#bd680f;font-size:32px;top:2050px;width:520px}
-.d321{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:400;font-style:italic;font-style:italic;line-height:normal;left:740px;color:#bd680f;font-size:22px;top:2110px;width:520px}
+.d321{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:300;font-style:italic;line-height:normal;left:740px;color:#bd680f;font-size:22px;top:2110px;width:520px}
 .d322{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:300;line-height:1.4;left:740px;font-style:normal;font-size:18px;color:transparent;top:2170px;width:500px}
 .d323{position:absolute;height:700px;left:-300px;top:100px;width:900px}
 .d324{position:absolute;height:700px;left:900px;top:900px;width:900px}
@@ -587,7 +587,7 @@ h1,h2,h3,p{font-size:inherit;font-weight:inherit}.documentation{isolation:isolat
 .d584{position:absolute;filter:blur(28px);height:746px;left:120px;top:1140px;width:560px}
 .d585{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:500;line-height:normal;left:760px;font-style:normal;color:#bd680f;font-size:32px;top:1180px;width:520px}
 .d586{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:300;line-height:1.4;left:760px;font-style:normal;font-size:19px;color:transparent;top:1250px;width:500px}
-.d587{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:400;font-style:italic;font-style:italic;line-height:1.4;left:760px;font-size:15px;color:transparent;top:1420px;width:500px}
+.d587{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:300;font-style:italic;line-height:1.4;left:760px;font-size:15px;color:transparent;top:1420px;width:500px}
 .d588{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:200;line-height:normal;left:760px;font-style:normal;font-size:140px;color:transparent;top:1520px;white-space:nowrap}
 .d589{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:300;line-height:1.4;left:760px;font-style:normal;font-size:19px;color:transparent;top:1700px;width:480px}
 .d590{translate:-50% 0;word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:300;line-height:0;left:720px;font-style:normal;color:#bd680f;font-size:32px;text-align:center;top:1980px;width:1072px}
@@ -608,7 +608,7 @@ h1,h2,h3,p{font-size:inherit;font-weight:inherit}.documentation{isolation:isolat
 .d605{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:300;line-height:1.4;left:300px;font-style:normal;font-size:16px;color:transparent;top:938px;width:320px}
 .d606{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:500;line-height:normal;left:184px;font-style:normal;color:#bd680f;font-size:16px;top:980px;width:110px}
 .d607{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:300;line-height:1.4;left:300px;font-style:normal;font-size:16px;color:transparent;top:978px;width:320px}
-.d608{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:400;font-style:italic;font-style:italic;line-height:1.4;left:184px;font-size:15px;color:transparent;top:1030px;width:440px}
+.d608{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:300;font-style:italic;line-height:1.4;left:184px;font-size:15px;color:transparent;top:1030px;width:440px}
 .d609{position:absolute;filter:blur(24px);height:420px;left:700px;top:360px;width:560px}
 .d610{position:absolute;filter:blur(24px);height:360px;left:700px;top:800px;width:270px}
 .d611{position:absolute;filter:blur(24px);height:360px;left:990px;top:800px;width:270px}
@@ -661,7 +661,7 @@ h1,h2,h3,p{font-size:inherit;font-weight:inherit}.documentation{isolation:isolat
 .d658{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:500;line-height:normal;left:544px;font-style:normal;color:#bd680f;font-size:14px;top:1850px;width:330px}
 .d659{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:300;line-height:normal;left:904px;font-style:normal;color:#bd680f;font-size:22px;top:1720px;width:330px}
 .d660{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:500;line-height:normal;left:904px;font-style:normal;color:#bd680f;font-size:14px;top:1850px;width:330px}
-.d661{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:400;font-style:italic;font-style:italic;line-height:1.4;left:184px;font-size:14px;color:transparent;top:1940px;width:872px}
+.d661{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:300;font-style:italic;line-height:1.4;left:184px;font-size:14px;color:transparent;top:1940px;width:872px}
 .d662{position:absolute;height:800px;left:-300px;top:200px;width:1000px}
 .d663{position:absolute;height:700px;left:800px;top:1300px;width:900px}
 .d664{position:absolute;filter:blur(24px);height:700px;left:120px;top:360px;width:520px}
@@ -691,7 +691,7 @@ h1,h2,h3,p{font-size:inherit;font-weight:inherit}.documentation{isolation:isolat
 .d688{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:300;line-height:normal;left:720px;font-style:normal;color:#bd680f;font-size:16px;top:994px;width:40px}
 .d689{word-break:break-word;position:absolute;font-family:SLato,sans-serif;font-weight:500;line-height:normal;left:770px;font-style:normal;color:#bd680f;font-size:16px;top:994px;width:240px}
 .d690{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:300;line-height:1.4;left:1010px;font-style:normal;font-size:15px;color:transparent;top:994px;width:300px}
-.d691{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:400;font-style:italic;font-style:italic;line-height:1.4;left:720px;font-size:22px;color:transparent;top:1080px;width:560px}
+.d691{word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:300;font-style:italic;line-height:1.4;left:720px;font-size:22px;color:transparent;top:1080px;width:560px}
 .d692{position:absolute;filter:blur(20px);height:800px;left:120px;top:1200px;width:1200px}
 .d693{translate:-50% 0;word-break:break-word;position:absolute;background-clip:text;-webkit-background-clip:text;font-family:SLato,sans-serif;font-weight:300;line-height:1.4;left:720px;font-style:normal;font-size:16px;color:transparent;text-align:center;top:2030px;width:872px}
 .d694{position:absolute;height:700px;left:800px;top:150px;width:900px}
