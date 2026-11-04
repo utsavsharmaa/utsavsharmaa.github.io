@@ -282,16 +282,16 @@ a{color:inherit;text-decoration:none}
 }
 /* bio band under the hero (Figma utsav-website, Desktop - 23, Group 1 245:3070): the bio on the left, the stamp photo with
    the BHU and NID stickers on the right. Placed in Figma px of the 1440 frame (--bk); below 1024px it stacks. */
-.bio{position:absolute;left:calc((193 - var(--bx)) * var(--bk));top:calc(111 * var(--bk));width:calc(587 * var(--bk));color:var(--tag-fg);
-  font:400 calc(20 * var(--bk))/1.4 var(--body);letter-spacing:-.01em;text-transform:capitalize;font-optical-sizing:none;font-variation-settings:"opsz" 14}
+.bio{position:absolute;left:calc((178 - var(--bx)) * var(--bk));top:calc(184 * var(--bk));width:calc(588 * var(--bk));color:var(--tag-fg);
+  font:400 calc(16 * var(--bk))/1.4 var(--body);letter-spacing:-.01em;text-transform:capitalize;font-optical-sizing:none;font-variation-settings:"opsz" 14}
 .bio p{margin:0}.bio p + p{margin-top:1.4em}
-.bio b{font-weight:700;letter-spacing:-.008em}
+.bio b{font-weight:700}
 .bio-pic{position:absolute;left:calc((821.61 - var(--bx)) * var(--bk));top:calc(13.4 * var(--bk));width:calc(518 * var(--bk));height:calc(563 * var(--bk))}
 .bio-pic > .dk{--bx:0}
 .bio-band .school-sticker{border-radius:50%;box-shadow:0 11px 19.6px rgba(25,25,25,.25)}
 @media(max-width:1023px){
  .tagb.bio-band{--bk:calc(100vw / 1440);--bx:0;height:auto;display:flex;flex-direction:column;align-items:center;gap:24px;padding:64px 24px 40px}
- .bio{position:relative;left:auto;top:auto;width:auto;max-width:560px;font-size:17px}
+ .bio{position:relative;left:auto;top:auto;width:auto;max-width:560px;font-size:16px}
  .bio-pic{position:relative;left:auto;top:auto;--bk:calc(min(518px, 100vw - 48px) / 518)}
  .bio-band .tag-stk{display:none}
 }
