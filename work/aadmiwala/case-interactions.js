@@ -33,47 +33,10 @@
     });
   }
 
-  var dialog = document.createElement('dialog');
-  if (typeof dialog.showModal !== 'function') return;
-  dialog.className = 'case-preview';
-  dialog.setAttribute('aria-labelledby', 'case-preview-title');
-  dialog.innerHTML = '<div class="case-preview-header"><h2 id="case-preview-title">Screen detail</h2><button class="case-preview-close" type="button" autofocus>Close</button></div><img class="case-preview-image" alt="">';
-  document.body.appendChild(dialog);
-  var preview = dialog.querySelector('img'), title = dialog.querySelector('h2'), trigger;
-  dialog.querySelector('button').addEventListener('click', function () { dialog.close(); });
-  dialog.addEventListener('click', function (event) {
-    var bounds = dialog.getBoundingClientRect();
-    if (event.target === dialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dialog.close();
-  });
-  dialog.addEventListener('close', function () {
-    document.documentElement.classList.remove('case-preview-open');
-    preview.removeAttribute('src');
-    if (trigger && trigger.isConnected) trigger.focus({ preventScroll: true });
-  });
+  /* Screen names for the shared image viewer (assets/interact.js) */
   article.querySelectorAll('img[src$=".png"]').forEach(function (image) {
     var slot = image.closest('[data-name]'), label = slot && slot.getAttribute('data-name');
     if (!label || !/^(Screen ·|Employer ·|HUB ·|Public ·|apna-|quess-|betterplace-|indiamart-)/.test(label)) return;
-    label = label.replace(/^Screen · /, '').replace(/-1440x900 1$/, '').replace(/ [123]$/, '');
-    image.classList.add('case-zoom');
-    image.setAttribute('role', 'button');
-    image.setAttribute('tabindex', '0');
-    image.setAttribute('aria-label', 'Enlarge ' + label);
-    image.setAttribute('aria-haspopup', 'dialog');
-    image.title = 'Click to enlarge';
-    function openPreview() {
-      trigger = image;
-      title.textContent = label;
-      preview.alt = label;
-      preview.src = image.currentSrc || image.src;
-      dialog.showModal();
-      dialog.scrollTop = 0;
-      document.documentElement.classList.add('case-preview-open');
-    }
-    image.addEventListener('click', openPreview);
-    image.addEventListener('keydown', function (event) {
-      if (event.key !== 'Enter' && event.key !== ' ') return;
-      event.preventDefault();
-      openPreview();
-    });
+    image.setAttribute('data-zoom-label', label.replace(/^Screen · /, '').replace(/-1440x900 1$/, '').replace(/ [123]$/, ''));
   });
 })();
