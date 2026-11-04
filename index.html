@@ -213,7 +213,7 @@ a{color:inherit;text-decoration:none}
 /* stickers: hover lifts and tilts one; with a mouse you can peel it off and drop it anywhere (double-click puts it back); a tap wiggles it */
 .dk{position:absolute;display:block;left:calc((var(--x) - var(--bx,0)) * var(--bk));top:calc(var(--y) * var(--bk));width:calc(var(--w) * var(--bk));height:auto;max-width:none;
   pointer-events:auto;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;
-  transform:translate(var(--dx,0px),var(--dy,0px)) scale(var(--s,1)) rotate(calc(var(--sr,0deg) + var(--rt,0deg)));transition:transform .5s cubic-bezier(.3,1.5,.5,1),filter .3s}
+  transform:translate(var(--dx,0px),var(--dy,0px)) scale(var(--s,1)) rotate(calc(var(--sr,0deg) + var(--rt,0deg) + var(--r0,0deg)));transition:transform .5s cubic-bezier(.3,1.5,.5,1),filter .3s}
 @media (hover:hover) and (pointer:fine){.dk:hover{--s:1.08;--sr:-5deg;filter:drop-shadow(0 10px 14px rgba(20,15,0,.18))}}
 .dk.drag{--s:1.12;cursor:grabbing;z-index:5;filter:drop-shadow(0 22px 26px rgba(20,15,0,.25));transition:filter .3s}
 .dk.wig{animation:wig .6s cubic-bezier(.3,1.5,.5,1)}
@@ -279,6 +279,21 @@ a{color:inherit;text-decoration:none}
   .work-tile img{border-radius:6px}
   .work-meta{font-size:11px}
   .work-details{gap:20px}
+}
+/* bio band under the hero (Figma utsav-website, Desktop - 23, Group 1 245:3070): the bio on the left, the stamp photo with
+   the BHU and NID stickers on the right. Placed in Figma px of the 1440 frame (--bk); below 1024px it stacks. */
+.bio{position:absolute;left:calc((193 - var(--bx)) * var(--bk));top:calc(111 * var(--bk));width:calc(587 * var(--bk));color:var(--tag-fg);
+  font:400 calc(20 * var(--bk))/1.4 var(--body);letter-spacing:-.01em;text-transform:capitalize;font-optical-sizing:none;font-variation-settings:"opsz" 14}
+.bio p{margin:0}.bio p + p{margin-top:1.4em}
+.bio b{font-weight:700;letter-spacing:-.008em}
+.bio-pic{position:absolute;left:calc((821.61 - var(--bx)) * var(--bk));top:calc(13.4 * var(--bk));width:calc(518 * var(--bk));height:calc(563 * var(--bk))}
+.bio-pic > .dk{--bx:0}
+.bio-band .school-sticker{border-radius:50%;box-shadow:0 11px 19.6px rgba(25,25,25,.25)}
+@media(max-width:1023px){
+ .tagb.bio-band{--bk:calc(100vw / 1440);--bx:0;height:auto;display:flex;flex-direction:column;align-items:center;gap:24px;padding:64px 24px 40px}
+ .bio{position:relative;left:auto;top:auto;width:auto;max-width:560px;font-size:17px}
+ .bio-pic{position:relative;left:auto;top:auto;--bk:calc(min(518px, 100vw - 48px) / 518)}
+ .bio-band .tag-stk{display:none}
 }
 .work-aadmiwala .work-tile{background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(72 0 0 24.75 1056 67.5)'><stop stop-color='rgba(245,185,120,1)' offset='0'/><stop stop-color='rgba(245,185,120,0)' offset='0.62'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(66 0 0 24.75 144 90)'><stop stop-color='rgba(255,225,184,1)' offset='0'/><stop stop-color='rgba(255,225,184,0)' offset='0.6'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(72 0 0 27 360 405)'><stop stop-color='rgba(201,123,61,1)' offset='0'/><stop stop-color='rgba(201,123,61,0)' offset='0.65'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(60 0 0 22.5 1080 382.5)'><stop stop-color='rgba(252,228,200,1)' offset='0'/><stop stop-color='rgba(252,228,200,0)' offset='0.58'/></radialGradient></defs></svg>"), linear-gradient(90deg, rgb(247, 226, 207) 0%, rgb(247, 226, 207) 100%)}
 .work-syntra .work-tile{background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(72 0 0 24.75 1080 54)'><stop stop-color='rgba(243,185,174,1)' offset='0'/><stop stop-color='rgba(243,185,174,0)' offset='0.62'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(66 0 0 24.75 120 90)'><stop stop-color='rgba(251,224,200,1)' offset='0'/><stop stop-color='rgba(251,224,200,0)' offset='0.6'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(72 0 0 27 300 405)'><stop stop-color='rgba(231,147,160,1)' offset='0'/><stop stop-color='rgba(231,147,160,0)' offset='0.65'/></radialGradient></defs></svg>"), url("data:image/svg+xml;utf8,<svg viewBox='0 0 1200 450' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(60 0 0 22.5 1056 396)'><stop stop-color='rgba(250,216,210,1)' offset='0'/><stop stop-color='rgba(250,216,210,0)' offset='0.58'/></radialGradient></defs></svg>"), linear-gradient(90deg, rgb(242, 226, 224) 0%, rgb(242, 226, 224) 100%)}
@@ -562,8 +577,11 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
 .me{padding-top:calc(115 * var(--k));padding-bottom:calc(87 * var(--k))}
 .me .uh{font-size:calc(120 * var(--k))}
 .me-stage{width:calc(1200 * var(--k));height:calc(718 * var(--k));margin:calc(68 * var(--k)) auto 0}
-.me-col.r{left:calc(738 * var(--k));top:calc(273 * var(--k));width:calc(462 * var(--k))}
-.me-vid{left:calc(420 * var(--k))}
+.me-col.r{left:calc(730 * var(--k));top:calc(273 * var(--k));width:calc(462 * var(--k))}
+.me-col.l{width:calc(462 * var(--k))}
+.me-col.l p{max-width:calc(420 * var(--k))}
+@media(max-width:1279px){ .me-col.l{width:100%} .me-col.l p{max-width:none} }
+.me-vid{left:calc(437 * var(--k))}
 .me-col h3{margin-bottom:calc(20 * var(--k));font-size:calc(14 * var(--k));line-height:1.4}
 .me-col p{margin-bottom:calc(20 * var(--k))}
 .chips-s{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:calc(32.3333 * var(--k));gap:calc(12 * var(--k));margin:0 0 calc(20 * var(--k));width:100%;padding:0}
@@ -623,21 +641,22 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
   </div>
 </header>
 
-<!-- the tagline on a strip of torn paper, with stickers (Figma: Desktop - 19, y844-1413) -->
-<div class="tagb tear-band">
+<!-- a short bio on a strip of torn paper, with the stamp photo and stickers (Figma: utsav-website, Desktop - 23, Group 1 245:3070) -->
+<div class="tagb tear-band bio-band">
   <div class="tear" aria-hidden="true"></div>
-  <p class="tagline">Curious<br>Designer,<br>Imagemaker,<br>Storyteller</p>
+  <div class="bio">
+    <p>a designer whose childhood habit of drawing on things and turning random materials into crafts eventually became a career. <b>I studied Fine Arts at Banaras Hindu University, spent two years working in Brand and UI/UX Design, and am now pursuing my master’s in Design for Retail Experience at the National Institute of Design.</b> Along the way, I’ve also explored photography and cinematography.</p>
+    <p>Outside of design, you’ll usually find me watching movies or anime, reading, solving puzzles, or going down a rabbit hole about some new technology. I’ve always been the curious kid who wants to know how things work and I still am, just with better tools and more tabs open.</p>
+  </div>
+  <div class="bio-pic">
+    <img class="dk bio-stamp" src="assets/home/bio/stamp.webp?v=1" alt="Utsav smiling, on a postage stamp" width="603" height="735" style="--x:101.39;--y:68.6;--w:301.49;--d:0s" decoding="async">
+    <img class="dk school-sticker" src="assets/home/refresh/imgImage87.png" alt="Banaras Hindu University" width="140" height="140" style="--x:332.39;--y:18.6;--w:140;--r0:8.93deg;--d:.1s" decoding="async">
+    <img class="dk school-sticker" src="assets/home/refresh/imgImage88.png" alt="National Institute of Design" width="135" height="135" style="--x:19.89;--y:342.1;--w:135;--r0:11.96deg;--d:.18s" decoding="async">
+    <img class="dk" src="assets/home/stk/b-dnd.webp?v=1" alt="" aria-hidden="true" width="943" height="528" style="--x:203.84;--y:387.03;--w:314.01;--d:.26s" decoding="async">
+  </div>
   <div class="tag-stk" aria-hidden="true">
-    <img class="dk" src="assets/home/stk/t-namaste.svg?v=1" alt="" width="165" height="166" style="--x:557.5;--y:-17.3;--w:164.9;--d:0.00s">
-    <img class="dk" src="assets/home/stk/t-sparkle.svg?v=1" alt="" width="107" height="107" style="--x:178.3;--y:66.3;--w:107.3;--d:0.07s">
-    <img class="dk" src="assets/home/stk/t-uiux.svg?v=1" alt="" width="171" height="97" style="--x:660.2;--y:165.7;--w:170.6;--d:0.14s">
-    <img class="dk" src="assets/home/stk/t-curious.svg?v=1" alt="" width="216" height="216" style="--x:857;--y:54;--w:216;--d:0.21s">
-    <img class="dk" src="assets/home/stk/t-starburst.svg?v=1" alt="" width="117" height="117" style="--x:1003.6;--y:-16.6;--w:116.8;--d:0.28s">
-    <img class="dk" src="assets/home/stk/t-dnd.svg?v=1" alt="" width="314" height="183" style="--x:1081.5;--y:84.2;--w:314.2;--d:0.35s">
-    <img class="dk" src="assets/home/stk/t-heart.svg?v=1" alt="" width="129" height="125" style="--x:180.2;--y:351.4;--w:129.2;--d:0.42s">
-    <img class="dk" src="assets/home/stk/t-flower.svg?v=1" alt="" width="152" height="152" style="--x:829;--y:282;--w:152;--d:0.49s">
-    <img class="dk" src="assets/home/stk/t-dfp.svg?v=1" alt="" width="247" height="206" style="--x:1069.9;--y:284.9;--w:247.2;--d:0.56s">
-    <img class="dk" src="assets/home/stk/t-greenstar.svg?v=1" alt="" width="117" height="117" style="--x:1271.6;--y:233.6;--w:116.8;--d:0.63s">
+    <img class="dk" src="assets/home/stk/t-starburst.svg?v=1" alt="" width="117" height="118" style="--x:178.64;--y:-8.57;--w:116.82;--d:.34s">
+    <img class="dk" src="assets/home/stk/a-heart.svg?v=2" alt="" width="130" height="126" style="--x:500.79;--y:466.07;--w:129.18;--d:.42s">
   </div>
 </div>
 
@@ -728,27 +747,31 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
     <div class="me-stage">
       <div class="me-col l">
         <h3>Life / Hobbies</h3>
-        <p>I’m Utsav — <b>a multidisciplinary designer, visual storyteller, and curious mind.</b> From graphic design to product experiences, I enjoy turning ideas into things that look good, work well, and mean something.</p>
-        <p>When I’m not designing, I’m probably travelling, taking photographs, watching films, or exploring something new. <b>I believe the best ideas often come from simply paying attention to the world around us.</b></p>
+        <ul class="chips-s"><li style="--c:#F24E1E">Painting</li><li style="--c:#577526">Photography</li><li style="--c:#2B37D6">Tech Savvy</li><li style="--c:#9999FF">Chess</li><li style="--c:#1E9E5A">Travelling</li></ul>
+        <p>A designer and visual storyteller. I enjoy turning ideas into things that look good and work well.</p>
+        <p>When not designing, I’m travelling, taking photos, or exploring. I believe the best ideas come from paying attention to the world.</p>
       </div>
       <div class="me-vid" id="meVid">
-        <img class="st" src="assets/home/stk/a-star-c.svg?v=2" alt="" style="left:16.7%;top:0.8%;width:18.4%">
-        <img class="st" src="assets/home/stk/a-star-b.svg?v=2" alt="" style="left:76.2%;top:12.6%;width:30.2%">
-        <img class="st" src="assets/home/stk/a-star-a.svg?v=2" alt="" style="left:-13.9%;top:44.8%;width:60.6%">
+        <img class="st" src="assets/home/stk/a-star-c.svg?v=2" alt="" style="left:20.299%;top:0.784%;width:18.406%">
+        <img class="st" src="assets/home/stk/a-star-b.svg?v=2" alt="" style="left:79.830%;top:12.618%;width:30.182%">
+        <img class="st" src="assets/home/stk/a-star-a.svg?v=2" alt="" style="left:-10.245%;top:44.789%;width:60.579%">
         <img class="poster" src="assets/home/me-poster.webp" width="358" height="900" alt="Utsav standing with his hands in his pockets, smiling" decoding="async" loading="lazy">
         <canvas width="440" height="1108" aria-hidden="true"></canvas>
       </div>
       <div class="me-col r">
         <h3>Skills</h3>
-        <ul class="chips-s"><li style="--c:#577526">Product Design</li><li style="--c:#6B54C6">UI/UX Design</li><li style="--c:#EC8A3C">Vibe Coding</li><li style="--c:#2B37D6">Design Research</li><li style="--c:#F24E1E">Visual Storytelling</li><li style="--c:#9999FF">Brand Identity</li><li style="--c:#1E9E5A">Prototyping</li><li style="--c:#1E9E5A">Brand Strategy</li></ul><p>I work across product design and UI/UX, turning complex problems into intuitive digital experiences. I use Figma, AI tools, and code to bring ideas to life, with my background in branding and visual storytelling adding another layer to how I design.</p>
-        <p>I like making things that are thoughtful, useful, and a little unexpected.</p>
+        <ul class="chips-s"><li style="--c:#577526">Product Design</li><li style="--c:#6B54C6">UI/UX Design</li><li style="--c:#1E9E5A">Prototyping</li><li style="--c:#EC8A3C">Vibe Coding</li><li style="--c:#1E9E5A">Brand Strategy</li><li style="--c:#2B37D6">Design Research</li><li style="--c:#9999FF">Brand Identity</li><li style="--c:#F24E1E">Visual Storytelling</li></ul>
+        <p>I turn complex problems into intuitive digital experiences using Figma, AI, and code, with a background in branding and visual storytelling.</p>
+        <p>I make thoughtful, useful things with an unexpected twist.</p>
       </div>
       <div aria-hidden="true">
-        <img class="dk" src="assets/home/stk/a-design-for-people.svg?v=2" alt="" width="256" height="221" style="--x:988;--y:24;--w:255.9;--d:.15s">
-        <img class="dk" src="assets/home/stk/a-heart.svg?v=2" alt="" width="129" height="125" style="--x:817;--y:147;--w:129.2;--d:.15s">
-        <img class="dk" src="assets/home/stk/a-starburst.svg?v=2" alt="" width="117" height="117" style="--x:288;--y:276.1;--w:116.8;--d:.15s">
-        <img class="dk" src="assets/home/stk/a-green-star.svg?v=2" alt="" width="117" height="117" style="--x:21.6;--y:320.3;--w:116.8;--d:.15s">
-        <img class="dk school-sticker" src="assets/home/refresh/imgImage87.png" alt="Banaras Hindu University" width="140" height="140" style="--x:847.758;--y:-28.980000000000004;--w:140;--rt:8.93deg;--d:.23s" loading="lazy" decoding="async"><img class="dk school-sticker" src="assets/home/refresh/imgImage88.png" alt="National Institute of Design" width="135" height="135" style="--x:236.49599999999998;--y:439.52;--w:135;--rt:11.96deg;--d:.23s" loading="lazy" decoding="async"></div>
+        <img class="dk" src="assets/home/stk/a-design-for-people.svg?v=2" alt="" width="256" height="221" style="--x:963.62;--y:13.61;--w:255.9;--d:.15s">
+        <img class="dk" src="assets/home/stk/a-heart.svg?v=2" alt="" width="130" height="126" style="--x:807.79;--y:152.78;--w:129.18;--d:.2s">
+        <img class="dk" src="assets/home/stk/a-namaste.webp?v=1" alt="" width="495" height="513" style="--x:811.92;--y:-43.08;--w:164.71;--d:.1s">
+        <img class="dk" src="assets/home/stk/a-starburst.svg?v=2" alt="" width="117" height="118" style="--x:363.64;--y:491.43;--w:116.82;--d:.25s">
+        <img class="dk" src="assets/home/stk/a-green-star.svg?v=2" alt="" width="117" height="117" style="--x:-29.4;--y:447.6;--w:116.85;--d:.3s">
+        <img class="dk" src="assets/home/stk/t-curious.svg?v=1" alt="" width="217" height="217" style="--x:149.61;--y:486.61;--w:216.03;--d:.35s">
+      </div>
     </div>
   </section>
 
