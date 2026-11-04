@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="100" height="40" viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Arrow pill" clip-path="url(#clip0_0_4)">
+<path id="Vector" d="M20 1H80C90.4934 1 99 9.50659 99 20C99 30.4934 90.4934 39 80 39H20C9.50659 39 1 30.4934 1 20C1 9.50659 9.50659 1 20 1Z" stroke-width="2" stroke="#AEA0C1"/>
+<path id="Vector_2" d="M22 20H78" stroke-width="2" stroke="#AEA0C1"/>
+<path id="Vector_3" d="M68 12L78 20L68 28" stroke-width="2" stroke-linejoin="round" stroke="#AEA0C1"/>
+</g>
+<defs>
+<clipPath id="clip0_0_4">
+<rect width="100" height="40" fill="white"/>
+</clipPath>
+</defs>
+</svg>
