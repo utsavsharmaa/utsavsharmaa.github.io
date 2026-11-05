@@ -613,6 +613,18 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
 .work-project .work-tile{background:none;aspect-ratio:1120/450}
 .work-pair .work-tile{aspect-ratio:506/400}
 .work-tile img.work-cover{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;border-radius:0;transform:none;box-shadow:none}
+
+/* Work cards: one accessible link covers the entire card. */
+.work-project{position:relative;isolation:isolate;transition:transform .18s ease,background-color .18s ease,box-shadow .18s ease}
+.work-link::after{content:"";position:absolute;inset:0;z-index:2;border-radius:32px}
+.work-project:focus-within{outline:2px solid var(--accent);outline-offset:3px}
+.work-project:active{transform:scale(.99);background:color-mix(in srgb,var(--paper) 94%,var(--accent) 6%)}
+@media(hover:hover) and (pointer:fine){
+ .work-project:hover{transform:translateY(-3px);outline:1px solid var(--accent);outline-offset:-1px}
+ .work-project:hover .work-link{color:var(--accent)}
+}
+@media(max-width:640px){.work-link::after{border-radius:24px}}
+@media(prefers-reduced-motion:reduce){.work-project{transition:none}.work-project:hover,.work-project:active{transform:none}}
 </style>
 </head>
 <body>
