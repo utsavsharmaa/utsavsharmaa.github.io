@@ -19,6 +19,7 @@ let timer;
 const rupees = n => '₹' + new Intl.NumberFormat('en-IN').format(n);
 const escape = str => String(str).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const photo = (name, alt, cls='hero') => `<img class="${cls}" src="assets/imgPhoto${name}.jpg" alt="${escape(alt)}">`;
+const icon = name => `<img class="ui-icon" src="assets/img${name}.svg" alt="">`;
 const currentPlace = () => places[s.place];
 const people = () => ({'Just me':1,'2 of us':2,'3 or more':4,'3 people':3}[s.group] ?? 2);
 const limit = () => s.budget * (s.scope === 'Per person' ? people() : 1);
@@ -35,9 +36,13 @@ const costs = () => {
 };
 const button = (label, action, cls='secondary', data='') => `<button class="${cls}" data-action="${action}" ${data}>${escape(label)}</button>`;
 const go = (label,page,cls='secondary') => button(label,'go',cls,`data-page="${page}"`);
-const choose = (key,value,label=value) => button(label,'choose','pill',`data-key="${key}" data-value="${escape(value)}" aria-pressed="${s[key]===value}"`);
-const group = (title,key,options) => `<fieldset class="group"><legend>${escape(title)}</legend><div class="chips">${options.map(x=>choose(key,x)).join('')}</div></fieldset>`;
-const reply = message => `<div class="reply"><span aria-hidden="true">✧</span><p>${escape(message)}</p></div>`;
+const valueIcons = {'Whole trip':'IconWallet','Per person':'IconUsers','Just me':'IconUsers','2 of us':'IconUsers','3 or more':'IconUsers',Bike:'IconBike',Car:'IconCar',Veg:'VegMark','Non-veg':'NonVegMark',Train:'IconCar',Bus:'IconCar'};
+const choose = (key,value,label=value) => {
+  const image = key==='city'?'IconPin':valueIcons[value];
+  return `<button class="pill" data-action="choose" data-key="${key}" data-value="${escape(value)}" aria-pressed="${s[key]===value}">${value==='Both'?icon('VegMark')+icon('NonVegMark'):image?icon(image):''}${escape(label)}</button>`;
+};
+const group = (title,key,options) => `<fieldset class="group"><legend>${({scope:icon("IconWallet"),group:icon("IconUsers"),food:icon("VegMark"),mode:icon("IconCar")})[key]??""}${escape(title)}</legend><div class="chips">${options.map(x=>choose(key,x)).join('')}</div></fieldset>`;
+const reply = message => `<div class="reply"><span class="reply-mark" aria-hidden="true">${icon("AiSparkles")}</span><p>${escape(message)}</p></div>`;
 const bubble = message => `<p class="bubble">${escape(message)}</p>`;
 const card = html => `<section class="card">${html}</section>`;
 const tag = value => `<span class="tag">${escape(value)}</span>`;
@@ -45,7 +50,7 @@ const list = items => `<ul class="list">${items.map(x=>`<li>${escape(x)}</li>`).
 const row = (title, detail, price='', image='') => `<div class="rowcard"><div><strong>${escape(title)}</strong><p class="muted">${escape(detail)}</p></div>${price?`<div class="price">${escape(price)}</div>`:''}${image?photo(image,title,''):''}</div>`;
 const primary = (label,action) => button(label,action,'primary wide');
 const balance = total => total <= limit() ? `${rupees(limit()-total)} under budget` : `${rupees(total-limit())} over budget`;
-const context = () => `<div class="chips">${[`From ${s.city}`,s.date,`${people()} people`,rupees(limit()),s.mode].map(tag).join('')}</div>`;
+const context = (from=false) => `<div class="trip-context">${[[from?`From ${s.city}`:currentPlace().name,'IconPin'],[s.date,'IconCalendar'],[`${people()} people`,'IconUsers'],[rupees(limit()),'IconWallet'],[s.mode,'IconBike']].map(([text,image])=>`<span>${icon(image)}${escape(text)}</span>`).join('')}</div>`;
 const destination = index => button('Explore '+places[index].name,'place','primary wide',`data-index="${index}"`);
 const scenarios = {'home':'Cleartrip home','ask':'₹15K weekend','reel':'Start from a reel','reelError':'Reel can’t be read','noBudget':'Nothing fits the budget','over':'Car + cottage trade-off','price':'Price changed or sold out','change':'Change after booking','weather':'Disruption during the trip'};
 function move(page) {
@@ -70,41 +75,62 @@ function start(page) {
 }
 function modal(title, content) {
   document.querySelector('#dialog-body').innerHTML = `<h2 id="dialog-title">${escape(title)}</h2>${content}`;
-  dialog.showModal();
+  document.querySelector('#scenarios').hidden=true;
+  if(!dialog.open) dialog.showModal();
 }
 const pageViews = {
-  home: () => `<h1>Where to next?</h1>${button('✧  Explore your next adventure with AI','begin','home-search')}<div class="grid">${['Hotels','Flights','Trains','Buses','Activities'].map(x=>`<div class="card home-tile"><strong>${x}</strong><small>Explore Cleartrip</small></div>`).join('')}</div>${photo('BhandardaraHero','Weekend getaway by the lake')}${primary('✧  Ask AI','begin')}`,
-  ask: () => bubble(s.request)+reply(`${rupees(s.budget)} this weekend. A few quick choices so I can plan it right.`)+card(
-    group(`${rupees(s.budget)} is for`,'scope',['Whole trip','Per person'])+
-    group('Who’s going?','group',['Just me','2 of us','3 or more'])+
-    `<fieldset class="group"><legend>Leaving from</legend><div class="chips">${choose('city',s.city)}${button('Change','city')}</div></fieldset>`+
-    group('Food','food',['Veg','Non-veg','Both'])+group('Getting there','mode',['Bike','Car','Train','Bus'])+primary('✧  Plan my weekend','plan')),
-  planning: () => bubble(s.request)+reply('On it. I’m checking what fits.')+card(`<h2>Planning your weekend</h2><progress aria-label="Planning progress" value="3" max="5"></progress>`+list(['Found places within 4 hours','Filtered for your dates and budget','Checked the weather','Comparing stays and guest reviews','Pricing transport, food and activities'])+button('Stop','stop')),
+  home: () => `<button class="home-search" data-action="begin">${icon('AiSparkles')}<span>Explore your next adventure with AI</span>${icon('SearchIcon')}</button>
+    <div class="services">${['Hotels','Flights','Trains','Buses','Activities'].map((x,i)=>`<button class="service" data-action="service" data-value="${x}"><span class="service-art art-${i}">${['▥','✈','▰','▣','☀'][i]}</span><strong>${x}</strong><small>30–80% off</small></button>`).join('')}</div>
+    <div class="home-promo">${photo('BhandardaraHero','A weekend in the Sahyadris')}<div><strong>Up to 25% off</strong><br>on your next escape</div></div>
+    <div class="home-offers">${['Wedding store','Brand of the day','Weekend escapes'].map(x=>`<article><strong>${x}</strong><p>Explore offers</p></article>`).join('')}</div>`,
+  ask: () => bubble(s.request)+reply(`${s.budget%1000===0?'₹'+s.budget/1000+'K':rupees(s.budget)} this weekend, let's make it count. 5 quick taps so I can plan it right.`)+`<div class="chat-indent ask-options">${card(
+    group(`${s.budget%1000===0?'₹'+s.budget/1000+'K':rupees(s.budget)} is for`,'scope',['Whole trip','Per person'])+
+    group("Who's going?",'group',['Just me','2 of us','3 or more'])+
+    `<fieldset class="group"><legend>${icon('IconPin')}Leaving from</legend><div class="chips">${choose('city',s.city)}<button class="pill" data-action="city">${icon('IconPen')}Change</button></div></fieldset>`+
+    group('Food','food',['Veg','Non-veg','Both'])+group('Getting there','mode',['Bike','Car','Train','Bus'])+
+    `<button class="primary wide" data-action="plan">${icon('AiSparkles')}Plan my weekend</button>`)}</div>`,
+  planning: () => bubble(s.request)+reply('On it. Give me about 15 seconds.')+`<div class="chat-indent">`+card(
+    `<div class="split-line"><h3>Planning your weekend</h3><span>3 of 5</span></div><progress aria-label="Planning progress" value="3" max="5"></progress>
+    <ol class="planning-list">${[['Found 34 places within 4 hrs of '+s.city,'Filtered to 6 that fit 2 days'],['Checked the weather','Clear, 18–27°, no rain alerts'],['Comparing 12 stays for Fri–Sun','Reading 1,900 guest reviews'],['Pricing car, food and activities',''],['Building your plan','']].map(([title,detail],i)=>`<li class="phase-${i}"><i>${i<2?'✓':i===2?'⟳':''}</i><div>${escape(title)}<small>${detail}</small></div></li>`).join('')}</ol>`)+
+    '<div class="skeleton"><i></i><b></b><b></b><b></b></div><div class="skeleton"><i></i><b></b><b></b><b></b></div>'+button('Stop','stop')+' <small class="inline">You can keep typing while I plan</small></div>',
   pick: () => {
     const p=places[s.crowd?1:0];const index=places.indexOf(p);
-    return context()+reply(s.comparing?'Here’s how all three compare.':'3 places fit your preferences. My pick first.')+
+    return context(true)+reply(s.comparing?'Here’s how all three compare.':'3 places fit your preferences. My pick first.')+
       (s.comparing?card(places.map((x,i)=>row(x.name,`${x.time} · ${x.crowd}`,rupees(x.estimate))+destination(i)).join('')):
-      card(`<div class="hero-wrap">${photo(p.photo,p.name)}<div class="hero-caption"><h2>${p.name}</h2><p>${p.desc}</p></div></div><div class="stats"><div><strong>${rupees(p.estimate)}</strong><small>${balance(p.estimate)}</small></div><div><strong>${p.time}</strong><small>From ${escape(s.city)}</small></div><div><strong>16–27°</strong><small>Clear skies</small></div></div>${tag('Best for you')}${tag(p.crowd)}<p>${p.name==='Bhandardara'?'Quiet lakes, an easy ride, and room in your budget for kayaking.':'Shorter travel leaves more time at the destination.'}</p>${destination(index)}`)+
+      card(`<div class="hero-wrap">${photo(p.photo,p.name)}<span class="best-label">${icon('AiSparkles')} Best for you</span><div class="hero-caption"><h2>${p.name}</h2><p>${p.desc}</p></div></div><div class="stats"><div><strong>${rupees(p.estimate)}</strong><small>${balance(p.estimate)}</small></div><div><strong>${p.time}</strong><small>From ${escape(s.city)}</small></div><div><strong>16–27°</strong><small>Clear skies</small></div></div>${tag(p.crowd)} <small class="inline">Fri–Sat, after the monsoon rush</small><p>${p.name==='Bhandardara'?'Quiet lakes, an easy ride, and room in your budget for kayaking.':'Shorter travel leaves more time at the destination.'}</p>${destination(index)}`)+
       `<h3>Also fits</h3><div class="grid">${places.map((x,i)=>i===index?'':card(photo(x.photo,x.name)+`<strong>${x.name}</strong><p>${rupees(x.estimate)} · ${x.time}</p>${destination(i)}`)).join('')}</div>`)+
       `<div class="chips">${button(s.comparing?'Show my pick':'Compare all 3','compare')}${button('Somewhere new','rotate')}${go('Cheaper options','noBudget')}</div>`;
   },
   place: () => {
     const p=currentPlace();
-    return photo(s.place===0?'BhandardaraHero':p.photo,p.name)+`<h1>${p.name}</h1><p>${p.desc} · ${p.time} from ${escape(s.city)}</p>`+
+    const activities=[['Kayaking at Arthur Lake','KayakingOnArthurLake','₹800 for 2'],['Randha Falls viewpoint','RandhaFalls','Free'],['Kalsubai sunrise trek','KalsubaiSunriseTrek','₹400'],['Stargazing at camp','StargazingAtCamp','Free']];
+    return `<div class="place-cover">${photo(s.place===0?'BhandardaraHero':p.photo,p.name)}<span>1 / 12 guest photos</span></div><section class="place-body"><h1>${p.name}</h1><p class="muted">${icon('IconPin')} ${p.desc} · From ${escape(s.city)}</p>`+
       ['Lake','Waterfalls','Camping','Stargazing'].map(tag).join('')+
-      card('<h2>When to go</h2><p>Friday is quieter. Saturday has higher demand for lake-view stays.</p>'+group('Travel dates','date',['Fri 20–Sun 22 Nov','Sat 21–Mon 23 Nov','Next weekend']))+
-      card('<h2>What to do</h2>'+group('Activity','activity',['Kayaking at Arthur Lake','Randha Falls viewpoint','Stargazing at camp'])+button('Why this place?','why')+ ' '+button('Share trip','share'))+go('Check stays','stay','primary wide');
+      `<p class="place-intro">${s.place===0?'A quiet lake town in the Sahyadri hills. November is the sweet spot: the falls still flow, nights are cool, and the monsoon crowds are gone.':escape(p.desc)+'.'}</p>
+      <div class="stats">${[['IconSun','27°','Daytime'],['IconMoon','15°','Night, pack a jacket'],['IconClock','5:55 pm','Sunset at the lake']].map(([image,temp,label])=>`<div>${icon(image)} <strong>${temp}</strong><small>${label}</small></div>`).join('')}</div><h3 class="section-label">When to go</h3>`+
+      card('<h3>Crowd and tent price, this week</h3><div class="date-chart">'+[['Thu',1600,'Low','Thu 19–Sat 21 Nov'],['Fri',1800,'Low','Fri 20–Sun 22 Nov'],['Sat',2200,'High','Sat 21–Mon 23 Nov'],['Sun',1900,'Medium','Sun 22–Tue 24 Nov']].map(([day,price,crowd,date],i)=>`<button class="chart-day" data-action="choose" data-key="date" data-value="${date}" aria-pressed="${s.date===date}"><strong>${rupees(price)}</strong><i class="bar-${i}"></i>${day}<small>${crowd}</small></button>`).join('')+'</div><div class="notice good">Arrive Friday: fewer people and ₹400 less a night than Saturday.</div>')+
+      '<h3 class="section-label">Things to do</h3><div class="activity-strip">'+activities.map(([name,image,price])=>`<button class="activity-card" data-action="choose" data-key="activity" data-value="${name}" aria-pressed="${s.activity===name}">${photo(image,name)}<strong>${name}</strong><small>${price}${s.activity===name?' · ✓ Added':''}</small></button>`).join('')+'</div><div class="notice info">Some activities are paid on the spot. They’re included in your trip budget.</div>'+
+      go('Check stays','stay','primary wide')+'</section>';
   },
-  stay: () => card(`${tag('Book on Cleartrip')}<h1>${escape(s.property)}</h1><p>4.3 ★ · 212 reviews · Breakfast and dinner included</p>${group('Photos','gallery',['Guest photos (48)','Hotel photos (12)'])}
-     ${photo(s.gallery.startsWith('Guest')?'GuestTentByTheLake':'GuestLakeAtSunrise',s.gallery)}<div class="grid">${['GuestTentInside','GuestWashroom','GuestLakeAtSunrise'].map((x,i)=>`<button class="secondary" data-action="photo" data-photo="${x}" aria-label="Open stay photo ${i+1}">${photo(x,['Inside the tent','Washroom','Lake sunrise'][i])}</button>`).join('')}</div>`)+
-    `<div class="notice"><strong>Photos vs reality</strong><p>Guests say some tents are smaller than the property’s photos. Ask for tents 1 to 6 for a lake view.</p></div><div class="grid">${card('<h3>Loved</h3>'+list(['Clean washrooms · 58','Bonfire and food · 41','Friendly staff · 37']))}${card('<h3>Complaints</h3>'+list(['Hot water only mornings · 22','Weak phone signal · 18','Rough last 2 km · 15']))}</div>`+
-    card(group('Pick a room','room',s.property==='Lakeview Camps'?['Lake-view tent','Cottage']:['Budget homestay','Lakeside cottage'])+`<p class="price">${rupees(roomCost())} · 2 nights</p>`+button('Read the house rules','rules')+' '+go('2 other stays','stays'))+primary(`Choose stay · ${rupees(roomCost())}`,'stayNext'),
+  stay: () => `${tag('✓ Book on Cleartrip')}<h1>${escape(s.property)}</h1><p><span class="rating">4.3 ★</span> <span class="muted">212 reviews · 600 m from Arthur Lake</span></p><p><span class="green-tag">✓ Breakfast and dinner included</span></p>
+    <div class="gallery-tabs">${choose('gallery','Guest photos (48)')}${choose('gallery','Hotel photos (12)')}</div>
+    ${photo(s.gallery.startsWith('Guest')?'GuestTentByTheLake':'GuestLakeAtSunrise',s.gallery)}
+    <div class="gallery-thumbs">${['GuestTentInside','GuestWashroom','GuestLakeAtSunrise'].map((x,i)=>`<button data-action="photo" data-photo="${x}" aria-label="Open stay photo ${i+1}">${photo(x,['Inside the tent','Washroom','Lake sunrise'][i])}</button>`).join('')}</div><small>Shot by guests in Oct–Nov 2026</small>`+
+    `<div class="notice"><strong>Photos vs reality</strong><p>9 guests say tents are smaller than the hotel’s photos. Lake view only from tents 1 to 6, so ask for one.</p></div><h3 class="section-label">What guests say</h3><div class="review-pair"><div class="notice good"><h3>Loved</h3>${list(['Clean washrooms · 58','Bonfire and food · 41','Friendly staff · 37'])}</div><div class="notice bad"><h3>Complaints</h3>${list(['Hot water only mornings · 22','Weak phone signal · 18','Rough last 2 km · 15'])}</div></div>`+
+    '<h3 class="section-label">Pick a room</h3><div class="room-grid">'+(s.property==='Lakeview Camps'?['Lake-view tent','Cottage']:['Budget homestay','Lakeside cottage']).map((room,i)=>`<button data-action="choose" data-key="room" data-value="${room}" aria-pressed="${s.room===room}"><span>${room}</span><strong>${rupees(s.property==='Lakeview Camps'?[4000,7600][i]:[3200,6800][i])}</strong><small>2 nights for 2 · taxes incl.</small></button>`).join('')+'</div>'+
+    card('<h3>The fine print, in plain words</h3>'+list(['Hot water 6–9 am only','No outside food or alcohol','Check-in 1 pm · check-out 10 am','Government ID needed for every guest'])+button('Read the house rules','rules')+' '+go('2 other stays','stays'))+primary(`Choose stay · ${rupees(roomCost())}`,'stayNext'),
   stays: () => '<h1>Other stays</h1>'+[['Budget homestay','Simpler rooms, no included meals',3200],['Lakeside cottage','More space, quieter location',6800],['Lakeview Camps','Guest photos and two included meals per day',4000]].map(([name,detail,price])=>card(row(name,detail,rupees(price))+button('Inspect '+name,'property','primary',`data-value="${name}"`))).join(''),
-  food: () => reply('Here are the meals already included and a few stops you can swap.')+
-    card(group('Food preference','foodFilter',['Non-veg','Veg','All'])+'<h3>4 meals are already in your stay</h3><p>Friday and Saturday dinner. Saturday and Sunday breakfast.</p>')+
-    card(row('Highway Misal House','Fri · 8:30 am · Veg · 65 km from Pune','₹250','HighwayMisalHouse')+
-    (s.foodFilter==='Veg'?row('Camp Kitchen','Sat · Lunch · Veg thali','₹450','CampKitchen'):row('Lakeside Dhaba','Sat · Lunch · '+(s.foodFilter==='All'?'Veg and non-veg':'Non-veg options'),'₹650','LakesideDhaba'))+
-    button(s.skippedMeal?'Restore lunch stop':'Skip lunch stop','meal')+' '+button('Swap food stop','foodSwap'))+
+  food: () => context()+bubble('Where should we eat?')+reply('Picked for '+s.foodFilter.toLowerCase()+', with other options marked too. Here’s each stop.')+
+    `<div class="chips">${['Non-veg','Veg','All'].map(x=>choose('foodFilter',x)).join('')}</div>
+    <div class="notice good"><strong>4 meals are already in your stay</strong><div class="included-meals">${['Fri · Dinner','Sat · Breakfast','Sat · Dinner','Sun · Breakfast'].map(x=>`<span>✓ ${x}</span>`).join('')}</div><small>At your stay’s kitchen. Below are picks for the other meals.</small></div>
+    <h3>On the way · Lonavala</h3>`+
+    row('Highway Misal House','Try: Misal pav and kanda bhaji · 4.4 ★','₹250','HighwayMisalHouse')+
+    '<h3>At Bhandardara</h3>'+
+    (s.foodFilter==='Veg'?'':row('Lakeside Dhaba','Try: Chicken sukka with jowar bhakri · 4.2 ★','₹600','LakesideDhaba'))+
+    row('Camp kitchen','Try: Pithla bhakri, a local classic · 4.0 ★','Included','CampKitchen')+
+    '<h3 class="section-label">Local must-try</h3><div class="food-strip">'+[['Pithla bhakri','CampKitchen'],['Masala chaas','MasalaChaas'],['Roasted bhutta','RoastedBhutta']].map(([name,image])=>`<div>${photo(image,name)}<small>${icon('VegMark')} ${name}</small></div>`).join('')+'</div>'+
+    '<div class="notice">Most places shut by 9:30 pm. Plan dinner early on Saturday.</div><div class="notice info">Other meals are paid as you go, on the trip.</div>'+
+    '<div class="actions">'+button(s.skippedMeal?'Restore lunch stop':'Skip lunch stop','meal')+button('Swap food stop','foodSwap')+'</div>'+
     card(group('Transport','mode',['Bike','Car','Train','Bus'])+group('Stay','room',['Lake-view tent','Cottage','Cottage Friday, tent Saturday'])+`<p>Estimated total <strong>${rupees(costs().total)}</strong></p>`+primary('See my itinerary','foodNext')),
   over: () => {
     const c=costs();
@@ -141,14 +167,16 @@ const pageViews = {
       (s.booked?go('Manage booking','change','primary wide'):go('Review before booking','review','primary wide'));
   },
   review: () => {
-    const c=costs();
-    return `<h1>Review your trip</h1><p>Check each item before you approve.</p>`+photo(currentPlace().photo,currentPlace().name)+`<h2>${currentPlace().name}</h2>`+context()+
-      card(`<h3>Whole trip</h3><p class="total">${rupees(c.total)}</p>${tag(balance(c.total))}<p>Pay now on Cleartrip <strong>${rupees(c.stay)}</strong></p><p>On the trip <strong>${rupees(c.total-c.stay)}</strong></p>`)+
-      (c.stay?card('<h2>Book on Cleartrip</h2>'+row(s.property,s.room+' · '+people()+' guests',rupees(c.stay))+button('Read house rules','rules')+' '+go('Edit stay','stay')):'')+
-      card('<h2>Arrange yourself</h2>'+row(s.mode,'Transport from '+s.city,rupees(c.travel))+row(s.activity,'Pay on the trip',rupees(c.fun))+row('Food','Estimate',rupees(c.food))+row('Buffer','Yours if unused',rupees(c.buffer))+go('Edit itinerary','itinerary'))+
+    const c=costs(), p=currentPlace();
+    const outside=c.total-c.stay;
+    return `<section class="review-summary"><div class="hero-wrap">${photo(p.photo,p.name)}<div class="hero-caption"><h2>${p.name}</h2><p>${escape(s.date)} · ${people()} people · by ${s.mode.toLowerCase()}</p></div></div>
+      <div class="review-totals"><small>Whole trip</small><div class="split-line"><strong class="total">${rupees(c.total)}</strong>${tag(balance(c.total))}</div><progress max="${Math.max(c.total,limit())}" value="${c.total}" aria-label="Trip cost versus budget"></progress>
+      <div class="review-legend"><span>Pay now on Cleartrip ${rupees(c.stay)}</span><span>On the trip ${rupees(outside)}</span></div></div></section>`+
+      (c.stay?`<section class="review-block book-block"><div class="split-line"><div><h3>Book on Cleartrip</h3><small>Pay now</small></div><strong>${rupees(c.stay)}</strong></div>${row(s.property,s.room+' · '+people()+' guests',rupees(c.stay))}${tag('Free cancellation')}${button('House rules','rules','quiet-chip')}${go('Edit stay','stay','quiet-chip')}</section>`:'')+
+      `<section class="review-block arrange-block"><div class="split-line"><div><h3>Arrange yourself</h3><small>Cleartrip can’t book these. Pay on the trip.</small></div><strong>${rupees(outside)}</strong></div>${row(s.mode==='Car'?'Self-drive car':s.mode,'Transport from '+s.city,rupees(c.travel))}${row(s.activity,'Pay on the trip',rupees(c.fun))}${row('Food, 2 days','Lunches and snacks',rupees(c.food))}${row('Buffer','For surprises on the road. Yours if unused.',rupees(c.buffer))}${go('Edit itinerary','itinerary','quiet-chip')}</section>`+
+      '<div class="notice"><strong>3 things to know before you pay</strong>'+list(['Hot water 6–9 am only','No outside alcohol at the camp','Last 2 km is a rough road, drive slow'])+'</div>'+
       (c.total>limit()?go('Review budget trade-offs','over','primary wide'):
-        primary(c.stay?`Confirm demo payment · ${rupees(c.stay)}`:'Confirm day-trip plan','confirm'))+
-      '<p class="muted">This is a simulated booking. No money is collected.</p>';
+        primary(c.stay?`Confirm demo payment · ${rupees(c.stay)}`:'Confirm day-trip plan','confirm'));
   },
   booked: () => `<div class="notice good"><h1>${currentPlace().name} ${costs().stay?'trip is booked':'day trip is ready'}</h1><p>Demo reference CT-48213 · ${escape(s.date)}</p></div>`+
     card(`<h2>What’s next</h2><p>Arrange transport and keep ${rupees(costs().total-costs().stay)} for the trip.</p>`+go('View your itinerary','itinerary','primary'))+
@@ -168,16 +196,53 @@ const pageViews = {
   weather: () => '<div class="notice"><h1>Heavy rain, 10 am to 4 pm</h1><p>Kayaking is closed today. You planned to pay there, so there’s no refund to claim.</p></div>'+
     card('<h2>Plan B for today</h2>'+['Randha Falls viewpoint','Bhutta and chai by the dam','Cosy afternoon at the cottage'].map((x,i)=>row(x,['20 min drive','Covered stalls · 10 min drive','Bonfire and board games'][i],['Free','₹150','₹300'][i])+choose('activity',x)).join('')+primary('Update my itinerary','weatherApply'))
 };
+const screenHeaders = {
+  place: ['',''],
+  stay: ['Stay check','Stay 1 of 3 that fit your plan'],
+  stays: ['Other stays','Compare options that fit your plan'],
+  itinerary: ['Your trip plan','First try: tap any stop to change it.'],
+  review: ['Review your trip','Check every item. Nothing is paid yet.']
+};
 function render(navigate=false) {
   const home=s.page==='home';
-  document.querySelector('#brand').textContent=home?'cleartrip':'Cleartrip AI';
-  document.querySelector('#subtitle').textContent=home?'':'Suggests a plan. You decide.';
-  document.querySelector('#back').disabled=!history.length&&home;
-  document.querySelector('#footer').hidden=home;
-  document.querySelector('#summary').innerHTML=context()+(s.booked?tag('Trip confirmed'):tag(balance(costs().total)));
+  const special=screenHeaders[s.page];
+  document.querySelector('.shell').dataset.screen=s.page;
+  document.querySelector('#brand').textContent=home?'cleartrip':special?.[0]??'Cleartrip AI';
+  document.querySelector('#subtitle').textContent=home?'':special?.[1]??'Suggests a plan. You decide.';
+  const back=document.querySelector('#back');
+  back.innerHTML=icon(home?'HamburgerIcon':'IconArrowLeft');
+  back.setAttribute('aria-label',home?'Open menu':'Go back');
+  const reset=document.querySelector('#reset');
+  reset.innerHTML=home?'<span class="coins">⚡ 55</span><span class="elite">Elite</span>':icon(special?'IconShare':'IconPen');
+  reset.setAttribute('aria-label',home?'Open demo menu':special?'Share trip':'Start again');
+  const homeNav=document.querySelector('#home-nav');
+  homeNav.hidden=!home;
+  homeNav.innerHTML=[['Home','HomeIcon','home'],['My Trips','MyTripsIcon','trips'],['Ask AI','AiSparkles','begin'],['Work','WorkIcon','homeInfo'],['Offers','OffersIcon','homeInfo']].map(([label,image,action])=>`<button data-action="${action}" data-value="${label}"><span>${icon(image)}</span>${label}</button>`).join('');
+  const footer=document.querySelector('#footer');
+  footer.hidden=home || Boolean(special);
+  footer.querySelector('small').textContent=s.booked?'Booked · CT-48213 · Help is open 24×7':'Nothing is booked until you review and pay.';
+  document.querySelector('#message').placeholder=s.page==='planning'?'Add something while I plan…':s.page==='reelError'?'Type the place, or paste a link':'Ask anything, or paste a reel link';
   screen.innerHTML=pageViews[s.page]();
+  const actions=document.querySelector('#screen-actions');
+  actions.innerHTML='';
+  const keyAction=({place:'[data-page=stay]',stay:'[data-action=stayNext]',itinerary:'[data-page=review], [data-page=change]',review:'[data-action=confirm], [data-page=over]'})[s.page];
+  const action=keyAction?screen.querySelector(keyAction):null;
+  actions.hidden=!action;
+  if(action) {
+    if(s.page==='place') {
+      const amount=document.createElement('div');
+      amount.innerHTML=`<strong>${rupees(currentPlace().estimate)} for ${people()}</strong><small>${escape(balance(currentPlace().estimate))}</small>`;
+      actions.append(amount);
+      action.textContent='Pick a stay ›';
+    }
+    if(s.page==='review' && action.dataset.action==='confirm' && costs().stay) {
+      action.textContent=`Pay ${rupees(costs().stay)} securely`;
+      action.setAttribute('aria-label',`Simulate paying ${rupees(costs().stay)}`);
+    }
+    actions.append(action);
+    if(s.page==='review') actions.insertAdjacentHTML('beforeend',`<small>The other ${rupees(costs().total-costs().stay)} is paid on the trip.</small>`);
+  }
   if(navigate) {
-    document.querySelector('aside details').open=false;
     screen.focus({preventScroll:true});
     document.querySelector('.workspace').scrollTop=0;
   }
@@ -218,6 +283,10 @@ function send(message) {
 }
 const asksForPlace = message => /explore|show me|take me to/i.test(message);
 const handlers = {
+  home: ()=>start('home'),
+  trips: ()=>s.booked?move('booked'):modal('My Trips','<p>Your demo booking will appear here after confirmation.</p>'),
+  homeInfo: b=>modal(b.dataset.value,'<p>Explore weekend trip ideas with Cleartrip Ask AI.</p>'+button('Ask AI','begin','primary')),
+  service: b=>{s.request='Help me plan a weekend with '+b.dataset.value.toLowerCase();move('ask');},
   go: b=>move(b.dataset.page),
   begin: ()=>move('ask'),
   start: b=>start(b.dataset.page),
@@ -267,13 +336,16 @@ document.addEventListener('click',e=>{
   const target=e.target.closest('[data-action]');
   if(target) handlers[target.dataset.action]?.(target);
 });
+const demoMenu=()=>{modal('Try a scenario','');document.querySelector('#scenarios').hidden=false;};
 document.querySelector('#back').addEventListener('click',()=>{
+  if(s.page==='home'){demoMenu();return;}
   clearTimeout(timer);
   s=history.pop()??initial();
   if(s.page==='planning') s=history.pop()??{...s,page:'ask'};
   render(true);
 });
-document.querySelector('#reset').addEventListener('click',()=>start('home'));
+document.querySelector('#reset').addEventListener('click',()=>{if(s.page==='home') demoMenu();else if(screenHeaders[s.page]) handlers.share();else start('home');});
+document.querySelector('#voice').addEventListener('click',()=>{document.querySelector('#message').focus();});
 document.querySelector('#reel').addEventListener('click',()=>modal('Start from a reel',
   '<p>Try the Kalsubai sample or paste a reel link in the chat.</p>'+
   button('Open sample reel','go','primary','data-page="reel"')+' '+button('Try an unreadable reel','go','secondary','data-page="reelError"')));
