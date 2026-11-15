@@ -179,7 +179,7 @@ function render(navigate=false) {
   if(navigate) {
     document.querySelector('aside details').open=false;
     screen.focus({preventScroll:true});
-    window.scrollTo(0,0);
+    document.querySelector('.workspace').scrollTop=0;
   }
 }
 const rules = () => modal('The fine print, in plain words',list(['Hot water 6–9 am only','No outside food or alcohol','Check in at 1 pm · Check out at 10 am','Government ID needed for every guest','Free cancellation until Wed 18 Nov, 6 pm','No cabs at the lake. Local jeeps are about ₹500 a ride.']));
