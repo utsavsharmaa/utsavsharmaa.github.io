@@ -57,7 +57,17 @@ const primary = (label,action) => button(label,action,'primary wide');
 const balance = total => total <= limit() ? `${rupees(limit()-total)} under budget` : `${rupees(total-limit())} over budget`;
 const context = (from=false) => `<div class="trip-context">${[[from?`From ${s.city}`:currentPlace().name,'IconPin'],[s.date,'IconCalendar'],[`${people()} people`,'IconUsers'],[rupees(limit()),'IconWallet'],[s.mode,'IconBike']].map(([text,image])=>`<span>${icon(image)}${escape(text)}</span>`).join('')}</div>`;
 const destination = index => button('Explore '+places[index].name,'place','primary wide',`data-index="${index}"`);
-const scenarios = {'home':'Cleartrip home','ask':'₹15K weekend','reel':'Start from a reel','reelError':'Reel can’t be read','noBudget':'Nothing fits the budget','over':'Car + cottage trade-off','price':'Price changed or sold out','change':'Change after booking','weather':'Disruption during the trip'};
+const edgeCases = {
+  planning:'AI is still planning',
+  noBudget:'Nothing fits the budget',
+  over:'Trip goes over budget',
+  price:'Price changes before payment',
+  sold:'Stay sells out',
+  reelError:'AI can’t read the reel',
+  change:'Change after booking',
+  weather:'Disruption during the trip'
+};
+const scenarios = {'home':'Cleartrip home','ask':'₹15K weekend','reel':'Start from a reel',...edgeCases};
 function move(page) {
   clearTimeout(timer);
   if(s.page===page) {render();return;}
@@ -88,14 +98,23 @@ function advancePlanning(step) {
 }
 function start(page) {
   clearTimeout(timer);
-  history.length = 0;
-  s = initial();
-  if (['over','price','change','weather'].includes(page)) {
-    s.mode='Car'; s.room=page==='over'?'Cottage':'Cottage Friday, tent Saturday';
+  history.length=0;
+  s=initial();
+  const sold=page==='sold';
+  if(sold) page='price';
+  if(['over','price','change','weather'].includes(page)) {
+    s.mode='Car';
+    s.room=page==='over'?'Cottage':'Cottage Friday, tent Saturday';
     if(page==='price') s.priceDelta=-600;
   }
-  if (page==='noBudget') s.group='3 or more';
-  if (['change','weather'].includes(page)) s.booked=true;
+  if(sold) s.scenario='sold';
+  if(page==='noBudget') s.group='3 or more';
+  if(['change','weather'].includes(page)) s.booked=true;
+  if(page==='planning') {
+    s.page='ask';
+    move('planning');
+    return;
+  }
   s.page=page;
   render('forward');
 }
@@ -319,6 +338,11 @@ function render(direction='', restoreScroll=0) {
   const home=s.page==='home';
   const special=screenHeaders[s.page];
   document.querySelector('.shell').dataset.screen=s.page;
+  const edgePage=s.page==='price'&&s.scenario==='sold'?'sold':s.page;
+  document.querySelectorAll('#edge-options button').forEach(option=>{
+    if(option.dataset.page===edgePage) option.setAttribute('aria-current','true');
+    else option.removeAttribute('aria-current');
+  });
   const brand=document.querySelector('#brand');
   if(home) brand.innerHTML=artwork('CleartripBrandArtwork','Cleartrip');
   else brand.textContent=special?.[0]??'Cleartrip AI';
@@ -461,7 +485,12 @@ const handlers = {
   switchTent: ()=>{s.room='Lake-view tent';s.priceDelta=0;move('review');},
   weatherApply: ()=>{if(s.activity==='Kayaking at Arthur Lake')s.activity='Randha Falls viewpoint';move('itinerary');}
 };
-document.querySelector('#scenarios').innerHTML=Object.entries(scenarios).map(([page,label])=>button(label,'start','scenario',`data-page="${page}"`)).join('');
+const scenarioButtons = choices => Object.entries(choices).map(([page,label])=>
+  button(label,'start','scenario',`data-page="${page}"`)
+).join('');
+document.querySelector('#scenarios').innerHTML=scenarioButtons(scenarios);
+document.querySelector('#edge-options').innerHTML=scenarioButtons(edgeCases);
+document.querySelector('#edge-picker').hidden=false;
 document.addEventListener('click',e=>{
   const target=e.target.closest('[data-action]');
   if(!target) return;
