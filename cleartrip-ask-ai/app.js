@@ -14,7 +14,7 @@ const initial = () => ({
   date:'Fri 20–Sun 22 Nov', place:0, room:'Lake-view tent', property:'Lakeview Camps',
   gallery:'Guest photos (48)', foodFilter:'Non-veg', meals:2400, extra:0, priceDelta:0,
   booked:false, scenario:'', reelType:'This trek', fitness:'We walk a lot', crowd:false,
-  activity:'Kayaking at Arthur Lake', activityDay:2, skippedMeal:false, planType:'', comparing:false
+  activity:'Kayaking at Arthur Lake', activityDay:2, stopEdits:{}, skippedMeal:false, planType:'', comparing:false
 });
 let s = initial();
 let timer;
@@ -22,7 +22,7 @@ let screenAnimation;
 let actionSource;
 const rupees = n => '₹' + new Intl.NumberFormat('en-IN').format(n);
 const escape = str => String(str).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-const photo = (name, alt, cls='hero') => `<img class="${cls}" src="assets/imgPhoto${name}.jpg" alt="${escape(alt)}">`;
+const photo = (name, alt, cls='hero', prefix='imgPhoto') => `<img class="${cls}" src="assets/${prefix}${name}.jpg" alt="${escape(alt)}">`;
 const artwork = (name,alt='') => `<img src="assets/img${name}.png" alt="${escape(alt)}">`;
 const icon = name => `<img class="ui-icon" src="assets/img${name}.svg" alt="">`;
 const currentPlace = () => places[s.place];
@@ -103,6 +103,88 @@ function modal(title, content) {
   document.querySelector('#dialog-body').innerHTML = `<h2 id="dialog-title">${escape(title)}</h2>${content}`;
   document.querySelector('#scenarios').hidden=true;
   if(!dialog.open) dialog.showModal();
+}
+const itineraryTime = minutes => {
+  const hours=Math.floor(minutes/60);
+  return `${hours%12||12}:${String(minutes%60).padStart(2,'0')} ${hours<12?'am':'pm'}`;
+};
+function itineraryStops() {
+  const c=costs();
+  const car=s.mode==='Car';
+  const stayStatus=s.booked?'Booked on Cleartrip':'Book on Cleartrip';
+  const meal='Included in stay';
+  const local=price=>`Pay there · ${rupees(price)}`;
+  const add=(id,day,time,iconName,title,detail,status='',tone='',image='',travel='')=>({id,day,time,iconName,title,detail,status,tone,image,travel});
+  const depart=add('depart',1,390,car?'IconCar':'IconBike',car?`Pick up car, leave ${s.city}`:`Leave ${s.city} by ${s.mode.toLowerCase()}`,car?'Self-drive rental, full tank':'Allow extra time for traffic',`Arrange yourself · ${rupees(c.travel)}`,'local');
+  const breakfast=add('misal',1,510,'ItineraryIconFood','Breakfast at Highway Misal House','Misal pav and kanda bhaji',local(250),'local','MisalPav','1 h 45 m · 65 km');
+  const kayak=add('activity',s.planType==='day'?1:s.activityDay,570,'ItineraryIconWave',s.activity==='Kayaking at Arthur Lake'?'Kayaking on Arthur Lake':s.activity,
+    s.activity==='Kayaking at Arthur Lake'?'1 hour, life jackets given. Calmest before 11 am.':'Check local conditions before leaving.',c.fun?local(c.fun):'Free',c.fun?'local':'included',s.activity==='Kayaking at Arthur Lake'?'Kayaking':'');
+  const dinner=s.food==='Veg'?'Vegetarian thali':'Veg and non-veg thali';
+  if(s.planType==='day') return [depart,breakfast,kayak,add('return',1,1080,'IconCar',`Return to ${s.city}`,'Allow time for evening traffic')];
+  return [depart,breakfast,
+    add('check-in',1,780,'ItineraryIconHome',`Check in at ${s.property}`,s.room==='Cottage Friday, tent Saturday'?'Cottage tonight. Early arrival? Bags can wait at the desk.':`${s.room}. Bags can wait at the desk if you arrive early.`,stayStatus,'booked','','2 h 30 m · 105 km, last 2 km rough'),
+    ...(!s.skippedMeal?[add('dhaba',1,810,'ItineraryIconFood',s.foodFilter==='Veg'?'Lunch at Camp Kitchen':'Lunch at Lakeside Dhaba',s.foodFilter==='Veg'?'Pithla bhakri, a local classic':'Chicken sukka with jowar bhakri',local(s.foodFilter==='Veg'?450:600),'local',s.foodFilter==='Veg'?'PithlaBhakri':'ChickenSukka')]:[]),
+    add('randha',1,960,'ItineraryIconMountain','Randha Falls','Viewpoint is a 5 min walk from parking','Free','included','RandhaFalls','20 min · 12 km'),
+    add('sunset',1,1075,'IconSun','Sunset at Arthur Lake','Best spot: the dam wall, 10 min from camp'),
+    add('bonfire',1,1200,'ItineraryIconFlame','Dinner and bonfire at camp',dinner,meal,'included'),
+    add('shower',2,420,'ItineraryIconDrop','Shower before 9 am','Hot water runs 6 to 9 am only'),
+    add('breakfast',2,480,'ItineraryIconFood','Breakfast at camp','Poha, tea, eggs to order',meal,'included'),
+    kayak,
+    ...(s.room==='Cottage Friday, tent Saturday'?[add('tent',2,690,'ItineraryIconTent','Move to lake-view tent','Ask for tents 1 to 6 for the view',stayStatus,'booked')]:[]),
+    add('pithla',2,810,'ItineraryIconFood','Lunch: pithla bhakri','Camp kitchen or the village stall',local(300),'local','PithlaBhakri'),
+    add('umbrella',2,990,'ItineraryIconMountain','Umbrella Falls viewpoint','15 min drive, good for photos','Free','included'),
+    add('stargazing',2,1200,'IconMoon','Dinner and stargazing','Clear skies forecast. Carry a jacket, 14°.',meal,'included','StargazingCamp'),
+    add('checkout',3,480,'ItineraryIconFood','Breakfast, then check out by 10 am','Late check-out costs ₹500, ask on Saturday',meal,'included'),
+    add('lunch',3,780,'ItineraryIconFood','Lunch stop at Lonavala','Pick up chikki for home',local(500),'local','','2 h 30 m · 105 km'),
+    add('return',3,990,'ItineraryIconFlag',car?`Back in ${s.city}, return the car`:`Back in ${s.city}`,car?'Return with a full tank to avoid a fuel charge':'Allow extra time for weekend traffic','Arrange yourself','local','','1 h 45 m · 65 km. Sunday traffic after 4 pm.')
+  ];
+}
+const editableStops = () => itineraryStops().map(stop=>({...stop,...s.stopEdits[stop.id]}));
+function itineraryView() {
+  const single=s.planType==='day', p=currentPlace(), c=costs();
+  const stops=editableStops();
+  const dateLabels=({
+    'Fri 20–Sun 22 Nov':['Fri 20 Nov','Sat 21 Nov','Sun 22 Nov'],
+    'Thu 19–Sat 21 Nov':['Thu 19 Nov','Fri 20 Nov','Sat 21 Nov'],
+    'Sat 21–Mon 23 Nov':['Sat 21 Nov','Sun 22 Nov','Mon 23 Nov'],
+    'Sun 22–Tue 24 Nov':['Sun 22 Nov','Mon 23 Nov','Tue 24 Nov'],
+    'Next weekend':['Fri 27 Nov','Sat 28 Nov','Sun 29 Nov']
+  })[s.date]??['Arrival day','Second day','Departure day'];
+  const days=single?[['Sunday · Day trip','27° / 15°']]:[
+    [dateLabels[0]+' · Arrive and settle in','27° / 15° · meals out ₹850'],
+    [dateLabels[1]+' · Lake day','26° / 14° · kayak + meals ₹1,100'],
+    [dateLabels[2]+' · Head home','27° / 15° · meals out ₹500']
+  ];
+  const entry=stop=>`${stop.travel?`<div class="timeline-travel"><span>${icon('IconCar')} ${escape(stop.travel)}</span></div>`:''}
+    <button class="timeline-stop" data-action="editItinerary" data-stop="${stop.id}">
+      <time>${itineraryTime(stop.time)}</time><span class="timeline-icon ${stop.tone}">${icon(stop.iconName)}</span>
+      <span class="timeline-copy"><strong>${escape(stop.title)}</strong><small>${escape(stop.detail)}</small>${stop.status?`<span class="timeline-label ${stop.tone}">${escape(stop.status)}</span>`:''}</span>
+      ${stop.image?photo(stop.image,'','timeline-photo','imgItineraryPhoto'):''}
+    </button>`;
+  return `<section class="itinerary-summary">${p.name==='Bhandardara'?photo('ArthurLakeBhandardara','Arthur Lake, Bhandardara','hero','imgItineraryPhoto'):photo(p.photo,p.name)}
+    <div><h1>${p.name}, ${single?'1 day':'3 days'}</h1><p>${escape(s.date)} · ${people()} people · by ${s.mode.toLowerCase()}</p>
+    <div class="itinerary-summary-tags"><span class="timeline-label included">${rupees(c.total)} total</span><span class="timeline-label">${p.name==='Bhandardara'?'3 h 30 m':p.time} ride</span></div></div></section>
+    <div class="itinerary-legend"><span class="booked">${s.booked?'Booked on Cleartrip':'Book on Cleartrip'}</span><span class="local">Pay there</span><span class="included">Included in stay</span></div>`+
+    days.map(([title,details],i)=>`<section class="itinerary-day"><header class="timeline-day-heading"><span class="day-badge">DAY<b>${i+1}</b></span><div><h2>${title}</h2><small>${icon('IconSun')} ${details}</small></div></header>
+     <div class="timeline-stops">${stops.filter(stop=>stop.day===i+1).sort((a,b)=>a.time-b.time).map(entry).join('')||'<p class="timeline-empty">No stops scheduled for this day.</p>'}</div></section>`).join('')+
+    (s.booked?go('Manage booking','change','primary wide'):go('Review before booking','review','primary wide'))+
+    `<button class="itinerary-edit-bar" data-action="editItinerary"><span class="reply-mark">${icon('AiSparkles')}</span><span><strong>Want to move something?</strong><small>Tap to change a stop or start later</small></span>${icon('IconPen')}</button>`;
+}
+function editItinerary(stopId) {
+  const stops=editableStops();
+  const stop=stops.find(item=>item.id===stopId)??stops[0];
+  const inputTime=minutes=>`${String(Math.floor(minutes/60)).padStart(2,'0')}:${String(minutes%60).padStart(2,'0')}`;
+  modal(stopId?'Edit stop':'Move a stop',`<form id="itinerary-edit-form">
+    <label>Stop<select name="stop">${stops.map(item=>`<option value="${item.id}" ${item.id===stop.id?'selected':''}>${escape(item.title)}</option>`).join('')}</select></label>
+    <label>Day<select name="day">${Array.from({length:s.planType==='day'?1:3},(_,i)=>`<option value="${i+1}" ${stop.day===i+1?'selected':''}>Day ${i+1}</option>`).join('')}</select></label>
+    <label>Time<input name="time" type="time" required value="${inputTime(stop.time)}"></label>
+    <button class="primary wide">Update itinerary</button></form>`);
+  const form=dialog.querySelector('#itinerary-edit-form');
+  form.elements.stop.addEventListener('change',()=>{
+    const selection=stops.find(item=>item.id===form.elements.stop.value);
+    form.elements.day.value=selection.day;
+    form.elements.time.value=inputTime(selection.time);
+  });
 }
 const pageViews = {
   home: () => `<button class="home-search" data-action="begin">${icon('AiSparkles')}<span>Explore your next adventure with AI</span>${icon('SearchIcon')}</button>
@@ -193,19 +275,7 @@ const pageViews = {
     card(row('Day trip on Sunday','Lake, falls and kayaking. Go home the same evening.','₹9,200')+button('Build day trip','day','primary'))+
     card(row('Tents both nights + 2 bikes','Keep two nights with a simpler stay.','₹14,600')+button('Build tent trip','tents'))+
     button('Change budget','budget')+' '+go('Change dates','ask'),
-  itinerary: () => {
-    const c=costs();const day=s.planType==='day';
-    return `<h1>${currentPlace().name}, ${day?'1 day':'3 days'}</h1>${context()}${tag(rupees(c.total)+' total')}${tag(day?'Pay there':'Book on Cleartrip + pay there')}`+
-      card(`<h2>${day?'Sunday · Day trip':'Day 1 · Arrive and settle in'}</h2>`+
-        row('6:30 am · Leave '+s.city,s.mode+' · Arrange yourself',rupees(c.travel))+
-        (!s.skippedMeal?row('8:30 am · Highway Misal House','Breakfast stop · Pay there','₹250'):'')+
-        (day?'':row('1:00 pm · Check in at '+s.property,s.room+' · '+(s.booked?'Booked on Cleartrip':'Book on Cleartrip'),rupees(c.stay)))+
-        (day?row('11:00 am · '+s.activity,'Pay there',rupees(c.fun))+row('6:00 pm · Return to '+s.city,'Allow time for traffic'):'')+
-        go('Edit food or transport','food'))+
-      (day?'':card('<h2>Day 2 · Lake and viewpoints</h2>'+(s.activityDay===2?row('11:00 am · '+s.activity,'Local activity',rupees(c.fun)):'')+go('Swap activity','place'))+
-      card('<h2>Day 3 · A slow morning</h2>'+row('8:30 am · Breakfast','Included in stay')+(s.activityDay===3?row('9:30 am · '+s.activity,'Local activity',rupees(c.fun)):'')+row('11:00 am · Drive home','Check out before leaving')))+
-      (s.booked?go('Manage booking','change','primary wide'):go('Review before booking','review','primary wide'));
-  },
+  itinerary: itineraryView,
   review: () => {
     const c=costs(), p=currentPlace();
     const outside=c.total-c.stay;
@@ -240,7 +310,7 @@ const screenHeaders = {
   place: ['',''],
   stay: ['Stay check','Stay 1 of 3 that fit your plan'],
   stays: ['Other stays','Compare options that fit your plan'],
-  itinerary: ['Your trip plan','First try: tap any stop to change it.'],
+  itinerary: ['Your trip plan','Hour by hour. Tap any stop to change it.'],
   review: ['Review your trip','Check every item. Nothing is paid yet.']
 };
 function render(direction='', restoreScroll=0) {
@@ -269,7 +339,7 @@ function render(direction='', restoreScroll=0) {
   screen.innerHTML=pageViews[s.page]();
   const actions=document.querySelector('#screen-actions');
   actions.innerHTML='';
-  const keyAction=({place:'[data-page=stay]',stay:'[data-action=stayNext]',itinerary:'[data-page=review], [data-page=change]',review:'[data-action=confirm], [data-page=over]'})[s.page];
+  const keyAction=({place:'[data-page=stay]',stay:'[data-action=stayNext]',itinerary:'.itinerary-edit-bar',review:'[data-action=confirm], [data-page=over]'})[s.page];
   const action=keyAction?screen.querySelector(keyAction):null;
   actions.hidden=!action;
   if(action) {
@@ -343,6 +413,7 @@ function send(message) {
 }
 const asksForPlace = message => /explore|show me|take me to/i.test(message);
 const handlers = {
+  editItinerary: b=>editItinerary(b.dataset.stop),
   home: ()=>start('home'),
   trips: ()=>s.booked?move('booked'):modal('My Trips','<p>Your demo booking will appear here after confirmation.</p>'),
   homeInfo: b=>modal(b.dataset.value,'<p>Explore weekend trip ideas with Cleartrip Ask AI.</p>'+button('Ask AI','begin','primary')),
@@ -384,7 +455,7 @@ const handlers = {
   addPerson: ()=>{s.group=people()>=3?'3 or more':'3 people';s.extra+=1200;s.meals+=900;move('booked');},
   changeDates: ()=>{s.date='Next weekend';move('booked');},
   changeStay: ()=>{s.property='Lakeview Camps';s.room='Cottage';s.priceDelta=0;move('booked');},
-  changeStop: ()=>{s.activityDay=3;move('itinerary');},
+  changeStop: ()=>{s.activityDay=3;const {activity,...otherEdits}=s.stopEdits;s.stopEdits=otherEdits;move('itinerary');},
   acceptPrice: ()=>{s.priceDelta=0;move('review');},
   sold: ()=>{s.scenario='sold';render();},
   switchTent: ()=>{s.room='Lake-view tent';s.priceDelta=0;move('review');},
@@ -421,6 +492,15 @@ document.querySelector('#composer').addEventListener('submit',e=>{
   send(message);
 });
 dialog.addEventListener('submit',e=>{
+  if(e.target.id==='itinerary-edit-form') {
+    e.preventDefault();
+    const form=e.target.elements;
+    const [hour,minute]=form.time.value.split(':').map(Number);
+    s.stopEdits={...s.stopEdits,[form.stop.value]:{day:Number(form.day.value),time:hour*60+minute}};
+    dialog.close();
+    render();
+    return;
+  }
   if(e.target.id!=='edit-form')return;
   e.preventDefault();
   const value=e.target.querySelector('input').value.trim();
