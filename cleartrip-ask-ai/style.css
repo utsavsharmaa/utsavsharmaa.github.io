@@ -263,3 +263,86 @@ progress::-webkit-progress-value {background:var(--orange);border-radius:5px;}
 .shell[data-screen=food] .rowcard img{grid-column:1;grid-row:1;width:65px;height:65px;}
 .shell[data-screen=food] .rowcard p{font-size:11px;}
 .shell[data-screen=food] .rowcard .price{font-size:11px;white-space:normal;}
+
+/* Home layout uses the dimensions and cropped image fills from Figma. */
+body { --phone-width:min(418px, calc(100vw - 16px), max(290px, 54dvh)); --phone-height:min(890px, calc(100dvh - 24px)); }
+.status-bar {height:62px;}
+.shell[data-screen=home] header {min-height:42px;padding:1px 18px 7px;gap:5px;}
+.shell[data-screen=home] #brand img {display:block;width:102px;height:23px;}
+.shell[data-screen=home] header #reset {display:flex;align-items:center;gap:14px;padding:0;min-height:34px;}
+.coins,.elite {display:inline-flex;justify-content:center;align-items:center;gap:7px;min-height:34px;font-size:15px;margin:0;}
+.coins {min-width:69px;}
+.coins img {width:17px;height:18px;}
+.elite {min-width:60px;}
+.shell[data-screen=home] main {padding:0 18px 78px;}
+.home-search {min-height:56px;border-radius:16px;padding:8px 10px;box-shadow:0 4px 9px #ff4d1a1a;gap:8px;color:#646464;}
+.home-search .ui-icon:first-child {width:23px;height:23px;}
+.home-search .ui-icon:last-child {width:34px;height:34px;}
+.services {row-gap:18px;margin:18px 0 8px;grid-template-columns:repeat(6,minmax(0,1fr));column-gap:0;justify-content:space-between;}
+.service {position:relative;min-width:0;height:122px;padding:12px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;margin-right:7%;box-shadow:0 5px 12px #0002;}
+.service:nth-child(-n+2) {height:151px;margin-right:5%;padding:16px;}
+.service:nth-child(2) {margin-right:0;margin-left:5%;}
+.service:nth-child(4) {margin-left:3.5%;margin-right:3.5%;}
+.service:nth-child(5) {margin-left:7%;margin-right:0;}
+.service-art {width:42px;height:42px;background:none;margin:0 0 9px;overflow:hidden;}
+.service:nth-child(-n+2) .service-art {width:50px;height:50px;margin-bottom:5px;}
+.service-art img {width:100%;height:100%;display:block;}
+.service strong {font-size:18px;line-height:1.25;}
+.service:nth-child(-n+2) strong {font-size:22px;}
+.service small {font-size:13px;color:#8b8b8b;margin-top:4px;}
+.service-badge {position:absolute;right:10px;top:-12px;background:var(--orange);color:#fff;font-size:11px;padding:2px 7px;border-radius:6px;white-space:nowrap;}
+.service-discount {position:absolute;inset:auto 0 0;padding:3px 4px 3px 15px;border-radius:0 0 15px 15px;background:linear-gradient(90deg,#ffd5c0,#fff);color:var(--ink);font-size:11px;white-space:nowrap;}
+.home-promo {display:block;width:100%;padding:0;border:0;background:none;text-align:left;}
+.home-promo img {display:block;width:100%;height:auto;aspect-ratio:366 / 194;}
+.home-pagination {display:flex;justify-content:center;align-items:center;gap:4px;height:16px;margin-top:4px;}
+.home-pagination span {width:5px;height:5px;border-radius:50%;background:#e8e8e8;}
+.home-pagination span:nth-child(4) {background:#8b8b8b;}
+.home-offers {gap:9px;margin:4px 0 0;}
+.home-offers button {display:block;position:relative;overflow:hidden;height:153px;border:0;border-radius:18px;padding:9px 7px;text-align:left;background:#653100;color:white;}
+.home-offers button:nth-child(2) {background:#edf2ff;color:#ca3c10;}
+.home-offers button:nth-child(3) {background:#766a56;}
+.home-offers button small,.home-offers button strong,.home-offers button span {display:block;position:relative;z-index:1;line-height:1.2;}
+.home-offers button small {color:#e8c875;font-size:11px;}
+.home-offers button:nth-child(2) small {color:#ca3c10;}
+.home-offers button img {position:absolute;bottom:0;left:0;width:100%;}
+.home-offers button:nth-child(3) img {height:100%;}
+.bloom-wordmark {font-size:23px;color:#e29b00;margin:5px 0 1px;}
+#home-nav {position:absolute;z-index:2;bottom:17px;left:18px;right:18px;height:62px;margin:0;background:#fffffff5;backdrop-filter:blur(9px);}
+#home-nav button:first-child {background:#fff2ec;border-radius:26px;}
+#home-nav button {font-size:11px;}
+#home-nav .ui-icon {width:22px;height:22px;}
+@media(max-width:360px) {
+  .shell[data-screen=home] main {padding-inline:11px;}
+  .shell[data-screen=home] header {padding-inline:11px;}
+  .shell[data-screen=home] header #reset {gap:4px;}
+  #home-nav {left:11px;right:11px;}
+  .service {padding-inline:7px;}
+  .service:nth-child(-n+2) {padding-inline:10px;}
+}
+.destination-main,.destination-tile{border:1px solid var(--line);border-radius:17px;background:#fff;overflow:hidden;box-shadow:0 3px 9px #0000000d;}
+.destination-main .hero{height:175px;max-height:none;margin:0;}
+.destination-main .hero-caption{padding:34px 14px 10px;}
+.destination-main .hero-caption h2{font-size:22px;line-height:1.18;}
+.destination-main .hero-caption p{font-size:12px;}
+.destination-body{padding:12px 13px;}
+.destination-body .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0 0 10px;}
+.destination-body .stats div{font-size:13px;padding:8px 7px;}
+.destination-body .stats .ui-icon{width:13px;height:13px;}
+.destination-body .stats small{font-size:11px;}
+.green-text{color:#176738;}
+.crowd-tag{border-radius:15px;padding:2px 6px;font-size:11px;white-space:nowrap;}
+.crowd-tag.low{background:#e8f5ec;color:#176738;}
+.crowd-tag.high{background:#fdecec;color:#b62424;}
+.destination-reason{margin:8px 0 10px;font-size:13px;}
+.destination-reason .ui-icon{margin-right:3px;}
+.destination-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+.destination-tile{padding:0;text-align:left;}
+.destination-tile .hero{height:92px;margin:0;}
+.destination-tile .hero-wrap strong{position:absolute;bottom:0;inset-inline:0;color:white;background:linear-gradient(transparent,#000b);padding:16px 7px 4px;font-size:13px;}
+.tile-meta{font-size:12px;padding:7px;}
+.tile-meta .crowd-tag{display:inline-block;margin-top:4px;}
+.home-search .ui-icon:first-child,.best-label .ui-icon,.destination-reason .ui-icon {
+  filter:brightness(0) saturate(100%) invert(26%) sepia(96%) saturate(2689%) hue-rotate(359deg) brightness(91%) contrast(95%);
+}
+.home-offers button {display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;}
+.shell[data-screen=place] header {top:62px;}

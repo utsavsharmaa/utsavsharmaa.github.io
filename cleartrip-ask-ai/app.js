@@ -19,6 +19,7 @@ let timer;
 const rupees = n => '₹' + new Intl.NumberFormat('en-IN').format(n);
 const escape = str => String(str).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const photo = (name, alt, cls='hero') => `<img class="${cls}" src="assets/imgPhoto${name}.jpg" alt="${escape(alt)}">`;
+const artwork = (name,alt='') => `<img src="assets/img${name}.png" alt="${escape(alt)}">`;
 const icon = name => `<img class="ui-icon" src="assets/img${name}.svg" alt="">`;
 const currentPlace = () => places[s.place];
 const people = () => ({'Just me':1,'2 of us':2,'3 or more':4,'3 people':3}[s.group] ?? 2);
@@ -80,9 +81,17 @@ function modal(title, content) {
 }
 const pageViews = {
   home: () => `<button class="home-search" data-action="begin">${icon('AiSparkles')}<span>Explore your next adventure with AI</span>${icon('SearchIcon')}</button>
-    <div class="services">${['Hotels','Flights','Trains','Buses','Activities'].map((x,i)=>`<button class="service" data-action="service" data-value="${x}"><span class="service-art art-${i}">${['▥','✈','▰','▣','☀'][i]}</span><strong>${x}</strong><small>30–80% off</small></button>`).join('')}</div>
-    <div class="home-promo">${photo('BhandardaraHero','A weekend in the Sahyadris')}<div><strong>Up to 25% off</strong><br>on your next escape</div></div>
-    <div class="home-offers">${['Wedding store','Brand of the day','Weekend escapes'].map(x=>`<article><strong>${x}</strong><p>Explore offers</p></article>`).join('')}</div>`,
+    <div class="services">${['Hotels','Flights','Trains','Buses','Holidays'].map((x,i)=>`<button class="service" data-action="service" data-value="${x}" aria-label="${x}">
+      ${i===0?'<span class="service-badge">Book at 0</span>':i===4?'<span class="service-badge">NEW</span>':''}
+      <span class="service-art">${artwork('Illustration'+x)}</span><strong>Hotels</strong><small>30-80% off</small>
+      ${i===0?'<span class="service-discount">1st stay: Flat 25% off</span>':''}</button>`).join('')}</div>
+    <button class="home-promo" data-action="service" data-value="Flights" aria-label="Epic Year End Sale, up to 25% off on flights"><img src="assets/imgAirplaneWindowPhotographAndSaleBranding.jpg" alt=""></button>
+    <div class="home-pagination" aria-hidden="true">${'<span></span>'.repeat(7)}</div>
+    <div class="home-offers">
+      <button data-action="homeInfo" data-value="Wedding store"><small>Wedding store</small><strong>Up to ₹5000 off</strong><span>on Flights</span>${artwork('WeddingDestinationPhotograph')}</button>
+      <button data-action="homeInfo" data-value="Brand of the day"><small>Brand of the day</small><strong class="bloom-wordmark">bloom</strong><strong>Up to ₹5000 off</strong>${artwork('BloomPropertyPhotograph')}</button>
+      <button data-action="homeInfo" data-value="Beyond appliances" aria-label="Beyond appliances">${artwork('BeyondCampaignArtwork')}</button>
+    </div>`,
   ask: () => bubble(s.request)+reply(`${s.budget%1000===0?'₹'+s.budget/1000+'K':rupees(s.budget)} this weekend, let's make it count. 5 quick taps so I can plan it right.`)+`<div class="chat-indent ask-options">${card(
     group(`${s.budget%1000===0?'₹'+s.budget/1000+'K':rupees(s.budget)} is for`,'scope',['Whole trip','Per person'])+
     group("Who's going?",'group',['Just me','2 of us','3 or more'])+
@@ -94,11 +103,17 @@ const pageViews = {
     <ol class="planning-list">${[['Found 34 places within 4 hrs of '+s.city,'Filtered to 6 that fit 2 days'],['Checked the weather','Clear, 18–27°, no rain alerts'],['Comparing 12 stays for Fri–Sun','Reading 1,900 guest reviews'],['Pricing car, food and activities',''],['Building your plan','']].map(([title,detail],i)=>`<li class="phase-${i}"><i>${i<2?'✓':i===2?'⟳':''}</i><div>${escape(title)}<small>${detail}</small></div></li>`).join('')}</ol>`)+
     '<div class="skeleton"><i></i><b></b><b></b><b></b></div><div class="skeleton"><i></i><b></b><b></b><b></b></div>'+button('Stop','stop')+' <small class="inline">You can keep typing while I plan</small></div>',
   pick: () => {
-    const p=places[s.crowd?1:0];const index=places.indexOf(p);
-    return context(true)+reply(s.comparing?'Here’s how all three compare.':'3 places fit your preferences. My pick first.')+
-      (s.comparing?card(places.map((x,i)=>row(x.name,`${x.time} · ${x.crowd}`,rupees(x.estimate))+destination(i)).join('')):
-      card(`<div class="hero-wrap">${photo(p.photo,p.name)}<span class="best-label">${icon('AiSparkles')} Best for you</span><div class="hero-caption"><h2>${p.name}</h2><p>${p.desc}</p></div></div><div class="stats"><div><strong>${rupees(p.estimate)}</strong><small>${balance(p.estimate)}</small></div><div><strong>${p.time}</strong><small>From ${escape(s.city)}</small></div><div><strong>16–27°</strong><small>Clear skies</small></div></div>${tag(p.crowd)} <small class="inline">Fri–Sat, after the monsoon rush</small><p>${p.name==='Bhandardara'?'Quiet lakes, an easy ride, and room in your budget for kayaking.':'Shorter travel leaves more time at the destination.'}</p>${destination(index)}`)+
-      `<h3>Also fits</h3><div class="grid">${places.map((x,i)=>i===index?'':card(photo(x.photo,x.name)+`<strong>${x.name}</strong><p>${rupees(x.estimate)} · ${x.time}</p>${destination(i)}`)).join('')}</div>`)+
+    const index=s.crowd?1:0;
+    const p=places[index];
+    const choices=places.map((x,i)=>`<button class="destination-tile" data-action="place" data-index="${i}" aria-label="Explore ${x.name}">
+      <div class="hero-wrap">${photo(x.photo,x.name)}<strong>${x.name}</strong></div>
+      <div class="tile-meta"><b>${rupees(x.estimate)}</b> · ${x.time}<br><span class="crowd-tag ${x.crowd==='Low crowd'?'low':'high'}">${x.crowd}</span></div></button>`);
+    return context(true)+reply(s.comparing?'Here’s how all three compare.':`3 places fit your ${s.budget%1000===0?'₹'+s.budget/1000+'K':rupees(s.budget)}. My pick first.`)+
+      (s.comparing?`<div class="destination-grid">${choices.join('')}</div>`:
+      `<section class="destination-main"><div class="hero-wrap">${photo(p.photo,p.name)}<span class="best-label">${icon('AiSparkles')} Best for you</span><div class="hero-caption"><h2>${p.name}</h2><p>${p.desc}</p></div></div>
+      <div class="destination-body"><div class="stats"><div>${icon('IconWallet')} <strong>${rupees(p.estimate)}</strong><small class="green-text">${rupees(Math.max(0,limit()-p.estimate))} left</small></div><div>${icon('IconBike')} <strong>${p.time}</strong><small>Scenic ghat ride</small></div><div>${icon('IconSun')} <strong>16–27°</strong><small>Clear skies</small></div></div>
+      <span class="crowd-tag ${p.crowd==='Low crowd'?'low':'high'}">${p.crowd}</span> <small class="inline">Fri–Sat, after the monsoon rush</small><p class="destination-reason">${icon('AiSparkles')} ${p.name==='Bhandardara'?'Quiet lakes, an easy ride, and money left for kayaking.':'Shorter travel leaves more time at the destination.'}</p>
+      ${destination(index)}</div></section><h3 class="section-label">Also fits</h3><div class="destination-grid">${choices.filter((_,i)=>i!==index).join('')}</div>`)+
       `<div class="chips">${button(s.comparing?'Show my pick':'Compare all 3','compare')}${button('Somewhere new','rotate')}${go('Cheaper options','noBudget')}</div>`;
   },
   place: () => {
@@ -207,13 +222,15 @@ function render(navigate=false) {
   const home=s.page==='home';
   const special=screenHeaders[s.page];
   document.querySelector('.shell').dataset.screen=s.page;
-  document.querySelector('#brand').textContent=home?'cleartrip':special?.[0]??'Cleartrip AI';
+  const brand=document.querySelector('#brand');
+  if(home) brand.innerHTML=artwork('CleartripBrandArtwork','Cleartrip');
+  else brand.textContent=special?.[0]??'Cleartrip AI';
   document.querySelector('#subtitle').textContent=home?'':special?.[1]??'Suggests a plan. You decide.';
   const back=document.querySelector('#back');
   back.innerHTML=icon(home?'HamburgerIcon':'IconArrowLeft');
   back.setAttribute('aria-label',home?'Open menu':'Go back');
   const reset=document.querySelector('#reset');
-  reset.innerHTML=home?'<span class="coins">⚡ 55</span><span class="elite">Elite</span>':icon(special?'IconShare':'IconPen');
+  reset.innerHTML=home?`<span class="coins">${artwork('SuperCoinSymbol')}55</span><span class="elite">Elite</span>`:icon(special?'IconShare':'IconPen');
   reset.setAttribute('aria-label',home?'Open demo menu':special?'Share trip':'Start again');
   const homeNav=document.querySelector('#home-nav');
   homeNav.hidden=!home;
