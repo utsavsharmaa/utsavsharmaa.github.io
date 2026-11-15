@@ -1,4 +1,6 @@
 const screen = document.querySelector('#screen');
+const workspace = document.querySelector('.workspace');
+const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const dialog = document.querySelector('#dialog');
 const history = [];
 const places = [
@@ -16,6 +18,8 @@ const initial = () => ({
 });
 let s = initial();
 let timer;
+let screenAnimation;
+let actionSource;
 const rupees = n => '₹' + new Intl.NumberFormat('en-IN').format(n);
 const escape = str => String(str).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const photo = (name, alt, cls='hero') => `<img class="${cls}" src="assets/imgPhoto${name}.jpg" alt="${escape(alt)}">`;
@@ -56,10 +60,31 @@ const destination = index => button('Explore '+places[index].name,'place','prima
 const scenarios = {'home':'Cleartrip home','ask':'₹15K weekend','reel':'Start from a reel','reelError':'Reel can’t be read','noBudget':'Nothing fits the budget','over':'Car + cottage trade-off','price':'Price changed or sold out','change':'Change after booking','weather':'Disruption during the trip'};
 function move(page) {
   clearTimeout(timer);
-  history.push({...s});
-  s.page = page;
-  render(true);
-  if (page === 'planning') timer = setTimeout(() => move(people() >= 4 && limit()<18000 && !s.planType ? 'noBudget' : 'pick'),2200);
+  if(s.page===page) {render();return;}
+  if(s.page!=='planning') history.push({state:{...s},scrollTop:workspace.scrollTop});
+  s.page=page;
+  render('forward');
+  if(page==='planning') advancePlanning(1);
+}
+const planningSteps = [
+  ['Looking for places within 4 hours','Filtering for your dates and group'],
+  ['Checking the weather','Looking for rain alerts and clear days'],
+  ['Comparing stays for the weekend','Checking prices and guest reviews'],
+  ['Pricing travel, food and activities','Adding the costs you pay on the trip'],
+  ['Putting your options together','Checking the total against your budget']
+];
+function advancePlanning(step) {
+  if(s.page!=='planning') return;
+  screen.querySelector('progress').value=step;
+  screen.querySelector('#planning-step').textContent=`${step} of ${planningSteps.length}`;
+  screen.querySelectorAll('.planning-list li').forEach((item,i)=>{
+    item.dataset.phase=i<step-1?'complete':i===step-1?'active':'pending';
+    item.querySelector('i').textContent=i<step-1?'✓':i===step-1?'⟳':'';
+  });
+  timer=setTimeout(()=>{
+    if(step<planningSteps.length) advancePlanning(step+1);
+    else move(people()>=4 && limit()<18000 && !s.planType?'noBudget':'pick');
+  },step===planningSteps.length?320:460);
 }
 function start(page) {
   clearTimeout(timer);
@@ -72,7 +97,7 @@ function start(page) {
   if (page==='noBudget') s.group='3 or more';
   if (['change','weather'].includes(page)) s.booked=true;
   s.page=page;
-  render(true);
+  render('forward');
 }
 function modal(title, content) {
   document.querySelector('#dialog-body').innerHTML = `<h2 id="dialog-title">${escape(title)}</h2>${content}`;
@@ -98,10 +123,10 @@ const pageViews = {
     `<fieldset class="group"><legend>${icon('IconPin')}Leaving from</legend><div class="chips">${choose('city',s.city)}<button class="pill" data-action="city">${icon('IconPen')}Change</button></div></fieldset>`+
     group('Food','food',['Veg','Non-veg','Both'])+group('Getting there','mode',['Bike','Car','Train','Bus'])+
     `<button class="primary wide" data-action="plan">${icon('AiSparkles')}Plan my weekend</button>`)}</div>`,
-  planning: () => bubble(s.request)+reply('On it. Give me about 15 seconds.')+`<div class="chat-indent">`+card(
-    `<div class="split-line"><h3>Planning your weekend</h3><span>3 of 5</span></div><progress aria-label="Planning progress" value="3" max="5"></progress>
-    <ol class="planning-list">${[['Found 34 places within 4 hrs of '+s.city,'Filtered to 6 that fit 2 days'],['Checked the weather','Clear, 18–27°, no rain alerts'],['Comparing 12 stays for Fri–Sun','Reading 1,900 guest reviews'],['Pricing car, food and activities',''],['Building your plan','']].map(([title,detail],i)=>`<li class="phase-${i}"><i>${i<2?'✓':i===2?'⟳':''}</i><div>${escape(title)}<small>${detail}</small></div></li>`).join('')}</ol>`)+
-    '<div class="skeleton"><i></i><b></b><b></b><b></b></div><div class="skeleton"><i></i><b></b><b></b><b></b></div>'+button('Stop','stop')+' <small class="inline">You can keep typing while I plan</small></div>',
+  planning: () => bubble(s.request)+reply('On it. I’m checking what fits your weekend.')+`<div class="chat-indent">`+card(
+    `<div class="split-line"><h3>Planning your weekend</h3><span id="planning-step" aria-live="polite">1 of 5</span></div><progress aria-label="Planning progress" value="1" max="5"></progress>
+    <ol class="planning-list">${planningSteps.map(([title,detail])=>`<li data-phase="pending"><i aria-hidden="true"></i><div>${escape(title)}<small>${detail}</small></div></li>`).join('')}</ol>`)+
+    '<div class="skeleton" aria-hidden="true"><i></i><b></b><b></b><b></b></div><div class="skeleton" aria-hidden="true"><i></i><b></b><b></b><b></b></div>'+button('Stop','stop')+' <small class="inline">You can keep typing while I plan</small></div>',
   pick: () => {
     const index=s.crowd?1:0;
     const p=places[index];
@@ -218,7 +243,9 @@ const screenHeaders = {
   itinerary: ['Your trip plan','First try: tap any stop to change it.'],
   review: ['Review your trip','Check every item. Nothing is paid yet.']
 };
-function render(navigate=false) {
+function render(direction='', restoreScroll=0) {
+  const scrollTop=workspace.scrollTop;
+  const strips=[...screen.querySelectorAll('.trip-context,.activity-strip')].map(el=>el.scrollLeft);
   const home=s.page==='home';
   const special=screenHeaders[s.page];
   document.querySelector('.shell').dataset.screen=s.page;
@@ -259,9 +286,25 @@ function render(navigate=false) {
     actions.append(action);
     if(s.page==='review') actions.insertAdjacentHTML('beforeend',`<small>The other ${rupees(costs().total-costs().stay)} is paid on the trip.</small>`);
   }
-  if(navigate) {
+  if(direction) {
+    screenAnimation?.cancel();
     screen.focus({preventScroll:true});
-    document.querySelector('.workspace').scrollTop=0;
+    workspace.scrollTop=restoreScroll;
+    if(!motion.matches) {
+      screenAnimation=screen.animate(
+        [{opacity:.45,transform:`translateY(${direction==='back'?-6:8}px)`},{opacity:1,transform:'translateY(0)'}],
+        {duration:210,easing:'cubic-bezier(.2,.72,.25,1)'}
+      );
+    }
+  } else {
+    workspace.scrollTop=scrollTop;
+    screen.querySelectorAll('.trip-context,.activity-strip').forEach((el,index)=>{el.scrollLeft=strips[index]??0;});
+    if(actionSource && !actionSource.isConnected) {
+      const replacement=[...screen.querySelectorAll('[data-action]')].find(el=>
+        Object.entries(actionSource.dataset).every(([key,value])=>el.dataset[key]===value)
+      );
+      replacement?.focus({preventScroll:true});
+    }
   }
 }
 const rules = () => modal('The fine print, in plain words',list(['Hot water 6–9 am only','No outside food or alcohol','Check in at 1 pm · Check out at 10 am','Government ID needed for every guest','Free cancellation until Wed 18 Nov, 6 pm','No cabs at the lake. Local jeeps are about ₹500 a ride.']));
@@ -313,12 +356,11 @@ const handlers = {
     if(key==='food') s.foodFilter=value==='Both'?'All':value;
     if(key==='room') s.priceDelta=0;
     render();
-    [...screen.querySelectorAll('[data-key]')].find(x=>x.dataset.key===key&&x.dataset.value===value)?.focus();
   },
   city: ()=>promptValue('Departure city','city',s.city),
   budget: ()=>promptValue('Trip budget','budget',s.budget,'number'),
   plan: ()=>move('planning'),
-  stop: ()=>{clearTimeout(timer);move('ask');},
+  stop: ()=>goBack(),
   place: b=>{s.place=Number(b.dataset.index);move('place');},
   compare: ()=>{s.comparing=!s.comparing;render();},
   rotate: ()=>{s.crowd=!s.crowd;s.comparing=false;render();},
@@ -351,16 +393,20 @@ const handlers = {
 document.querySelector('#scenarios').innerHTML=Object.entries(scenarios).map(([page,label])=>button(label,'start','scenario',`data-page="${page}"`)).join('');
 document.addEventListener('click',e=>{
   const target=e.target.closest('[data-action]');
-  if(target) handlers[target.dataset.action]?.(target);
+  if(!target) return;
+  actionSource=target;
+  try {handlers[target.dataset.action]?.(target);}
+  finally {actionSource=undefined;}
 });
 const demoMenu=()=>{modal('Try a scenario','');document.querySelector('#scenarios').hidden=false;};
-document.querySelector('#back').addEventListener('click',()=>{
+function goBack() {
   if(s.page==='home'){demoMenu();return;}
   clearTimeout(timer);
-  s=history.pop()??initial();
-  if(s.page==='planning') s=history.pop()??{...s,page:'ask'};
-  render(true);
-});
+  const previous=history.pop();
+  s=previous?.state??initial();
+  render('back',previous?.scrollTop??0);
+}
+document.querySelector('#back').addEventListener('click',goBack);
 document.querySelector('#reset').addEventListener('click',()=>{if(s.page==='home') demoMenu();else if(screenHeaders[s.page]) handlers.share();else start('home');});
 document.querySelector('#voice').addEventListener('click',()=>{document.querySelector('#message').focus();});
 document.querySelector('#reel').addEventListener('click',()=>modal('Start from a reel',
@@ -370,8 +416,9 @@ dialog.addEventListener('click',e=>{if(e.target.closest('[data-action]'))dialog.
 document.querySelector('#composer').addEventListener('submit',e=>{
   e.preventDefault();
   const input=document.querySelector('#message');
-  send(input.value);
+  const message=input.value;
   input.value='';
+  send(message);
 });
 dialog.addEventListener('submit',e=>{
   if(e.target.id!=='edit-form')return;
