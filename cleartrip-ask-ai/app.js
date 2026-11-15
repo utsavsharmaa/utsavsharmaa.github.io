@@ -28,7 +28,7 @@ const icon = name => `<img class="ui-icon" src="assets/img${name}.svg" alt="">`;
 const currentPlace = () => places[s.place];
 const people = () => ({'Just me':1,'2 of us':2,'3 or more':4,'3 people':3}[s.group] ?? 2);
 const limit = () => s.budget * (s.scope === 'Per person' ? people() : 1);
-const transport = () => ({Bike:1800,Car:4600,Train:2200,Bus:2400}[s.mode]);
+const transport = () => ({Bike:1800,Car:4600,Train:2200,Bus:1400}[s.mode]??1800);
 const roomCost = () => ({'Lake-view tent':4000,Cottage:7600,'Cottage Friday, tent Saturday':5400,'Budget homestay':3200,'Lakeside cottage':6800}[s.room] ?? 4000);
 const costs = () => {
   const day = s.planType === 'day';
@@ -41,12 +41,12 @@ const costs = () => {
 };
 const button = (label, action, cls='secondary', data='') => `<button class="${cls}" data-action="${action}" ${data}>${escape(label)}</button>`;
 const go = (label,page,cls='secondary') => button(label,'go',cls,`data-page="${page}"`);
-const valueIcons = {'Whole trip':'IconWallet','Per person':'IconUsers','Just me':'IconUsers','2 of us':'IconUsers','3 or more':'IconUsers',Bike:'IconBike',Car:'IconCar',Veg:'VegMark','Non-veg':'NonVegMark',Train:'IconCar',Bus:'IconCar'};
+const valueIcons = {'Whole trip':'IconWallet','Per person':'AskIconUser','Just me':'AskIconUser','2 of us':'IconUsers','3 or more':'IconUsers',Bike:'IconBike',Car:'IconCar',Veg:'VegMark','Non-veg':'NonVegMark',Train:'IconCar',Bus:'IconCar'};
 const choose = (key,value,label=value) => {
   const image = key==='city'?'IconPin':valueIcons[value];
   return `<button class="pill" data-action="choose" data-key="${key}" data-value="${escape(value)}" aria-pressed="${s[key]===value}">${value==='Both'?icon('VegMark')+icon('NonVegMark'):image?icon(image):''}${escape(label)}</button>`;
 };
-const group = (title,key,options) => `<fieldset class="group"><legend>${({scope:icon("IconWallet"),group:icon("IconUsers"),food:icon("VegMark"),mode:icon("IconCar")})[key]??""}${escape(title)}</legend><div class="chips">${options.map(x=>choose(key,x)).join('')}</div></fieldset>`;
+const group = (title,key,options) => `<fieldset class="group"><legend>${({scope:icon("IconWallet"),group:icon("IconUsers"),food:icon("AskIconFood"),mode:icon("IconCar")})[key]??""}${escape(title)}</legend><div class="chips">${options.map(x=>choose(key,x)).join('')}</div></fieldset>`;
 const reply = message => `<div class="reply"><span class="reply-mark" aria-hidden="true">${icon("AiSparkles")}</span><p>${escape(message)}</p></div>`;
 const bubble = message => `<p class="bubble">${escape(message)}</p>`;
 const card = html => `<section class="card">${html}</section>`;
@@ -93,7 +93,10 @@ function advancePlanning(step) {
   });
   timer=setTimeout(()=>{
     if(step<planningSteps.length) advancePlanning(step+1);
-    else move(people()>=4 && limit()<18000 && !s.planType?'noBudget':'pick');
+    else {
+      if(s.mode==='Let AI pick') s.mode=limit()<12000||people()>=4?'Bus':'Bike';
+      move(people()>=4 && limit()<18000 && !s.planType?'noBudget':'pick');
+    }
   },step===planningSteps.length?320:460);
 }
 function start(page) {
@@ -123,6 +126,23 @@ function modal(title, content) {
   document.querySelector('#scenarios').hidden=true;
   if(!dialog.open) dialog.showModal();
 }
+const transportOptions = [
+  ['Let AI pick','AskAiSparkles2','Compares all'],
+  ['Bike','IconBike','4h · ₹900','Best for you'],
+  ['Car','AskIconCar1','3.5h · ₹2,300'],
+  ['Train','AskIconTrain','5h · ₹1,100'],
+  ['Bus','AskIconBus','6h · ₹700','Cheapest'],
+  ['Flight','AskFrame','No airport near','Not worth it']
+];
+const transportPicker = () => `<fieldset class="group transport-picker">
+  <legend>${icon('IconCar')}Getting there</legend>
+  <div class="transport-grid">${transportOptions.map(([value,image,detail,badge])=>
+    `<button class="transport-option" data-action="choose" data-key="mode" data-value="${value}" aria-pressed="${s.mode===value}" ${value==='Flight'?'disabled':''}>
+      <span class="transport-name">${icon(image)} <span>${value}</span></span>
+      <small>${detail}</small>${badge?`<span class="transport-badge ${value.toLowerCase()}">${badge}</span>`:''}
+    </button>`).join('')}</div>
+    <small class="transport-note">Rough return cost per person, 100–200 km from ${escape(s.city)}</small>
+  </fieldset>`;
 const itineraryTime = minutes => {
   const hours=Math.floor(minutes/60);
   return `${hours%12||12}:${String(minutes%60).padStart(2,'0')} ${hours<12?'am':'pm'}`;
@@ -221,8 +241,8 @@ const pageViews = {
   ask: () => bubble(s.request)+reply(`${s.budget%1000===0?'₹'+s.budget/1000+'K':rupees(s.budget)} this weekend, let's make it count. 5 quick taps so I can plan it right.`)+`<div class="chat-indent ask-options">${card(
     group(`${s.budget%1000===0?'₹'+s.budget/1000+'K':rupees(s.budget)} is for`,'scope',['Whole trip','Per person'])+
     group("Who's going?",'group',['Just me','2 of us','3 or more'])+
-    `<fieldset class="group"><legend>${icon('IconPin')}Leaving from</legend><div class="chips">${choose('city',s.city)}<button class="pill" data-action="city">${icon('IconPen')}Change</button></div></fieldset>`+
-    group('Food','food',['Veg','Non-veg','Both'])+group('Getting there','mode',['Bike','Car','Train','Bus'])+
+    `<fieldset class="group"><legend>${icon('IconPin')}Leaving from</legend><div class="chips">${choose('city',s.city)}<button class="pill" data-action="city">${icon('AskIconEdit')}Change</button></div></fieldset>`+
+    group('Food','food',['Veg','Non-veg','Both'])+transportPicker()+
     `<button class="primary wide" data-action="plan">${icon('AiSparkles')}Plan my weekend</button>`)}</div>`,
   planning: () => bubble(s.request)+reply('On it. I’m checking what fits your weekend.')+`<div class="chat-indent">`+card(
     `<div class="split-line"><h3>Planning your weekend</h3><span id="planning-step" aria-live="polite">1 of 5</span></div><progress aria-label="Planning progress" value="1" max="5"></progress>
