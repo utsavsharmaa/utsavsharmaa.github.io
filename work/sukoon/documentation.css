@@ -2361,3 +2361,5 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 
 .d676[data-node-id="1059:23449"]{background-color:transparent}
+
+@media (min-width: 1100px){.flow.d851{white-space:nowrap;width:100%;min-width:0;font-size:16px!important}}
