@@ -523,3 +523,13 @@ dialog[open] {animation:dialog-enter 190ms cubic-bezier(.2,.75,.25,1) both;}
   .transport-name {font-size:11px;}
   .transport-name .ui-icon {width:12px;height:12px;}
 }
+
+#dialog > form[method="dialog"] {
+  display:flex;
+  justify-content:flex-start;
+  margin:16px 0 0;
+}
+#dialog .inline-form {
+  align-items:stretch;
+  row-gap:12px;
+}
