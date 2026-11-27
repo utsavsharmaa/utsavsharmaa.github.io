@@ -2363,3 +2363,7 @@
 .d676[data-node-id="1059:23449"]{background-color:transparent}
 
 @media (min-width: 1100px){.flow.d851{white-space:nowrap;width:100%;min-width:0;font-size:16px!important}}
+
+
+/* Live alignment fixes based on the updated Sukoon Figma project */
+@media(min-width:821px){.d85{align-items:flex-start!important}#chapter-07 .d204{margin-bottom:-23px!important}}
